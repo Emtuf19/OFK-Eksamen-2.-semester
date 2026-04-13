@@ -6,7 +6,7 @@ using System.Text;
 
 namespace _2_Semester_Eksamen.ViewModel
 {
-    class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -4,7 +4,10 @@ using System.Text;
 
 namespace _2_Semester_Eksamen.Model
 {
-    class EventRepository
+    public class EventRepository
     {
+        private List<Event> events = new List<Event>();
+
+       
     }
 }
