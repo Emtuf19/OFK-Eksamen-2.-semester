@@ -6,8 +6,7 @@ namespace _2_Semester_Eksamen.Model
 {
     public class TrainerRepository
     {
-        private List<Trainer> trainers = new List<Trainer>;
+        private List<Trainer> trainers = new List<Trainer>();
 
-        public 
     }
 }

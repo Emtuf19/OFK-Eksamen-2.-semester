@@ -4,7 +4,9 @@ using System.Text;
 
 namespace _2_Semester_Eksamen.Model
 {
-    class ContactInfoRepository
+    public class ContactInfoRepository
     {
+        private List<ContactInfo> contactInfos = new List<ContactInfo>();
+
     }
 }

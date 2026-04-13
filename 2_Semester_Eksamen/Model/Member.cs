@@ -4,7 +4,9 @@ using System.Text;
 
 namespace _2_Semester_Eksamen.Model
 {
-    class Member
+    public class Member
     {
+        public string Name { get; set; }
+
     }
 }

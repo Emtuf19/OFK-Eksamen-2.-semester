@@ -4,7 +4,10 @@ using System.Text;
 
 namespace _2_Semester_Eksamen.Model
 {
-    class MemberRepository
+    public class MemberRepository
     {
+        private List<Member> members = new List<Member>();
+
+
     }
 }

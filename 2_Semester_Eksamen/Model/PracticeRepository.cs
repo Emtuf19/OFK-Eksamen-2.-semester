@@ -4,7 +4,12 @@ using System.Text;
 
 namespace _2_Semester_Eksamen.Model
 {
-    class PracticeRepository
+    public class PracticeRepository
     {
+        private List<Practice> practice = new List<Practice>();
+
+
+
+
     }
 }
