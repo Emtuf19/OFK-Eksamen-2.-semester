@@ -10,7 +10,7 @@ using Microsoft.Data.SqlClient;
 
 namespace _2_Semester_Eksamen.Model
 {
-    public abstract class BaseRepository<TEntity>
+    public abstract class BaseRepo<TEntity>
         where TEntity : class, new()
     {
         protected List<TEntity> entities;
@@ -18,9 +18,9 @@ namespace _2_Semester_Eksamen.Model
 
         protected readonly string ConnectionString;
 
-        protected BaseRepository()
+        protected BaseRepo()
         {
-            IConfigurationRoot config = new ConfigurationBuilder().AddJsonFile("appsetting.json").Build();
+            IConfigurationRoot config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
             entities = new List<TEntity>();
             ConnectionString = config.GetConnectionString("MyDBConnection");
@@ -31,8 +31,7 @@ namespace _2_Semester_Eksamen.Model
             return new SqlConnection(ConnectionString);
         }
 
-
-        public abstract int GetById(int entity);
+        public abstract TEntity GetById(int entity);
 
         public abstract List<TEntity> GetAll();
 
