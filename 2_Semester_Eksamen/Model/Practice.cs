@@ -6,20 +6,8 @@ namespace _2_Semester_Eksamen.Model
 {
     public class Practice
     {
-        public string Name { get; set; }
-
-        public DateOnly Date { get; set; }
-
-        public TimeOnly StartTime { get; set; }
-
-        public TimeOnly EndTime { get; set; }
-
-        public Practice(string name, DateOnly date, TimeOnly startTime, TimeOnly endTime)
-        {
-            Name = name;
-            Date = date;
-            StartTime = startTime;
-            EndTime = endTime;
-        }
+        public string PracticeName { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
     }
 }
