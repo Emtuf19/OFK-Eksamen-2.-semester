@@ -4,7 +4,11 @@ using System.Text;
 
 namespace _2_Semester_Eksamen.Model
 {
-    class ContactInfo
+    public class ContactInfo
     {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string ContactPhoneNumber { get; set; }
+        public string ContactEmail { get; set; }
     }
 }
