@@ -1,5 +1,6 @@
 ﻿using _2_Semester_Eksamen.Model;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -20,9 +21,61 @@ namespace _2_Semester_Eksamen.Model
 
                 Practice practice = new Practice();
 
-                using SqlCommand cmd = new SqlCommand("dbo.GetByID", con);
+                using SqlCommand cmd = new SqlCommand("dbo.sp_GetPracticeByIDWithMembersAndTrainers", con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@ID", SqlDbType.Int).Value = ID;
+
+                using SqlDataReader reader = cmd.ExecuteReader();
+
+                if (!reader.HasRows)
+                    return null;
+
+                if (reader.Read())
+                {
+                    practice = new Practice
+                    {
+                        PracticeID = Convert.ToInt32(reader["PracticeID"]),
+                        PracticeName = reader["PracticeName"] is DBNull ? string.Empty : (string)reader["PracticeName"],
+                        StartTime = reader["StartTime"] is DBNull ? DateTime.MinValue : Convert.ToDateTime(reader["StartTime"]),
+                        EndTime = reader["EndTime"] is DBNull ? DateTime.MinValue : Convert.ToDateTime(reader["EndTime"])
+                    };
+                }
+
+                if (reader.NextResult())
+                {
+                    while (reader.Read())
+                    {
+                        if (practice == null) break;
+
+                        var member = new Member
+                        {
+                            MemberID = reader["MemberID"] is DBNull ? 0 : Convert.ToInt32(reader["MemberID"]),
+                            FirstName = reader["MemberFirstName"] is DBNull ? string.Empty : (string)reader["MemberFirstName"],
+                            LastName = reader["MemberLastName"] is DBNull ? string.Empty : (string)reader["MemberLastName"]
+                        };
+
+                        practice.Members.Add(member);
+                    }
+                }
+
+                if (reader.NextResult())
+                {
+                    while (reader.Read())
+                    {
+                        if (practice == null) break;
+
+                        var trainer = new Trainer
+                        {
+                            TrainerID = reader["TrainerID"] is DBNull ? 0 : Convert.ToInt32(reader["TrainerID"]),
+                            FirstName = reader["TrainerFirstName"] is DBNull ? string.Empty : (string)reader["TrainerFirstName"],
+                            LastName = reader["TrainerLastName"] is DBNull ? string.Empty : (string)reader["TrainerLastName"],
+                            Email = reader["TrainerEmail"] is DBNull ? string.Empty : (string)reader["TrainerEmail"]
+                        };
+
+                        practice.Trainers.Add(trainer);
+                    }
+                }
+
 
                 return practice;
             }

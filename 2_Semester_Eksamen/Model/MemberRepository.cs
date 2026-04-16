@@ -16,11 +16,44 @@ namespace _2_Semester_Eksamen.Model
             {
                 con.Open();
 
-                Member member = new Member();
-
-                using SqlCommand cmd = new SqlCommand("dbo.GetByID", con);
+                using SqlCommand cmd = new SqlCommand("sp_GetMemberByID", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@ID", SqlDbType.Int).Value = ID;
+                cmd.Parameters.Add("@MemberID", SqlDbType.Int).Value = ID;
+
+                using SqlDataReader reader = cmd.ExecuteReader();
+
+                if (!reader.HasRows)
+                    return null;
+
+                Member? member = null;
+
+                while (reader.Read())
+                {
+                    if (member == null)
+                    {
+                        member = new Member
+                        {
+                            MemberID = Convert.ToInt32(reader["MemberID"]),
+                            FirstName = reader["MemberFirstName"] is DBNull ? string.Empty : (string)reader["MemberFirstName"],
+                            LastName = reader["MemberLastName"]  is DBNull ? string.Empty : (string)reader["MemberLastName"]
+                        };
+                    }
+
+                    var contactIDObject = reader["ContactPersonID"];
+                    if (contactIDObject != DBNull.Value)
+                    {
+                        var contact = new ContactInfo
+                        {
+                            ContactPersonID = Convert.ToInt32(contactIDObject),
+                            FirstName = reader["ContactFirstName"] is DBNull ? string.Empty : (string)reader["ContactFirstName"],
+                            LastName = reader["ContactLastName"]  is DBNull ? string.Empty : (string)reader["ContactLastName"],
+                            ContactPhoneNumber = reader["ContactPhoneNumber"] is DBNull ? string.Empty : (string)reader["ContactPhoneNumber"],
+                            ContactEmail = reader["ContactEmail"] is DBNull ? string.Empty : (string)reader["ContactEmail"]
+                        };
+
+                        member.ContactPersons.Add(contact);
+                    }
+                }
 
                 return member;
             }
