@@ -74,7 +74,6 @@ namespace _2_Semester_Eksamen.Model
                         event1.Trainers.Add(trainer);
                     }
                 }
-
                 return event1;
             }
         }

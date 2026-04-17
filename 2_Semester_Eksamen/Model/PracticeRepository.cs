@@ -75,8 +75,6 @@ namespace _2_Semester_Eksamen.Model
                         practice.Trainers.Add(trainer);
                     }
                 }
-
-
                 return practice;
             }
         }

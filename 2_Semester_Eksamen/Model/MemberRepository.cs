@@ -45,25 +45,57 @@ namespace _2_Semester_Eksamen.Model
                         var contact = new ContactInfo
                         {
                             ContactPersonID = Convert.ToInt32(contactIDObject),
-                            FirstName = reader["ContactFirstName"] is DBNull ? string.Empty : (string)reader["ContactFirstName"],
-                            LastName = reader["ContactLastName"]  is DBNull ? string.Empty : (string)reader["ContactLastName"],
+                            ContactFirstName = reader["ContactFirstName"] is DBNull ? string.Empty : (string)reader["ContactFirstName"],
+                            ContactLastName = reader["ContactLastName"]  is DBNull ? string.Empty : (string)reader["ContactLastName"],
                             ContactPhoneNumber = reader["ContactPhoneNumber"] is DBNull ? string.Empty : (string)reader["ContactPhoneNumber"],
                             ContactEmail = reader["ContactEmail"] is DBNull ? string.Empty : (string)reader["ContactEmail"]
                         };
-
                         member.ContactPersons.Add(contact);
                     }
                 }
-
                 return member;
             }
         }
 
         public override List<Member> GetAll()
         {
-            return members;
-        }
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
+                members = new List<Member>();
 
+                using SqlCommand cmd = new SqlCommand("sp_GetAllMembers", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+
+                using SqlDataReader reader = cmd.ExecuteReader();
+                while(reader.Read())
+                {
+                    var member = new Member
+                    {
+                        MemberID = Convert.ToInt32(reader["MemberID"]),
+                        FirstName = reader["MemberFirstName"] is DBNull ? string.Empty : (string)reader["MemberFirstName"],
+                        LastName = reader["MemberLastName"]  is DBNull ? string.Empty : (string)reader["MemberLastName"]
+                    };
+                    members.Add(member);
+
+                    var contactIDObject = reader["ContactPersonID"];
+                    if (contactIDObject != DBNull.Value)
+                    {
+                        var contact = new ContactInfo
+                        {
+                            ContactPersonID = Convert.ToInt32(contactIDObject),
+                            ContactFirstName = reader["ContactFirstName"] is DBNull ? string.Empty : (string)reader["ContactFirstName"],
+                            ContactLastName = reader["ContactLastName"] is DBNull ? string.Empty : (string)reader["ContactLastName"],
+                            ContactPhoneNumber = reader["ContactPhoneNumber"] is DBNull ? string.Empty : (string)reader["ContactPhoneNumber"],
+                            ContactEmail = reader["ContactEmail"] is DBNull ? string.Empty : (string)reader["ContactEmail"]
+                        };
+                        member.ContactPersons.Add(contact);
+                    }
+                }
+                return members;
+            }
+        }
         public override void Add(Member member)
         {
             using (SqlConnection con = CreateConnection())
@@ -75,6 +107,7 @@ namespace _2_Semester_Eksamen.Model
                 cmd.Parameters.Add("@TrainerFirstName", SqlDbType.NVarChar, 50).Value = member.FirstName;
                 cmd.Parameters.Add("@TrainerLastName", SqlDbType.NVarChar, 50).Value = member.LastName;
             }
+            members.Add(member);
         }
 
         public override void Update(Member member)
