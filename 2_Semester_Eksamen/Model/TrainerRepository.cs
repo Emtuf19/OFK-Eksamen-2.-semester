@@ -39,8 +39,8 @@ namespace _2_Semester_Eksamen.Model
 
                 using SqlCommand cmd = new SqlCommand("dbo.sp_InsertIntoTrainer", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@TrainerFirstName", SqlDbType.NVarChar, 50).Value = trainer.FirstName;
-                cmd.Parameters.Add("@TrainerLastName", SqlDbType.NVarChar, 50).Value = trainer.LastName;
+                cmd.Parameters.Add("@TrainerFirstName", SqlDbType.NVarChar, 50).Value = trainer.TrainerFirstName;
+                cmd.Parameters.Add("@TrainerLastName", SqlDbType.NVarChar, 50).Value = trainer.TrainerLastName;
                 cmd.Parameters.Add("@PhoneNumber", SqlDbType.Int).Value = trainer.PhoneNumber;
                 cmd.Parameters.Add("@Email", SqlDbType.NVarChar, 50).Value = trainer.Email;
             }

@@ -34,8 +34,8 @@ namespace _2_Semester_Eksamen.Model
                         member = new Member
                         {
                             MemberID = Convert.ToInt32(reader["MemberID"]),
-                            FirstName = reader["MemberFirstName"] is DBNull ? string.Empty : (string)reader["MemberFirstName"],
-                            LastName = reader["MemberLastName"]  is DBNull ? string.Empty : (string)reader["MemberLastName"]
+                            MemberFirstName = reader["MemberFirstName"] is DBNull ? string.Empty : (string)reader["MemberFirstName"],
+                            MemberLastName = reader["MemberLastName"]  is DBNull ? string.Empty : (string)reader["MemberLastName"]
                         };
                     }
 
@@ -74,8 +74,8 @@ namespace _2_Semester_Eksamen.Model
                     var member = new Member
                     {
                         MemberID = Convert.ToInt32(reader["MemberID"]),
-                        FirstName = reader["MemberFirstName"] is DBNull ? string.Empty : (string)reader["MemberFirstName"],
-                        LastName = reader["MemberLastName"]  is DBNull ? string.Empty : (string)reader["MemberLastName"]
+                        MemberFirstName = reader["MemberFirstName"] is DBNull ? string.Empty : (string)reader["MemberFirstName"],
+                        MemberLastName = reader["MemberLastName"]  is DBNull ? string.Empty : (string)reader["MemberLastName"]
                     };
                     members.Add(member);
 
@@ -104,8 +104,8 @@ namespace _2_Semester_Eksamen.Model
 
                 using SqlCommand cmd = new SqlCommand("dbo.sp_InsertIntoTrainer", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@TrainerFirstName", SqlDbType.NVarChar, 50).Value = member.FirstName;
-                cmd.Parameters.Add("@TrainerLastName", SqlDbType.NVarChar, 50).Value = member.LastName;
+                cmd.Parameters.Add("@TrainerFirstName", SqlDbType.NVarChar, 50).Value = member.MemberFirstName;
+                cmd.Parameters.Add("@TrainerLastName", SqlDbType.NVarChar, 50).Value = member.MemberLastName;
             }
             members.Add(member);
         }

@@ -40,8 +40,8 @@ namespace _2_Semester_Eksamen.Model
 
                 using SqlCommand cmd = new SqlCommand("dbo.sp_InsertIntoContactInfo", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@TrainerFirstName", SqlDbType.NVarChar, 50).Value = contactInfo.FirstName;
-                cmd.Parameters.Add("@TrainerLastName", SqlDbType.NVarChar, 50).Value = contactInfo.LastName;
+                cmd.Parameters.Add("@TrainerFirstName", SqlDbType.NVarChar, 50).Value = contactInfo.ContactFirstName;
+                cmd.Parameters.Add("@TrainerLastName", SqlDbType.NVarChar, 50).Value = contactInfo.ContactLastName;
                 cmd.Parameters.Add("@PhoneNumber", SqlDbType.Int).Value = contactInfo.ContactPhoneNumber;
                 cmd.Parameters.Add("@Email", SqlDbType.NVarChar, 50).Value = contactInfo.ContactEmail;
             }

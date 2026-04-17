@@ -32,7 +32,7 @@ namespace _2_Semester_Eksamen.Model
                     event1 = new Event
                     {
                         EventID = Convert.ToInt32(reader["EventID"]),
-                        Name = reader["EventName"] is DBNull ? string.Empty : (string)reader["EventName"],
+                        EventName = reader["EventName"] is DBNull ? string.Empty : (string)reader["EventName"],
                         Description = reader["Description"] is DBNull ? string.Empty : (string)reader["Description"],
                         Price = reader["Price"] is DBNull ? 0.0 : Convert.ToDouble(reader["Price"]),
                         AgeGroup = reader["AgeGroup"] is DBNull ? string.Empty : (string)reader["AgeGroup"],
@@ -49,8 +49,8 @@ namespace _2_Semester_Eksamen.Model
                         var member = new Member
                         {
                             MemberID = reader["MemberID"] is DBNull ? 0 : Convert.ToInt32(reader["MemberID"]),
-                            FirstName = reader["MemberFirstName"] is DBNull ? string.Empty : (string)reader["MemberFirstName"],
-                            LastName = reader["MemberLastName"] is DBNull ? string.Empty : (string)reader["MemberLastName"]
+                            MemberFirstName = reader["MemberFirstName"] is DBNull ? string.Empty : (string)reader["MemberFirstName"],
+                            MemberLastName = reader["MemberLastName"] is DBNull ? string.Empty : (string)reader["MemberLastName"]
                         };
 
                         event1.Members.Add(member);
@@ -66,8 +66,8 @@ namespace _2_Semester_Eksamen.Model
                         var trainer = new Trainer
                         {
                             TrainerID = reader["TrainerID"] is DBNull ? 0 : Convert.ToInt32(reader["TrainerID"]),
-                            FirstName = reader["TrainerFirstName"] is DBNull ? string.Empty : (string)reader["TrainerFirstName"],
-                            LastName = reader["TrainerLastName"] is DBNull ? string.Empty : (string)reader["TrainerLastName"],
+                            TrainerFirstName = reader["TrainerFirstName"] is DBNull ? string.Empty : (string)reader["TrainerFirstName"],
+                            TrainerLastName = reader["TrainerLastName"] is DBNull ? string.Empty : (string)reader["TrainerLastName"],
                             Email = reader["TrainerEmail"] is DBNull ? string.Empty : (string)reader["TrainerEmail"]
                         };
 
@@ -80,7 +80,84 @@ namespace _2_Semester_Eksamen.Model
 
         public override List<Event> GetAll()
         {
-            return events;
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
+                events = new List<Event>();
+
+                using SqlCommand cmd = new SqlCommand("sp_GetAllEventsWithMembersAndTrainers", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                using SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var event1 = new Event
+                    {
+                        EventID = Convert.ToInt32(reader["EventID"]),
+                        EventName = reader["EventName"] is DBNull ? string.Empty : (string)reader["EventName"],
+                        Description = reader["Description"] is DBNull ? string.Empty : (string)reader["Description"],
+                        Price = Convert.ToDouble(reader["Price"]),
+                        AgeGroup = reader["AgeGroup"] is DBNull ? string.Empty : (string)reader["AgeGroup"],
+                        Time = Convert.ToDateTime(reader["Time"]),
+                        Members = new List<Member>(),
+                        Trainers = new List<Trainer>()
+                    };
+                    events.Add(event1);
+                }
+
+                if (reader.NextResult())
+                {
+                    while (reader.Read())
+                    {
+                        var EventIDObj = reader["EventID"];
+                        if (EventIDObj == DBNull.Value) continue;
+                        int EventID = Convert.ToInt32(EventIDObj);
+
+                        var event1 = events.Find(e => e.EventID == EventID);
+                        if (event1 == null) continue;
+
+                        var MemberIDObject = reader["MemberID"];
+                        if (MemberIDObject != DBNull.Value)
+                        {
+                            var member = new Member
+                            {
+                                MemberID = Convert.ToInt32(MemberIDObject),
+                                MemberFirstName = reader["MemberFirstName"] is DBNull ? string.Empty : (string)reader["MemberFirstName"],
+                                MemberLastName = reader["MemberLastName"] is DBNull ? string.Empty : (string)reader["MemberLastName"],
+                            };
+                            event1.Members.Add(member);
+                        }
+                    }
+                }
+
+                if (reader.NextResult())
+                {
+                    while (reader.Read())
+                    {
+                        var EventIDObj = reader["EventID"];
+                        if (EventIDObj == DBNull.Value) continue;
+                        int EventID = Convert.ToInt32(EventIDObj);
+
+                        var event1 = events.Find(e => e.EventID == EventID);
+                        if (event1 == null) continue;
+
+                        var trainerIDObject = reader["TrainerID"];
+                        if (trainerIDObject != DBNull.Value)
+                        {
+                            var trainer = new Trainer
+                            {
+                                TrainerID = Convert.ToInt32(trainerIDObject),
+                                TrainerFirstName = reader["TrainerFirstName"] is DBNull ? string.Empty : (string)reader["TrainerFirstName"],
+                                TrainerLastName = reader["TrainerLastName"] is DBNull ? string.Empty : (string)reader["TrainerLastName"],
+                                Email = reader["TrainerEmail"] is DBNull ? string.Empty : (string)reader["TrainerEmail"]
+                            };
+                            event1.Trainers.Add(trainer);
+                        }
+                    }
+                }
+                return events;
+            }
         }
 
         public override void Add(Event event1)
@@ -91,7 +168,7 @@ namespace _2_Semester_Eksamen.Model
 
                 using SqlCommand cmd = new SqlCommand("dbo.sp_InsertIntoEvent", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 50).Value = event1.Name;
+                cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 50).Value = event1.EventName;
                 cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 1000).Value = event1.Description;
                 cmd.Parameters.Add("@EventName", SqlDbType.Float).Value = event1.Price;
                 cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 50).Value = event1.AgeGroup;
