@@ -69,7 +69,8 @@ namespace _2_Semester_Eksamen.Model
                             TrainerID = reader["TrainerID"] is DBNull ? 0 : Convert.ToInt32(reader["TrainerID"]),
                             TrainerFirstName = reader["TrainerFirstName"] is DBNull ? string.Empty : (string)reader["TrainerFirstName"],
                             TrainerLastName = reader["TrainerLastName"] is DBNull ? string.Empty : (string)reader["TrainerLastName"],
-                            Email = reader["TrainerEmail"] is DBNull ? string.Empty : (string)reader["TrainerEmail"]
+                            TrainerPhoneNumber = reader["TrainerPhoneNumber"] is DBNull ? string.Empty : (string)reader["TrainerPhoneNumber"],
+                            TrainerEmail = reader["TrainerEmail"] is DBNull ? string.Empty : (string)reader["TrainerEmail"]
                         };
 
                         practice.Trainers.Add(trainer);
@@ -149,7 +150,8 @@ namespace _2_Semester_Eksamen.Model
                                 TrainerID = Convert.ToInt32(trainerIDObject),
                                 TrainerFirstName = reader["TrainerFirstName"] is DBNull ? string.Empty : (string)reader["TrainerFirstName"],
                                 TrainerLastName = reader["TrainerLastName"] is DBNull ? string.Empty : (string)reader["TrainerLastName"],
-                                Email = reader["TrainerEmail"] is DBNull ? string.Empty : (string)reader["TrainerEmail"]
+                                TrainerPhoneNumber = reader["TrainerPhoneNumber"] is DBNull ? string.Empty : (string)reader["TrainerPhoneNumber"],
+                                TrainerEmail = reader["TrainerEmail"] is DBNull ? string.Empty : (string)reader["TrainerEmail"]
                             };
                             practice.Trainers.Add(trainer);
                         }
@@ -175,7 +177,18 @@ namespace _2_Semester_Eksamen.Model
 
         public override void Update(Practice practice)
         {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
 
+                using SqlCommand cmd = new SqlCommand("dbo.sp_UpdatePractice", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@PracticeID", SqlDbType.Int).Value = practice.PracticeID;
+                cmd.Parameters.Add("@PracticeName", SqlDbType.NVarChar, 50).Value = practice.PracticeName;
+                cmd.Parameters.Add("@StartTime", SqlDbType.DateTime2).Value = practice.StartTime;
+                cmd.Parameters.Add("@EndTime", SqlDbType.DateTime2).Value = practice.EndTime;
+                cmd.ExecuteNonQuery();
+            }
         }
 
         public override void Delete(int ID)

@@ -177,6 +177,49 @@ namespace _2_Semester_Eksamen
             //    // Show full exception to help debugging (column mismatch, connection, etc.)
             //    MessageBox.Show($"Error while calling PracticeRepository.GetAll(): {ex.Message}\n\n{ex}", "Error");
             //}
+
+
+            //// Quick test for MemberRepository.Update
+            //try
+            //{
+            //    var repo = new MemberRepository();
+
+            //    //change id to one that exists.
+            //    int testId = 1; 
+            //    var before = repo.GetById(testId);
+
+            //    if (before == null)
+            //    {
+            //        MessageBox.Show($"GetById({testId}) returned null - no member with that ID.", "Update test");
+            //    }
+            //    else
+            //    {
+            //        var sb = new StringBuilder();
+            //        sb.AppendLine("Before update:");
+            //        sb.AppendLine($"{before.MemberID} - {before.MemberFirstName} {before.MemberLastName}");
+
+            //        before.MemberFirstName = before.MemberFirstName + "_Edited";
+            //        before.MemberLastName = before.MemberLastName + "_Edited";
+
+            //        // Call update
+            //        repo.Update(before);
+
+            //        // Re-read from DB
+            //        var after = repo.GetById(testId);
+            //        sb.AppendLine("");
+            //        sb.AppendLine("After update:");
+            //        if (after == null)
+            //            sb.AppendLine("Member disappeared after update (null).");
+            //        else
+            //            sb.AppendLine($"{after.MemberID} - {after.MemberFirstName} {after.MemberLastName}");
+
+            //        MessageBox.Show(sb.ToString(), "MemberRepository.Update() test");
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Error testing Update: {ex.Message}\n\n{ex}", "Error");
+            //}
         }
     }
 }

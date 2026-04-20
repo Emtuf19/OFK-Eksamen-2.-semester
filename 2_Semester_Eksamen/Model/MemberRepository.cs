@@ -102,17 +102,28 @@ namespace _2_Semester_Eksamen.Model
             {
                 con.Open();
 
-                using SqlCommand cmd = new SqlCommand("dbo.sp_InsertIntoTrainer", con);
+                using SqlCommand cmd = new SqlCommand("dbo.sp_InsertIntoMember", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@TrainerFirstName", SqlDbType.NVarChar, 50).Value = member.MemberFirstName;
-                cmd.Parameters.Add("@TrainerLastName", SqlDbType.NVarChar, 50).Value = member.MemberLastName;
+                cmd.Parameters.Add("@MemberFirstName", SqlDbType.NVarChar, 50).Value = member.MemberFirstName;
+                cmd.Parameters.Add("@MemberLastName", SqlDbType.NVarChar, 50).Value = member.MemberLastName;
             }
             members.Add(member);
         }
 
         public override void Update(Member member)
         {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
 
+                using SqlCommand cmd = new SqlCommand("dbo.sp_UpdateMember", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@MemberID", SqlDbType.Int).Value = member.MemberID;
+                cmd.Parameters.Add("@MemberFirstName", SqlDbType.NVarChar, 50).Value = member.MemberFirstName;
+                cmd.Parameters.Add("@MemberLastName", SqlDbType.NVarChar, 50).Value = member.MemberLastName;
+                cmd.ExecuteNonQuery();
+            }
         }
 
         public override void Delete(int ID)

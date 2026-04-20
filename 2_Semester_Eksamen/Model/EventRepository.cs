@@ -68,7 +68,8 @@ namespace _2_Semester_Eksamen.Model
                             TrainerID = reader["TrainerID"] is DBNull ? 0 : Convert.ToInt32(reader["TrainerID"]),
                             TrainerFirstName = reader["TrainerFirstName"] is DBNull ? string.Empty : (string)reader["TrainerFirstName"],
                             TrainerLastName = reader["TrainerLastName"] is DBNull ? string.Empty : (string)reader["TrainerLastName"],
-                            Email = reader["TrainerEmail"] is DBNull ? string.Empty : (string)reader["TrainerEmail"]
+                            TrainerPhoneNumber = reader["TrainerPhoneNumber"] is DBNull ? string.Empty : (string)reader["TrainerPhoneNumber"],
+                            TrainerEmail = reader["TrainerEmail"] is DBNull ? string.Empty : (string)reader["TrainerEmail"]
                         };
 
                         event1.Trainers.Add(trainer);
@@ -150,7 +151,8 @@ namespace _2_Semester_Eksamen.Model
                                 TrainerID = Convert.ToInt32(trainerIDObject),
                                 TrainerFirstName = reader["TrainerFirstName"] is DBNull ? string.Empty : (string)reader["TrainerFirstName"],
                                 TrainerLastName = reader["TrainerLastName"] is DBNull ? string.Empty : (string)reader["TrainerLastName"],
-                                Email = reader["TrainerEmail"] is DBNull ? string.Empty : (string)reader["TrainerEmail"]
+                                TrainerPhoneNumber = reader["TrainerPhoneNumber"] is DBNull ? string.Empty : (string)reader["TrainerPhoneNumber"],
+                                TrainerEmail = reader["TrainerEmail"] is DBNull ? string.Empty : (string)reader["TrainerEmail"]
                             };
                             event1.Trainers.Add(trainer);
                         }
@@ -178,7 +180,20 @@ namespace _2_Semester_Eksamen.Model
 
         public override void Update(Event event1)
         {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
 
+                using SqlCommand cmd = new SqlCommand("dbo.sp_UpdateEvent", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@EventID", SqlDbType.Int).Value = event1.EventID;
+                cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 50).Value = event1.EventName;
+                cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 1000).Value = event1.Description;
+                cmd.Parameters.Add("@EventName", SqlDbType.Float).Value = event1.Price;
+                cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 50).Value = event1.AgeGroup;
+                cmd.Parameters.Add("@StartTime", SqlDbType.DateTime2).Value = event1.Time;
+                cmd.ExecuteNonQuery();
+            }
         }
 
         public override void Delete(int ID)
