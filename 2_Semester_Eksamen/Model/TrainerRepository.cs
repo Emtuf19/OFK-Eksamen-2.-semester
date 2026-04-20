@@ -16,19 +16,54 @@ namespace _2_Semester_Eksamen.Model
             {
                 con.Open();
 
-                Trainer trainer = new Trainer();
+                Trainer? trainer = null;
 
-                using SqlCommand cmd = new SqlCommand("dbo.GetByID", con);
+                using SqlCommand cmd = new SqlCommand("dbo.GetByTrainerID", con);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@ID", SqlDbType.Int).Value = ID;
 
+                using SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    trainer = new Trainer
+                    {
+                        TrainerID = Convert.ToInt32(reader["TrainerID"]),
+                        TrainerFirstName = reader["TrainerFirstName"] is DBNull ? string.Empty : (string)reader["TrainerFirstName"],
+                        TrainerLastName = reader["TrainerLastName"] is DBNull ? string.Empty : (string)reader["TrainerLastName"],
+                        TrainerPhoneNumber = reader["TrainerPhoneNumber"] is DBNull ? string.Empty : (string)reader["TrainerPhoneNumber"],
+                        TrainerEmail = reader["TrainerEmail"] is DBNull ? string.Empty : (string)reader["TrainerEmail"]
+                    };
+                }
                 return trainer;
             }
         }
 
         public override List<Trainer> GetAll()
         {
-            return trainers;
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
+                trainers = new List<Trainer>();
+
+                using SqlCommand cmd = new SqlCommand("sp_GetAllTrainers", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                using SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    var trainer = new Trainer
+                    {
+                        TrainerID = Convert.ToInt32(reader["TrainerID"]),
+                        TrainerFirstName = reader["TrainerFirstName"] is DBNull ? string.Empty : (string)reader["TrainerFirstName"],
+                        TrainerLastName = reader["TrainerLastName"] is DBNull ? string.Empty : (string)reader["TrainerLastName"],
+                        TrainerPhoneNumber = reader["TrainerPhoneNumber"] is DBNull ? string.Empty : (string)reader["TrainerPhoneNumber"],
+                        TrainerEmail = reader["TrainerEmail"] is DBNull ? string.Empty : (string)reader["TrainerEmail"]
+                    };
+                    trainers.Add(trainer);
+                }
+                return trainers;
+            }
         }
 
         public override void Add(Trainer trainer)
@@ -39,16 +74,28 @@ namespace _2_Semester_Eksamen.Model
 
                 using SqlCommand cmd = new SqlCommand("dbo.sp_InsertIntoTrainer", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@TrainerFirstName", SqlDbType.NVarChar, 50).Value = trainer.FirstName;
-                cmd.Parameters.Add("@TrainerLastName", SqlDbType.NVarChar, 50).Value = trainer.LastName;
-                cmd.Parameters.Add("@PhoneNumber", SqlDbType.Int).Value = trainer.PhoneNumber;
-                cmd.Parameters.Add("@Email", SqlDbType.NVarChar, 50).Value = trainer.Email;
+                cmd.Parameters.Add("@TrainerFirstName", SqlDbType.NVarChar, 50).Value = trainer.TrainerFirstName;
+                cmd.Parameters.Add("@TrainerLastName", SqlDbType.NVarChar, 50).Value = trainer.TrainerLastName;
+                cmd.Parameters.Add("@TrainerPhoneNumber", SqlDbType.Int).Value = trainer.TrainerPhoneNumber;
+                cmd.Parameters.Add("@TrainerEmail", SqlDbType.NVarChar, 50).Value = trainer.TrainerEmail;
             }
         }
 
         public override void Update(Trainer trainer)
         {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
 
+                using SqlCommand cmd = new SqlCommand("dbo.sp_UpdateTrainer", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@TrainerID", SqlDbType.Int).Value = trainer.TrainerID;
+                cmd.Parameters.Add("@TrainerFirstName", SqlDbType.NVarChar, 50).Value = trainer.TrainerFirstName;
+                cmd.Parameters.Add("@TrainerLastName", SqlDbType.NVarChar, 50).Value = trainer.TrainerLastName;
+                cmd.Parameters.Add("@TrainerPhoneNumber", SqlDbType.Int).Value = trainer.TrainerPhoneNumber;
+                cmd.Parameters.Add("@TrainerEmail", SqlDbType.NVarChar, 50).Value = trainer.TrainerEmail;
+                cmd.ExecuteNonQuery();
+            }
         }
 
         public override void Delete(int ID)

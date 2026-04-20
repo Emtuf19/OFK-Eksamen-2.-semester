@@ -6,7 +6,10 @@ namespace _2_Semester_Eksamen.Model
 {
     public class Member
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public int MemberID { get; set; }
+        public string MemberFirstName { get; set; }
+        public string MemberLastName { get; set; }
+
+        public List<ContactInfo> ContactPersons { get; set; } = new List<ContactInfo>();
     }
 }

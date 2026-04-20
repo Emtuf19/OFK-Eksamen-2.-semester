@@ -40,16 +40,30 @@ namespace _2_Semester_Eksamen.Model
 
                 using SqlCommand cmd = new SqlCommand("dbo.sp_InsertIntoContactInfo", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@TrainerFirstName", SqlDbType.NVarChar, 50).Value = contactInfo.FirstName;
-                cmd.Parameters.Add("@TrainerLastName", SqlDbType.NVarChar, 50).Value = contactInfo.LastName;
-                cmd.Parameters.Add("@PhoneNumber", SqlDbType.Int).Value = contactInfo.ContactPhoneNumber;
-                cmd.Parameters.Add("@Email", SqlDbType.NVarChar, 50).Value = contactInfo.ContactEmail;
+                cmd.Parameters.Add("@MemberFirstName", SqlDbType.NVarChar, 50).Value = contactInfo.ContactFirstName;
+                cmd.Parameters.Add("@MemberLastName", SqlDbType.NVarChar, 50).Value = contactInfo.ContactLastName;
+                cmd.Parameters.Add("@ContactPhoneNumber", SqlDbType.Int).Value = contactInfo.ContactPhoneNumber;
+                cmd.Parameters.Add("@ContactEmail", SqlDbType.NVarChar, 50).Value = contactInfo.ContactEmail;
+                cmd.Parameters.Add("@MemberID", SqlDbType.Int).Value = contactInfo.MemberID;
             }
         }
 
         public override void Update(ContactInfo contactInfo)
         {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
 
+                using SqlCommand cmd = new SqlCommand("dbo.sp_UpdateContactInfo", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@ContactPersonID", SqlDbType.Int).Value = contactInfo.ContactPersonID;
+                cmd.Parameters.Add("@ContactFirstName", SqlDbType.NVarChar, 50).Value = contactInfo.ContactFirstName;
+                cmd.Parameters.Add("@ContactLastName", SqlDbType.NVarChar, 50).Value = contactInfo.ContactLastName;
+                cmd.Parameters.Add("@ContactPhoneNumber", SqlDbType.Int).Value = contactInfo.ContactPhoneNumber;
+                cmd.Parameters.Add("@ContactEmail", SqlDbType.NVarChar, 50).Value = contactInfo.ContactEmail;
+                cmd.ExecuteNonQuery();
+            }
         }
 
         public override void Delete(int ID)
