@@ -787,7 +787,7 @@ BEGIN
     END;
 
     --END TIME MÅ IKKE VÆRE TIDLIGERE END START TIME
-    IF @endTime IS NOT NULL AND @endTime < COALESCE(@startTime, StartTime)
+    IF @endTime IS NOT NULL AND @endTime < COALESCE(@startTime, (SELECT StartTime FROM Practice WHERE PracticeID = @practiceID))
     BEGIN
         RAISERROR('Practice end time cannot be earlier than practice start time', 16, 1)
         RETURN;
