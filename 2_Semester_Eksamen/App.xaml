@@ -4,6 +4,14 @@
              xmlns:local="clr-namespace:_2_Semester_Eksamen"
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="Button">
+            
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Padding" Value="10"/>
+                
+                    
+        </Style>
+
+
     </Application.Resources>
 </Application>

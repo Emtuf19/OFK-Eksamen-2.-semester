@@ -9,4 +9,12 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Icon\odense-logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icon\odense-logo.png" />
+  </ItemGroup>
+
 </Project>

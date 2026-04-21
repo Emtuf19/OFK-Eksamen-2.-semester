@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,19 +11,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace _2_Semester_Eksamen
+namespace _2_Semester_Eksamen.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for Medlem.xaml
     /// </summary>
-    public partial class MainWindow : NavigationWindow
+    public partial class Medlem : Page
     {
-        public MainWindow()
+        public Medlem()
         {
             InitializeComponent();
-
-            ShowsNavigationUI = false;
         }
     }
-
 }
