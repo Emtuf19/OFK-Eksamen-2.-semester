@@ -6,11 +6,10 @@
       xmlns:local="clr-namespace:_2_Semester_Eksamen.Views"
       mc:Ignorable="d" 
       d:DesignHeight="650" d:DesignWidth="1200"
-      Background="Wheat"
-      Title="Træner">
+      Title="Træner" Background="Wheat">
 
-    <Grid Margin="10,0,10,10">
-        <Grid HorizontalAlignment="Center" VerticalAlignment="Stretch">
+    <Grid>
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
@@ -21,70 +20,73 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <!-- Image  -->
-            <Button Click="Home_Click">
-                <Button.Template>
-                    <ControlTemplate>
-                        <Image Height="122" Width="101" Source="/Icon/odense-logo.png" VerticalAlignment="Top" 
-            HorizontalAlignment="Left" Margin="8,10,0,0"  />
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-            <!-- Træning -->
-            <StackPanel  Margin="10,20" Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" >
-                <Button BorderThickness="0" Background="Transparent" Margin="90,0,0,0" Width="150"  Content="Træning">
 
+            <StackPanel Background="#FFA92E2E" Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center">
+                <!-- Image  -->
+                <Button Click="Home_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Height="122" Stretch="Uniform" Source="/Icon/odense-logo.png" VerticalAlignment="Top" 
+                               HorizontalAlignment="Left" Margin="10,10"/>
+                        </ControlTemplate>
+                    </Button.Template>
                 </Button>
+                <!-- Træning -->
+                <Button Margin="20,0,0,0" VerticalAlignment="Center" Content="Home" Style="{StaticResource NavBar}"/>
+
+                <Button Content="Træning" Style="{StaticResource NavBar}"/>
 
                 <!-- Aflys Træning -->
-                <Button Width="200"  Content="Aflys Træning">
-
-                </Button>
+                <Button Content="Aflys Træning" Style="{StaticResource NavBar}"/>
 
                 <!-- Medlemsoversigt -->
-                <Button Width="200"  Content="Medlemsoversigt">
-
-                </Button>
+                <Button Content="Medlemsoversigt" Style="{StaticResource NavBar}"/>
 
                 <!-- Begivenheder -->
-                <Button Width="200"  Content="Begivenhed">
-
-                </Button>
+                <Button Content="Begivenhed" Style="{StaticResource NavBar}"/>
 
                 <!-- Opret Begivenhed -->
-                <Button Width="200"  Content="Opret Begivenhed">
-
-                </Button>
+                <Button Content="Opret Begivenhed" Style="{StaticResource NavBar}"/>
 
                 <!-- Log ud -->
-                <Button Width="100"  Content="Log ud">
+                <Button HorizontalAlignment="Right" Content="Log ud" Style="{StaticResource NavBar}"/>
 
-                </Button>
             </StackPanel>
-            <Label Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2">
+
+            <Label Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="30" >
                 Odense Fægte-Klub
             </Label>
 
 
-            <ListBox ItemsSource="{Binding Practices}" SelectedItem="{Binding ThisPractice, Mode=TwoWay}" Margin="20,0,0,30" Grid.Row="3" Grid.Column="0">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Margin="5">
-                            <TextBlock Text="{Binding PracticeID}" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding Trainers}" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding StartTime, StringFormat=dd-MM-yyyy HH:mm}" />
-                            <TextBlock Text="{Binding EndTime, StringFormat=dd-MM-yyyy HH:mm}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-
-            <ListBox Margin="20,0,0,30" Grid.Row="3" Grid.Column="1" d:ItemsSource="{d:SampleData ItemCount=5}"/>
-
             <!-- List over Træning   -->
-
+            <Border BorderThickness="2" BorderBrush="Black" Grid.Row="3" Grid.Column="0" Margin="40,0,20,30">
+                <Grid Background="White" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Margin="40" FontSize="20" Text="{Binding Error}" FontWeight="Bold"  />
+                    <ListBox Background="Transparent" Grid.Row="1" ItemsSource="{Binding Practices}" BorderThickness="0" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="5">
+                                    <TextBlock Text="{Binding PracticeID}" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Trainers}" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding StartTime, StringFormat=dd-MM-yyyy HH:mm}" />
+                                    <TextBlock Text="{Binding EndTime, StringFormat=dd-MM-yyyy HH:mm}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
 
             <!-- Preview over Kalender -->
+            <ListBox Margin="20,0,40,30" Grid.Row="3" Grid.Column="1" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+
+
+
+
 
         </Grid>
     </Grid>

@@ -13,23 +13,32 @@ namespace _2_Semester_Eksamen.Views
         public ObservableCollection<Practice> Practices { get; set; }
 
         public Practice ThisPractice { get; set; }
+        public string Error { get; set; }
 
 
         public Træner()
         {
             InitializeComponent();
-
-            Practices = new ObservableCollection<Practice>();
-
-            var repo = new PracticeRepository();
-            var practicesFromDb = repo.GetAll();
-
-            foreach (var practice in practicesFromDb)
+            try
             {
-                Practices.Add(practice);
-            }
+                Practices = new ObservableCollection<Practice>();
 
-            DataContext = this;
+                var repo = new PracticeRepository();
+                var practicesFromDb = repo.GetAll();
+
+
+                foreach (var practice in practicesFromDb)
+                {
+                    Practices.Add(practice);
+                }
+
+                DataContext = this;
+            }
+            catch (Exception ex) 
+            {
+                Error = "Ingen Trænning";
+                DataContext = this;
+            }
         }
 
 

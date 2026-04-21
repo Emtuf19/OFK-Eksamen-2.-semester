@@ -17,14 +17,14 @@
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Image Height="200" Width="127" Source="/Icon/odense-logo.png" VerticalAlignment="Top" 
+        <Image Margin="50" Height="200" Width="127" Source="/Icon/odense-logo.png" VerticalAlignment="Top" 
                HorizontalAlignment="Center" RenderTransformOrigin="0.323,0.585"/>
 
         <!-- Button View -->
-        <Button HorizontalAlignment="Center" Background="White" Margin="0,25,0,0" Grid.Row="1" VerticalAlignment="Top" 
+        <Button HorizontalAlignment="Center" Foreground="Black" FontSize="30" FontWeight="Bold" Background="White" Margin="0,60,0,0" Grid.Row="1" VerticalAlignment="Top" 
                 Height="74" Width="196" Click="TrænerButton_Click">Træner</Button>
 
-        <Button HorizontalAlignment="Center" Background="White" Margin="0,188,0,0" Grid.Row="1" VerticalAlignment="Top"
+        <Button HorizontalAlignment="Center" Foreground="Black" FontSize="30" FontWeight="Bold" Background="White" Margin="0,200,0,0" Grid.Row="1" VerticalAlignment="Top"
                 Height="74" Width="196" Click="MedlemButton_Click">Medlem</Button>
 
 
