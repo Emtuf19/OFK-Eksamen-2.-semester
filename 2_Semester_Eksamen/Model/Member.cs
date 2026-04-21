@@ -4,7 +4,12 @@ using System.Text;
 
 namespace _2_Semester_Eksamen.Model
 {
-    class Member
+    public class Member
     {
+        public int MemberID { get; set; }
+        public string MemberFirstName { get; set; }
+        public string MemberLastName { get; set; }
+
+        public List<ContactInfo> ContactPersons { get; set; } = new List<ContactInfo>();
     }
 }
