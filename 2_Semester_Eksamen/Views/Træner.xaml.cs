@@ -1,4 +1,5 @@
 ﻿using _2_Semester_Eksamen.Model;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -30,6 +31,7 @@ namespace _2_Semester_Eksamen.Views
 
             DataContext = this;
         }
+
 
         private void Home_Click(object sender, RoutedEventArgs e)
         {

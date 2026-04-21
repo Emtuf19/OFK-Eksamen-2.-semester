@@ -71,6 +71,7 @@
                     <DataTemplate>
                         <StackPanel Margin="5">
                             <TextBlock Text="{Binding PracticeID}" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding Trainers}" FontWeight="Bold"/>
                             <TextBlock Text="{Binding StartTime, StringFormat=dd-MM-yyyy HH:mm}" />
                             <TextBlock Text="{Binding EndTime, StringFormat=dd-MM-yyyy HH:mm}" />
                         </StackPanel>

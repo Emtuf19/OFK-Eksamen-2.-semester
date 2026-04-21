@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace _2_Semester_Eksamen.Model
@@ -88,6 +89,7 @@ namespace _2_Semester_Eksamen.Model
                 practices = new List<Practice>();
 
                 using SqlCommand cmd = new SqlCommand("sp_GetAllPracticesWithMembersAndTrainers", con);
+
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 using SqlDataReader reader = cmd.ExecuteReader();
@@ -157,9 +159,12 @@ namespace _2_Semester_Eksamen.Model
                         }
                     }
                 }
-                return practices;
             }
+            return practices;
         }
+
+
+
 
         public override void Add(Practice practice)
         {
