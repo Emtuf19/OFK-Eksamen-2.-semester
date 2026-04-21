@@ -482,6 +482,7 @@ BEGIN
         t.TrainerID,
         t.TrainerFirstName,
         t.TrainerLastName,
+        t.TrainerPhoneNumber,
         t.TrainerEmail
     FROM Trainer_Event te
     INNER JOIN Trainer t
@@ -528,7 +529,9 @@ BEGIN
     SELECT
         t.TrainerID,
         t.TrainerFirstName,
-        t.TrainerLastName
+        t.TrainerLastName,
+        t.TrainerPhoneNumber,
+        t.TrainerEmail
     FROM Trainer_Practice tp
     INNER JOIN Trainer t
         ON tp.TrainerID = t.TrainerID
@@ -564,7 +567,9 @@ BEGIN
         tp.PracticeID,
         t.TrainerID,
         t.TrainerFirstName,
-        t.TrainerLastName
+        t.TrainerLastName,
+        t.TrainerPhoneNumber,
+        t.TrainerEmail
     FROM Trainer_Practice tp
     INNER JOIN Trainer t
         ON tp.TrainerID = t.TrainerID;
@@ -601,7 +606,9 @@ BEGIN
         te.EventID,
         t.TrainerID,
         t.TrainerFirstName,
-        t.TrainerLastName
+        t.TrainerLastName,
+        t.TrainerPhoneNumber,
+        t.TrainerEmail
     FROM Trainer_Event te
     INNER JOIN Trainer t
         ON te.TrainerID = t.TrainerID;
