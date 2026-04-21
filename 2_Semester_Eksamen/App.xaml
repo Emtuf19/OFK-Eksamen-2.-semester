@@ -5,11 +5,13 @@
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
         <Style TargetType="Button">
-            
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Padding" Value="10"/>
-                
-                    
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="50"/>
         </Style>
 
 

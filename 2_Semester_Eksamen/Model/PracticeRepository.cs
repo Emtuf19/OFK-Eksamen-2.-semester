@@ -45,7 +45,7 @@ namespace _2_Semester_Eksamen.Model
                 {
                     while (reader.Read())
                     {
-                        if (practice == null) break;
+                        //if (practice == null) break;
 
                         var member = new Member
                         {
@@ -62,7 +62,7 @@ namespace _2_Semester_Eksamen.Model
                 {
                     while (reader.Read())
                     {
-                        if (practice == null) break;
+                        //if (practice == null) break;
 
                         var trainer = new Trainer
                         {
@@ -172,6 +172,8 @@ namespace _2_Semester_Eksamen.Model
                 cmd.Parameters.Add("@PracticeName", SqlDbType.NVarChar, 50).Value = practice.PracticeName;
                 cmd.Parameters.Add("@StartTime", SqlDbType.DateTime2).Value = practice.StartTime;
                 cmd.Parameters.Add("@EndTime", SqlDbType.DateTime2).Value = practice.EndTime;
+
+                cmd.ExecuteNonQuery();
             }
         }
 

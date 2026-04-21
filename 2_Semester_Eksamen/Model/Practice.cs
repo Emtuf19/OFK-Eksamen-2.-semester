@@ -11,7 +11,7 @@ namespace _2_Semester_Eksamen.Model
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
 
-        public List<Trainer> Trainers { get; set; }
-        public List<Member> Members { get; set; }
+        public List<Trainer> Trainers { get; set; } = new List<Trainer>();
+        public List<Member> Members { get; set; } = new List<Member>();
     }
 }

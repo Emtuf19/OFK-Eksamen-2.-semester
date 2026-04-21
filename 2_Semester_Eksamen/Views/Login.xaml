@@ -5,7 +5,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:_2_Semester_Eksamen.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="850"  d:DesignWidth="1200"
+      d:DesignHeight="720"  d:DesignWidth="1280"
+      Background="Wheat"
       Title="Odense fægteklub - Login">
 
     <Grid>
@@ -20,10 +21,10 @@
                HorizontalAlignment="Center" RenderTransformOrigin="0.323,0.585"/>
 
         <!-- Button View -->
-        <Button HorizontalAlignment="Center" Margin="0,25,0,0" Grid.Row="1" VerticalAlignment="Top" 
+        <Button HorizontalAlignment="Center" Background="White" Margin="0,25,0,0" Grid.Row="1" VerticalAlignment="Top" 
                 Height="74" Width="196" Click="TrænerButton_Click">Træner</Button>
 
-        <Button HorizontalAlignment="Center" Margin="0,188,0,0" Grid.Row="1" VerticalAlignment="Top"
+        <Button HorizontalAlignment="Center" Background="White" Margin="0,188,0,0" Grid.Row="1" VerticalAlignment="Top"
                 Height="74" Width="196" Click="MedlemButton_Click">Medlem</Button>
 
 
