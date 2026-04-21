@@ -10,6 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Icon\odense-logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icon\odense-logo.png" />
     <Compile Remove="Tools\**" />
     <EmbeddedResource Remove="Tools\**" />
     <None Remove="Tools\**" />

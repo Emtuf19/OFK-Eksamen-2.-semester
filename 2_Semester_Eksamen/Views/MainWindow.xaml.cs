@@ -16,12 +16,13 @@ namespace _2_Semester_Eksamen
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : NavigationWindow
     {
         public MainWindow()
         {
             InitializeComponent();
 
+            ShowsNavigationUI = false;
             // Quick test: call MemberRepository.GetAll() and show results
             //try
             //{
@@ -222,4 +223,5 @@ namespace _2_Semester_Eksamen
             //}
         }
     }
+
 }
