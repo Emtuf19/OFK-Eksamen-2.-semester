@@ -9,6 +9,9 @@
       Title="EventWindow">
 
     <Grid>
+        <TextBlock>
+            fisk
+        </TextBlock>
         
     </Grid>
 </Page>

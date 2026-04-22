@@ -25,13 +25,17 @@ namespace _2_Semester_Eksamen.Views
 
         private void TrainerButton_Click(object sender, RoutedEventArgs e)
         {
-            // View Home Page
+            var main = (MainWindow)Application.Current.MainWindow;
+            main.LoginSuccess("Trainer");
+
             NavigationService.Navigate(new HomeWindow());
         }
 
         private void MemberButton_Click(object sender, RoutedEventArgs e)
         {
-            //View Member Page
+            var main = (MainWindow)Application.Current.MainWindow;
+            main.LoginSuccess("Member");
+
             NavigationService.Navigate(new MemberHomeWindow());
         }
     }

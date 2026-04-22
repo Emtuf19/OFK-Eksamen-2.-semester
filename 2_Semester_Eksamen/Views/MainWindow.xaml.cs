@@ -1,4 +1,5 @@
 ﻿using _2_Semester_Eksamen.Model;
+using _2_Semester_Eksamen.Views;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Windows;
@@ -10,19 +11,28 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace _2_Semester_Eksamen
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : NavigationWindow
-    {
+    public partial class MainWindow : Window
+    {      
+        public string CurrentRole { get; set; }
+
         public MainWindow()
         {
-            InitializeComponent();
 
-            ShowsNavigationUI = false;
+            InitializeComponent();
+            // Køre vær gang der skiftes page            
+            MainFrame.Navigated += MainFrame_Navigated;
+            // Startside            
+            MainFrame.Navigate(new LoginWindow());
+            
+            SetMember();
+
             // Quick test: call MemberRepository.GetAll() and show results
             //try
             //{
@@ -221,7 +231,97 @@ namespace _2_Semester_Eksamen
             //{
             //    MessageBox.Show($"Error testing Update: {ex.Message}\n\n{ex}", "Error");
             //}
+
+        }
+        //Tjekker role ved login
+        public void LoginSuccess(string role)
+        {
+            CurrentRole = role;
+
+            if (role == "Trainer")
+            {
+                SetTrainer();
+            }
+            else
+            {
+                SetMember();
+            }
+
+            MainFrame.Navigate(new HomeWindow());
+        }
+        // Hvilke knapper hvem kan se
+        private void SetTrainer()
+        {
+            HomeBtn.Visibility = Visibility.Visible;
+            PracticeBtn.Visibility = Visibility.Visible;
+            OverviewMemberBtn.Visibility = Visibility.Visible;
+            EventBtn.Visibility = Visibility.Visible;
+            AboutBtn.Visibility = Visibility.Visible;
+            StaffBtn.Visibility = Visibility.Visible;
+            LogOutBtn.Visibility = Visibility.Visible;         
+        }
+
+        private void SetMember()
+        {
+            HomeBtn.Visibility = Visibility.Visible;
+            PracticeBtn.Visibility = Visibility.Visible;
+            EventBtn.Visibility = Visibility.Visible;
+            AboutBtn.Visibility = Visibility.Visible;
+            StaffBtn.Visibility = Visibility.Visible;
+            LogOutBtn.Visibility = Visibility.Visible;
+
+            OverviewMemberBtn.Visibility = Visibility.Collapsed;
+        }
+
+        // Skjuler navbar ved login page
+        private void MainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            if (e.Content is LoginWindow)
+            {
+                TrainerNavBar.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                TrainerNavBar.Visibility = Visibility.Visible;
+            }
+        }
+
+        // Knapper navigation
+
+        private void Home_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new HomeWindow());
+        }
+
+        private void Event_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new EventWindow());
+        }
+
+        private void Practice_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new PracticeWindow());
+        }
+
+        private void OverviewMember_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new OverviewMemberWindow());
+        }
+
+        private void AboutUs_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new AboutUsWindow());
+        }
+
+        private void Staff_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new StaffWindow());
+        }
+
+        private void Logout_Click(object sender, RoutedEventArgs e)
+        {
+            SetMember();
+            MainFrame.Navigate(new LoginWindow());
         }
     }
-
 }
