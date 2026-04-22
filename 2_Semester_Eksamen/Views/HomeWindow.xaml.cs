@@ -8,7 +8,7 @@ using System.Windows.Navigation;
 
 namespace _2_Semester_Eksamen.Views
 {
-    public partial class Træner : Page
+    public partial class HomeWindow : Page
     {
         public ObservableCollection<Practice> Practices { get; set; }
 
@@ -16,7 +16,7 @@ namespace _2_Semester_Eksamen.Views
         public string Error { get; set; }
 
 
-        public Træner()
+        public HomeWindow()
         {
             InitializeComponent();
             try
@@ -44,8 +44,39 @@ namespace _2_Semester_Eksamen.Views
 
         private void Home_Click(object sender, RoutedEventArgs e)
         {
-            //View Medlem Page
-            NavigationService.Navigate(new Login());
+            NavigationService.Navigate(new HomeWindow());
         }
+
+        private void Practice_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new PracticeWindow());
+        }
+
+        private void Event_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new EventWindow());
+        }
+
+        private void OverviewMember_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new OverviewMemberWindow());
+        }
+
+        private void AboutUs_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new AboutUsWindow());
+        }
+
+        private void Staff_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new StaffWindow());
+        }
+
+        private void Logout_Click(object sender, RoutedEventArgs e)
+        {
+            //View Medlem Page
+            NavigationService.Navigate(new LoginWindow());
+        }
+
     }
 }
