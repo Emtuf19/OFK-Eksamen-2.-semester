@@ -5,10 +5,58 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:_2_Semester_Eksamen.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Background="White"
       Title="StaffWindow">
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </Page.Resources>
+    
 
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="4">
+            <Label HorizontalAlignment="Center" Margin="20" Content="Folk"/>
+        </StackPanel>
+        <!-- Person 1 -->
+        <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock>
+        Træner: Jens Hansen
+            </TextBlock>
+            <TextBlock FontWeight="Normal" >
+        Jens har været træner i 39 år  <LineBreak/>
+        Han er god til at fægte
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="2"  HorizontalAlignment="Center">
+            <Image Source="/Icon/odense-logo.png" Height="180" Margin="20"/>
+        </StackPanel>
+        <!-- Person 2 -->
+        <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock>
+        Træner: Jens Hansen
+            </TextBlock>
+            <TextBlock FontWeight="Normal" >
+        Jens har været træner i 39 år  <LineBreak/>
+        Han er god til at fægte
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="2"  HorizontalAlignment="Center">
+            <Image Source="/Icon/odense-logo.png" Height="180" Margin="20"/>
+        </StackPanel>
     </Grid>
 </Page>
