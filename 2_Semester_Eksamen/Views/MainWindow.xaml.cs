@@ -30,8 +30,6 @@ namespace _2_Semester_Eksamen
             MainFrame.Navigated += MainFrame_Navigated;
             // Startside            
             MainFrame.Navigate(new LoginWindow());
-            
-            SetMember();
 
             // Quick test: call MemberRepository.GetAll() and show results
             //try
@@ -320,7 +318,6 @@ namespace _2_Semester_Eksamen
 
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
-            SetMember();
             MainFrame.Navigate(new LoginWindow());
         }
     }
