@@ -24,64 +24,6 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <StackPanel
-                Grid.Row="0"
-                Grid.ColumnSpan="2"
-                VerticalAlignment="Center"
-                Background="#FFA92E2E"
-                Orientation="Horizontal">
-                <!--  Image  -->
-                <Button Click="Home_Click">
-                    <Button.Template>
-                        <ControlTemplate>
-                            <Image
-                                Height="122"
-                                Margin="10,10"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Source="/Icon/odense-logo.png"
-                                Stretch="Uniform" />
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-                <!--  Home  -->
-                <Button
-                    Margin="20,0,0,0"
-                    VerticalAlignment="Center"
-                    Click="Home_Click"
-                    Content="Home"
-                    Style="{StaticResource NavBar}" />
-
-                <!--  Træning  -->
-                <Button Content="Træning" Style="{StaticResource NavBar}" 
-                        Click="Practice_Click"/>
-
-                <!--  Medlemsoversigt  -->
-                <Button Content="Medlemsoversigt" Style="{StaticResource NavBar}" 
-                        Click="OverviewMember_Click"/>
-
-                <!--  Begivenheder  -->
-                <Button Content="Begivenhed" Style="{StaticResource NavBar}" 
-                        Click="Event_Click"/>
-
-                <!--  Om Os  -->
-                <Button Content="Om Os" Style="{StaticResource NavBar}" 
-                        Click="AboutUs_Click"/>
-
-                <!--  Kontakt  -->
-                <Button Content="Kontakt" Style="{StaticResource NavBar}" 
-                        Click="Staff_Click"/>
-
-                <!--  Log ud  -->
-                <Button
-                    HorizontalAlignment="Right"
-                    Click="Logout_Click"
-                    Content="Log ud"
-                    Style="{StaticResource NavBar}" />
-
-
-            </StackPanel>
-
             <Label
                 Grid.Row="1"
                 Grid.ColumnSpan="2"

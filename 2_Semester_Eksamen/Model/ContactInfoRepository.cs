@@ -27,10 +27,7 @@ namespace _2_Semester_Eksamen.Model
             }
         }
 
-        public override List<ContactInfo> GetAll()
-        {
-            return contactInfos;
-        }
+        public override List<ContactInfo> GetAll() => throw new NotImplementedException();
 
         public override void Add(ContactInfo contactInfo)
         {

@@ -36,7 +36,7 @@ namespace _2_Semester_Eksamen.Views
             var main = (MainWindow)Application.Current.MainWindow;
             main.LoginSuccess("Member");
 
-            NavigationService.Navigate(new MemberHomeWindow());
+            NavigationService.Navigate(new HomeWindow());
         }
     }
 }

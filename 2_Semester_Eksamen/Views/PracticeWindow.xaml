@@ -1,14 +1,41 @@
-﻿<Page x:Class="_2_Semester_Eksamen.Views.PracticeWindow"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:_2_Semester_Eksamen.Views"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="PracticeWindow">
+﻿<Page
+    x:Class="_2_Semester_Eksamen.Views.PracticeWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:_2_Semester_Eksamen.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="PracticeWindow"
+    d:DesignHeight="720"
+    d:DesignWidth="1280"
+    Background="White"
+    mc:Ignorable="d">
 
     <Grid>
-        
+        <StackPanel Margin="20">
+
+            <!--  Calendar  -->
+            <Calendar SelectedDate="{Binding SelectedDate}">
+                
+            </Calendar>
+
+
+
+            <!--  Practices list  -->
+            <ItemsControl ItemsSource="{Binding SelectedPractices}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Margin="5"
+                            Padding="10"
+                            BorderBrush="Gray"
+                            BorderThickness="1">
+                            <TextBlock Text="{Binding PracticeName}" />
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+        </StackPanel>
     </Grid>
 </Page>

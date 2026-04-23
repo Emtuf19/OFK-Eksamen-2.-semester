@@ -83,10 +83,11 @@ namespace _2_Semester_Eksamen.Model
 
         public override List<Practice> GetAll()
         {
+            List<Practice> practices = new List<Practice>();
+
             using (SqlConnection con = CreateConnection())
             {
                 con.Open();
-                practices = new List<Practice>();
 
                 using SqlCommand cmd = new SqlCommand("sp_GetAllPracticesWithMembersAndTrainers", con);
 

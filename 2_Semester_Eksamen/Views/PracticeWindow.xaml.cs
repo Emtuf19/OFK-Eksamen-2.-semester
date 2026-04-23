@@ -10,6 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using _2_Semester_Eksamen.ViewModel;
+using _2_Semester_Eksamen.Model;
 
 namespace _2_Semester_Eksamen.Views
 {
@@ -21,6 +23,7 @@ namespace _2_Semester_Eksamen.Views
         public PracticeWindow()
         {
             InitializeComponent();
+            DataContext = new CalendarViewModel();
         }
     }
 }
