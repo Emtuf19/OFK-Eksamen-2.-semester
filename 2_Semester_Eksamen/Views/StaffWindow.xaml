@@ -30,7 +30,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Grid.ColumnSpan="4">
-            <Label HorizontalAlignment="Center" Margin="20" Content="Folk"/>
+            <Label HorizontalAlignment="Center" Margin="20" Content="Kontakt"/>
         </StackPanel>
         <!-- Person 1 -->
         <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">

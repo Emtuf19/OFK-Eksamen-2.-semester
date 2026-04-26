@@ -10,7 +10,7 @@
     d:DesignWidth="1280"
     Background="White"
     mc:Ignorable="d">
-
+    
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -32,8 +32,7 @@
                 VerticalAlignment="Center">
                 Odense Fægte-Klub
             </Label>
-
-
+            
             <!--  List over Træning  -->
             <Border
                 Grid.Row="3"
@@ -41,23 +40,23 @@
                 Margin="40,0,20,30"
                 BorderBrush="Black"
                 BorderThickness="2">
-                <Grid Background="White">
+                <Grid Background="#FFF3F35D">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <TextBlock
                         HorizontalAlignment="Center"
-                        FontSize="20"
+                        FontSize="25"
                         FontWeight="Bold"
                         Text="Træninger:" />
                     <TextBlock
                         Grid.Row="0"
-                        Margin="40,0"
-                        FontSize="20"
+                        Margin="40,0"                       
                         FontWeight="Bold"
                         Text="{Binding Error}" />
                     <ListBox
+                        FontSize="16"
                         Grid.Row="1"
                         Background="Transparent"
                         BorderThickness="0"
@@ -70,8 +69,10 @@
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
+                                                    <Rectangle Height="1" Fill="Black"></Rectangle>
                                                     <TextBlock FontWeight="Bold" Text="Træner: " />
                                                     <TextBlock Text="{Binding TrainerFirstName}" />
+                                                    <TextBlock Text="{Binding TrainerLastName}" />
                                                 </StackPanel>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
