@@ -4,7 +4,7 @@ using System.Text;
 
 namespace _2_Semester_Eksamen.ViewModel
 {
-    class EventScheduleViewModel
+    class EventViewModel
     {
     }
 }

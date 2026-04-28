@@ -23,7 +23,7 @@ namespace _2_Semester_Eksamen.Views
         public PracticeWindow()
         {
             InitializeComponent();
-            DataContext = new CalendarViewModel();
+            DataContext = new PracticeViewModel();
         }
     }
 }
