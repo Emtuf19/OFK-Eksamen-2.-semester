@@ -30,6 +30,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Icon\Trainer1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icon\Trainer2.png" />
+    <Resource Include="Icon\Trainer3.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.5" />
   </ItemGroup>

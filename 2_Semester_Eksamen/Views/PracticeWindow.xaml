@@ -25,8 +25,9 @@
             <Button Content="Aflys træning" Command="{Binding DeletePracticeCommand}"/>
 
             <!--  Calendar  -->
+
             <Calendar SelectedDate="{Binding SelectedDate}">
-                
+
             </Calendar>
 
 
