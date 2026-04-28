@@ -10,7 +10,7 @@ using _2_Semester_Eksamen.Commands;
 
 namespace _2_Semester_Eksamen.ViewModel
 {
-    public class CalendarViewModel : ViewModelBase
+    public class PracticeViewModel : ViewModelBase
     {
         public ObservableCollection<Practice> Practices { get; set; } = new();
 
@@ -67,6 +67,20 @@ namespace _2_Semester_Eksamen.ViewModel
             {
                 _endTime = value;
                 OnPropertyChanged();
+            }
+        }
+
+
+        private DateTime? _selectedDate;
+        public DateTime? SelectedDate
+        {
+            get => _selectedDate;
+            set
+            {
+                _selectedDate = value;
+                OnPropertyChanged();
+                CreatePracticeCommand?.RaiseCanExecuteChanged();
+                UpdateSelectedPractices();
             }
         }
 
@@ -137,20 +151,7 @@ namespace _2_Semester_Eksamen.ViewModel
             UpdateSelectedPractices();
         }
 
-        private DateTime? _selectedDate;
-        public DateTime? SelectedDate
-        {
-            get => _selectedDate;
-            set
-            {
-                _selectedDate = value;
-                OnPropertyChanged();
-                CreatePracticeCommand?.RaiseCanExecuteChanged();
-                UpdateSelectedPractices();
-            }
-        }
-
-        public CalendarViewModel()
+        public PracticeViewModel()
         {
             LoadPractices();
 
