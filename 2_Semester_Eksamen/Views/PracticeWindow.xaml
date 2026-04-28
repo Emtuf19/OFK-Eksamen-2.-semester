@@ -17,8 +17,8 @@
             <DatePicker SelectedDate="{Binding SelectedDate}" Margin="5"/>
 
             <TextBox Text="{Binding PracticeName}" Margin="5"/>
-            <TextBox Text="{Binding StartTime}" Margin="5"/>
-            <TextBox Text="{Binding EndTime}" Margin="5"/>
+            <TextBox Text="{Binding StartTime, StringFormat=HH:mm, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+            <TextBox Text="{Binding EndTime, StringFormat=HH:mm, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
 
             <Button Content="Opret træning" Command="{Binding CreatePracticeCommand}"/>
             <Button Content="Rediger træning" Command="{Binding UpdatePracticeCommand}"/>
