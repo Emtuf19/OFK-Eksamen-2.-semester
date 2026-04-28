@@ -10,42 +10,67 @@
     d:DesignWidth="1280"
     Background="White"
     mc:Ignorable="d">
+    <Page.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="8"/>
+                </Style>
+            </Style.Resources>
+        </Style>
+    </Page.Resources>
 
     <Grid>
-        <StackPanel Margin="20">
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Grid.ColumnSpan="4" HorizontalAlignment="Center">
+            Træning
+        </Label>
+        <StackPanel Margin="20" Grid.Column="1" Grid.Row="1">
             <DatePicker SelectedDate="{Binding SelectedDate}" Margin="5"/>
 
             <TextBox Text="{Binding PracticeName}" Margin="5"/>
             <TextBox Text="{Binding StartTime}" Margin="5"/>
             <TextBox Text="{Binding EndTime}" Margin="5"/>
-
-            <Button Content="Opret træning" Command="{Binding CreatePracticeCommand}"/>
-            <Button Content="Rediger træning" Command="{Binding UpdatePracticeCommand}"/>
-            <Button Content="Aflys træning" Command="{Binding DeletePracticeCommand}"/>
-
-            <!--  Calendar  -->
-
-            <Calendar SelectedDate="{Binding SelectedDate}">
-
-            </Calendar>
-
-
-
+            <StackPanel x:Name="TrainerTrainingCommands">
+                <Button Content="Opret træning" Command="{Binding CreatePracticeCommand}" Background="#FF2DC72D"/>
+                <Button Content="Rediger træning" Command="{Binding UpdatePracticeCommand}" Background="#FF679ECE"/>
+                <Button Content="Aflys træning" Command="{Binding DeletePracticeCommand}" Background="#FFDE4444"/>
+            </StackPanel>
             <!--  Practices list  -->
-            <ListBox ItemsSource="{Binding SelectedPractices}"
-         SelectedItem="{Binding SelectedPractice}" Height="100">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding PracticeName}" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding StartTime}"/>
-                            <TextBlock Text="{Binding EndTime}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-
+            <StackPanel Margin="0,10">
+                <ListBox ItemsSource="{Binding SelectedPractices}" MinHeight="228" BorderThickness="1" BorderBrush="Black"                         
+                        SelectedItem="{Binding SelectedPractice}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding PracticeName}" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding StartTime}"/>
+                                <TextBlock Text="{Binding EndTime}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>                           
+                </ListBox>
+            </StackPanel>
+        </StackPanel>
+        <!--  Calendar  -->
+        <StackPanel Margin="0,15" Grid.Row="1" Grid.Column="2">
+            <Viewbox>
+                <Calendar SelectedDate="{Binding SelectedDate}"/>
+            </Viewbox>
         </StackPanel>
     </Grid>
 </Page>

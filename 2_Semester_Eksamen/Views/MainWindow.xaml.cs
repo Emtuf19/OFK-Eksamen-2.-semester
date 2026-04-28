@@ -248,7 +248,7 @@ namespace _2_Semester_Eksamen
             MainFrame.Navigate(new HomeWindow());
         }
         // Hvilke knapper hvem kan se
-        private void SetTrainer()
+        public void SetTrainer()
         {
             HomeBtn.Visibility = Visibility.Visible;
             PracticeBtn.Visibility = Visibility.Visible;
@@ -256,10 +256,10 @@ namespace _2_Semester_Eksamen
             EventBtn.Visibility = Visibility.Visible;
             AboutBtn.Visibility = Visibility.Visible;
             StaffBtn.Visibility = Visibility.Visible;
-            LogOutBtn.Visibility = Visibility.Visible;         
+            LogOutBtn.Visibility = Visibility.Visible;        
         }
 
-        private void SetMember()
+        public void SetMember()
         {
             HomeBtn.Visibility = Visibility.Visible;
             PracticeBtn.Visibility = Visibility.Visible;
