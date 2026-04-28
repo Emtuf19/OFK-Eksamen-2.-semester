@@ -10,17 +10,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using _2_Semester_Eksamen.ViewModel;
+using _2_Semester_Eksamen.Model;
 
 namespace _2_Semester_Eksamen.Views
 {
     /// <summary>
-    /// Interaction logic for Kalender.xaml
+    /// Interaction logic for PracticeWindow.xaml
     /// </summary>
-    public partial class Kalender : Page
+    public partial class PracticeWindow : Page
     {
-        public Kalender()
+        public PracticeWindow()
         {
             InitializeComponent();
+            DataContext = new CalendarViewModel();
         }
     }
 }

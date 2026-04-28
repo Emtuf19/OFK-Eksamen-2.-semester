@@ -14,11 +14,11 @@ using System.Windows.Shapes;
 namespace _2_Semester_Eksamen.Views
 {
     /// <summary>
-    /// Interaction logic for Medlem.xaml
+    /// Interaction logic for EventWindow.xaml
     /// </summary>
-    public partial class Medlem : Page
+    public partial class EventWindow : Page
     {
-        public Medlem()
+        public EventWindow()
         {
             InitializeComponent();
         }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace _2_Semester_Eksamen.Model
@@ -45,7 +46,7 @@ namespace _2_Semester_Eksamen.Model
                 {
                     while (reader.Read())
                     {
-                        if (practice == null) break;
+                        //if (practice == null) break;
 
                         var member = new Member
                         {
@@ -62,7 +63,7 @@ namespace _2_Semester_Eksamen.Model
                 {
                     while (reader.Read())
                     {
-                        if (practice == null) break;
+                        //if (practice == null) break;
 
                         var trainer = new Trainer
                         {
@@ -82,12 +83,14 @@ namespace _2_Semester_Eksamen.Model
 
         public override List<Practice> GetAll()
         {
+            List<Practice> practices = new List<Practice>();
+
             using (SqlConnection con = CreateConnection())
             {
                 con.Open();
-                practices = new List<Practice>();
 
                 using SqlCommand cmd = new SqlCommand("sp_GetAllPracticesWithMembersAndTrainers", con);
+
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 using SqlDataReader reader = cmd.ExecuteReader();
@@ -157,9 +160,12 @@ namespace _2_Semester_Eksamen.Model
                         }
                     }
                 }
-                return practices;
             }
+            return practices;
         }
+
+
+
 
         public override void Add(Practice practice)
         {
@@ -172,6 +178,8 @@ namespace _2_Semester_Eksamen.Model
                 cmd.Parameters.Add("@PracticeName", SqlDbType.NVarChar, 50).Value = practice.PracticeName;
                 cmd.Parameters.Add("@StartTime", SqlDbType.DateTime2).Value = practice.StartTime;
                 cmd.Parameters.Add("@EndTime", SqlDbType.DateTime2).Value = practice.EndTime;
+
+                cmd.ExecuteNonQuery();
             }
         }
 
@@ -202,6 +210,35 @@ namespace _2_Semester_Eksamen.Model
                     cmd.Parameters.Add("@ID", SqlDbType.Int).Value = ID;
                     cmd.ExecuteNonQuery();
                 }
+            }
+        }
+
+        //Test af ny CreatePractice, som gøre brug af SCOPE IDENTITY() for at få det nye PracticeID, og dermed kunne tilføje medlemmer og trænere til den nye practice
+        public int Create(Practice practice)
+        {
+            using (SqlConnection conn = CreateConnection())
+            using (SqlCommand cmd = new SqlCommand("sp_InsertIntoPractice", conn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@practiceName", practice.PracticeName);
+                cmd.Parameters.AddWithValue("@startTime", practice.StartTime);
+                cmd.Parameters.AddWithValue("@endTime", practice.EndTime);
+
+                SqlParameter outputId = new SqlParameter("@newPracticeID", SqlDbType.Int)
+                {
+                    Direction = ParameterDirection.Output
+                };
+
+                cmd.Parameters.Add(outputId);
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+
+                int newId = (int)outputId.Value;
+                practice.PracticeID = newId;
+
+                return newId;
             }
         }
 

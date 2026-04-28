@@ -16,23 +16,27 @@ namespace _2_Semester_Eksamen.Views
     /// <summary>
     /// Interaction logic for Login.xaml
     /// </summary>
-    public partial class Login : Page
+    public partial class LoginWindow : Page
     {
-        public Login()
+        public LoginWindow()
         {
             InitializeComponent();
         }
 
-        private void TrænerButton_Click(object sender, RoutedEventArgs e)
+        private void TrainerButton_Click(object sender, RoutedEventArgs e)
         {
-            // View Træner Page
-            NavigationService.Navigate(new Træner());
+            var main = (MainWindow)Application.Current.MainWindow;
+            main.LoginSuccess("Trainer");
+
+            NavigationService.Navigate(new HomeWindow());
         }
 
-        private void MedlemButton_Click(object sender, RoutedEventArgs e)
+        private void MemberButton_Click(object sender, RoutedEventArgs e)
         {
-            //View Medlem Page
-            NavigationService.Navigate(new Medlem());
+            var main = (MainWindow)Application.Current.MainWindow;
+            main.LoginSuccess("Member");
+
+            NavigationService.Navigate(new HomeWindow());
         }
     }
 }

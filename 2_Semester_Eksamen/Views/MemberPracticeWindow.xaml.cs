@@ -14,21 +14,13 @@ using System.Windows.Shapes;
 namespace _2_Semester_Eksamen.Views
 {
     /// <summary>
-    /// Interaction logic for Træner.xaml
+    /// Interaction logic for MemberPracticeWindow.xaml
     /// </summary>
-    public partial class Træner : Page
+    public partial class MemberPracticeWindow : Page
     {
-        public Træner()
+        public MemberPracticeWindow()
         {
             InitializeComponent();
-        }
-
-        
-
-        private void Home_Click(object sender, RoutedEventArgs e)
-        {
-            //View Medlem Page
-            NavigationService.Navigate(new Login());
         }
     }
 }

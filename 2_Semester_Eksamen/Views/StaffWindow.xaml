@@ -1,0 +1,90 @@
+﻿<Page x:Class="_2_Semester_Eksamen.Views.StaffWindow"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:_2_Semester_Eksamen.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Background="White"
+      Title="StaffWindow">
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </Page.Resources>
+
+    <ScrollViewer>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Grid.ColumnSpan="4">
+                <Label HorizontalAlignment="Center" Margin="20" Content="Kontakt"/>
+            </StackPanel>
+            <!-- Person 1 -->
+            <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" >
+                <TextBlock>
+                Træner: Jens Hansen <LineBreak/>
+                Tlf: 12345678 <LineBreak/>
+                Mail: navn@mail.dk
+                </TextBlock>
+                <TextBlock FontWeight="Normal" TextWrapping="Wrap">
+                Lorem ipsum dolor sit amet consectetur 
+                adipiscing elit. Sit amet consectetur adipiscing  
+                elit quisque faucibus ex. Adipiscing elit quisque 
+                faucibus ex sapien vitae pellentesque.
+                </TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="2"  HorizontalAlignment="Center">
+                <Image Source="/Icon/Trainer1.png" Height="200" Margin="10"/>
+            </StackPanel>
+            <!-- Person 2 -->
+            <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" >
+                <TextBlock>
+                Træner: Jens Hansen <LineBreak/>
+                Tlf: 12345678 <LineBreak/>
+                Mail: navn@mail.dk
+                </TextBlock>
+                <TextBlock FontWeight="Normal" TextWrapping="Wrap" >
+                Lorem ipsum dolor sit amet consectetur
+                adipiscing elit. Sit amet consectetur adipiscing 
+                elit quisque faucibus ex. Adipiscing elit quisque 
+                faucibus ex sapien vitae pellentesque.
+                </TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Grid.Column="2"  HorizontalAlignment="Center">
+                <Image Source="/Icon/Trainer2.png" Height="200" Margin="10"/>
+            </StackPanel>
+            <!-- Person 3 -->
+            <StackPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock>
+                Træner: Jens Hansen <LineBreak/>
+                Tlf: 12345678 <LineBreak/>
+                Mail: navn@mail.dk
+                </TextBlock>
+                <TextBlock FontWeight="Normal" >
+                Lorem ipsum dolor sit amet consectetur <LineBreak/>
+                adipiscing elit. Sit amet consectetur adipiscing  <LineBreak/>
+                elit quisque faucibus ex. Adipiscing elit quisque <LineBreak/>
+                faucibus ex sapien vitae pellentesque.
+                </TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="3" Grid.Column="2"  HorizontalAlignment="Center">
+                <Image Source="/Icon/Trainer3.png" Height="200" Margin="10"/>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</Page>
