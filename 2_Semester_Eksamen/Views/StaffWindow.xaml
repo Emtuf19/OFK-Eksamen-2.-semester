@@ -14,49 +14,77 @@
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
     </Page.Resources>
-    
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Grid.ColumnSpan="4">
-            <Label HorizontalAlignment="Center" Margin="20" Content="Kontakt"/>
-        </StackPanel>
-        <!-- Person 1 -->
-        <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock>
-        Træner: Jens Hansen
-            </TextBlock>
-            <TextBlock FontWeight="Normal" >
-        Jens har været træner i 39 år  <LineBreak/>
-        Han er god til at fægte
-            </TextBlock>
-        </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="2"  HorizontalAlignment="Center">
-            <Image Source="/Icon/odense-logo.png" Height="180" Margin="20"/>
-        </StackPanel>
-        <!-- Person 2 -->
-        <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock>
-        Træner: Jens Hansen
-            </TextBlock>
-            <TextBlock FontWeight="Normal" >
-        Jens har været træner i 39 år  <LineBreak/>
-        Han er god til at fægte
-            </TextBlock>
-        </StackPanel>
-        <StackPanel Grid.Row="2" Grid.Column="2"  HorizontalAlignment="Center">
-            <Image Source="/Icon/odense-logo.png" Height="180" Margin="20"/>
-        </StackPanel>
-    </Grid>
+    <ScrollViewer>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Grid.ColumnSpan="4">
+                <Label HorizontalAlignment="Center" Margin="20" Content="Kontakt"/>
+            </StackPanel>
+            <!-- Person 1 -->
+            <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" >
+                <TextBlock>
+                Træner: Jens Hansen <LineBreak/>
+                Tlf: 12345678 <LineBreak/>
+                Mail: navn@mail.dk
+                </TextBlock>
+                <TextBlock FontWeight="Normal" TextWrapping="Wrap">
+                Lorem ipsum dolor sit amet consectetur 
+                adipiscing elit. Sit amet consectetur adipiscing  
+                elit quisque faucibus ex. Adipiscing elit quisque 
+                faucibus ex sapien vitae pellentesque.
+                </TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="2"  HorizontalAlignment="Center">
+                <Image Source="/Icon/Trainer1.png" Height="200" Margin="10"/>
+            </StackPanel>
+            <!-- Person 2 -->
+            <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" >
+                <TextBlock>
+                Træner: Jens Hansen <LineBreak/>
+                Tlf: 12345678 <LineBreak/>
+                Mail: navn@mail.dk
+                </TextBlock>
+                <TextBlock FontWeight="Normal" TextWrapping="Wrap" >
+                Lorem ipsum dolor sit amet consectetur
+                adipiscing elit. Sit amet consectetur adipiscing 
+                elit quisque faucibus ex. Adipiscing elit quisque 
+                faucibus ex sapien vitae pellentesque.
+                </TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Grid.Column="2"  HorizontalAlignment="Center">
+                <Image Source="/Icon/Trainer2.png" Height="200" Margin="10"/>
+            </StackPanel>
+            <!-- Person 3 -->
+            <StackPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock>
+                Træner: Jens Hansen <LineBreak/>
+                Tlf: 12345678 <LineBreak/>
+                Mail: navn@mail.dk
+                </TextBlock>
+                <TextBlock FontWeight="Normal" >
+                Lorem ipsum dolor sit amet consectetur <LineBreak/>
+                adipiscing elit. Sit amet consectetur adipiscing  <LineBreak/>
+                elit quisque faucibus ex. Adipiscing elit quisque <LineBreak/>
+                faucibus ex sapien vitae pellentesque.
+                </TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="3" Grid.Column="2"  HorizontalAlignment="Center">
+                <Image Source="/Icon/Trainer3.png" Height="200" Margin="10"/>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 </Page>

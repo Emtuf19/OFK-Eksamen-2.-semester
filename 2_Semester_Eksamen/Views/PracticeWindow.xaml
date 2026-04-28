@@ -15,12 +15,10 @@
         <StackPanel Margin="20">
 
             <!--  Calendar  -->
-            <Viewbox Width="600">
-                
+
             <Calendar SelectedDate="{Binding SelectedDate}">
-                
+
             </Calendar>
-            </Viewbox>
 
 
 
