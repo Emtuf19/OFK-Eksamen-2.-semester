@@ -14,6 +14,16 @@
     <Grid>
         <StackPanel Margin="20">
 
+            <DatePicker SelectedDate="{Binding SelectedDate}" Margin="5"/>
+
+            <TextBox Text="{Binding PracticeName}" Margin="5"/>
+            <TextBox Text="{Binding StartTime}" Margin="5"/>
+            <TextBox Text="{Binding EndTime}" Margin="5"/>
+
+            <Button Content="Opret træning" Command="{Binding CreatePracticeCommand}"/>
+            <Button Content="Rediger træning" Command="{Binding UpdatePracticeCommand}"/>
+            <Button Content="Aflys træning" Command="{Binding DeletePracticeCommand}"/>
+
             <!--  Calendar  -->
             <Calendar SelectedDate="{Binding SelectedDate}">
                 
@@ -22,19 +32,18 @@
 
 
             <!--  Practices list  -->
-            <ItemsControl ItemsSource="{Binding SelectedPractices}">
-                <ItemsControl.ItemTemplate>
+            <ListBox ItemsSource="{Binding SelectedPractices}"
+         SelectedItem="{Binding SelectedPractice}" Height="100">
+                <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border
-                            Margin="5"
-                            Padding="10"
-                            BorderBrush="Gray"
-                            BorderThickness="1">
-                            <TextBlock Text="{Binding PracticeName}" />
-                        </Border>
+                        <StackPanel>
+                            <TextBlock Text="{Binding PracticeName}" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding StartTime}"/>
+                            <TextBlock Text="{Binding EndTime}"/>
+                        </StackPanel>
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
         </StackPanel>
     </Grid>

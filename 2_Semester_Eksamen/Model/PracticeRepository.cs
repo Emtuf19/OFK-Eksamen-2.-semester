@@ -213,6 +213,35 @@ namespace _2_Semester_Eksamen.Model
             }
         }
 
+        //Test af ny CreatePractice, som gøre brug af SCOPE IDENTITY() for at få det nye PracticeID, og dermed kunne tilføje medlemmer og trænere til den nye practice
+        public int Create(Practice practice)
+        {
+            using (SqlConnection conn = CreateConnection())
+            using (SqlCommand cmd = new SqlCommand("sp_InsertIntoPractice", conn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@practiceName", practice.PracticeName);
+                cmd.Parameters.AddWithValue("@startTime", practice.StartTime);
+                cmd.Parameters.AddWithValue("@endTime", practice.EndTime);
+
+                SqlParameter outputId = new SqlParameter("@newPracticeID", SqlDbType.Int)
+                {
+                    Direction = ParameterDirection.Output
+                };
+
+                cmd.Parameters.Add(outputId);
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+
+                int newId = (int)outputId.Value;
+                practice.PracticeID = newId;
+
+                return newId;
+            }
+        }
+
     }
 
 }
