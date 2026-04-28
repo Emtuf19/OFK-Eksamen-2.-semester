@@ -95,13 +95,18 @@ namespace _2_Semester_Eksamen.ViewModel
 
         private void ExecuteDeletePractice()
         {
+
+            PracticeName = "Træning Aflyst";
+            SelectedPractice.PracticeName = PracticeName;
+            SelectedPractice.StartTime = StartTime;
+            SelectedPractice.EndTime = EndTime;
+            
             var repo = new PracticeRepository();
+            
+            repo.Update(SelectedPractice);
+            
+            UpdateSelectedPractices();
 
-            repo.Delete(SelectedPractice.PracticeID);
-
-            SelectedPractices.Remove(SelectedPractice);
-
-            SelectedPractice = null;
         }
 
         private bool CanExecuteCreatePractice()
@@ -116,11 +121,9 @@ namespace _2_Semester_Eksamen.ViewModel
             var newPractice = new Practice
             {
                 PracticeName = "New Practice",
-                StartTime = date.Date.AddHours(18), // Default to 9 AM on the selected date
-                EndTime = date.Date.AddHours(20) // Default to 10 AM on the selected date
+                StartTime = date.Date.AddHours(18), // Default to 6 PM on the selected date
+                EndTime = date.Date.AddHours(20) // Default to 8 PM on the selected date
 
-                //StartTime = SelectedDate.Value,
-                //EndTime = SelectedDate.Value.AddHours(1)
             };
 
             var repo = new PracticeRepository();
