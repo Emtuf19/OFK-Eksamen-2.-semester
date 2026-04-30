@@ -119,6 +119,14 @@ namespace _2_Semester_Eksamen.ViewModel
                 var repo = new PracticeRepository();
                 repo.RemoveMemberFromPractice(SelectedPractice.PracticeID, MemberIDInput);
 
+                bool memberExists = SelectedPractice.Members?.Any(m => m.MemberID == MemberIDInput) ?? false;
+
+                if (!memberExists)
+                {
+                    MessageBox.Show($"Medlem {MemberIDInput} er ikke tilmeldt træningen.", "Afmelding mislykket", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 MessageBox.Show($"Medlem {MemberIDInput} er afmeldt træningen.", "Afmelding fuldført", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 var member = SelectedPractice.Members?.FirstOrDefault(m => m.MemberID == MemberIDInput);
