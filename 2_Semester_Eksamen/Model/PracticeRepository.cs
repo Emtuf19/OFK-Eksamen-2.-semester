@@ -161,7 +161,9 @@ namespace _2_Semester_Eksamen.Model
                     }
                 }
             }
-            return practices;
+            //Tilføjet filter for at kun vise fremtidige practices, og sortering på starttidspunkt
+            practices = practices.Where(p => p.StartTime >= DateTime.Now).ToList();
+            return practices.OrderBy(p => p.StartTime).ToList();
         }
 
 

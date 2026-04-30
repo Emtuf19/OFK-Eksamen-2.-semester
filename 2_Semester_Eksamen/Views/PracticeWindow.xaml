@@ -17,8 +17,8 @@
             <DatePicker SelectedDate="{Binding SelectedDate}" Margin="5"/>
 
             <TextBox Text="{Binding PracticeName}" Margin="5"/>
-            <TextBox Text="{Binding StartTime}" Margin="5"/>
-            <TextBox Text="{Binding EndTime}" Margin="5"/>
+            <TextBox Text="{Binding StartTime, StringFormat=HH:mm, ConverterCulture=da-DK}" Margin="5"/>
+            <TextBox Text="{Binding EndTime, StringFormat=HH:mm, ConverterCulture=da-DK}" Margin="5"/>
 
             <Button Content="Opret træning" Command="{Binding CreatePracticeCommand}"/>
             <Button Content="Rediger træning" Command="{Binding UpdatePracticeCommand}"/>
@@ -38,9 +38,22 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
-                            <TextBlock Text="{Binding PracticeName}" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding StartTime}"/>
-                            <TextBlock Text="{Binding EndTime}"/>
+                            <TextBlock Text="{Binding PracticeName}" FontWeight="Bold">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="Black"/>
+
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding PracticeName}" Value="Træning Aflyst">
+                                                <Setter Property="Foreground" Value="Red"/>
+                                                <Setter Property="FontSize" Value="16"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBlock Text="{Binding StartTime, ConverterCulture=da-DK}"/>
+                            <TextBlock Text="{Binding EndTime, ConverterCulture=da-DK}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

@@ -64,7 +64,20 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Margin="5">
-                                    <TextBlock FontWeight="Bold" Text="{Binding PracticeName}" />
+                                    <TextBlock FontWeight="Bold" Text="{Binding PracticeName}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="Black"/>
+
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding PracticeName}" Value="Træning Aflyst">
+                                                        <Setter Property="Foreground" Value="Red"/>
+                                                        <Setter Property="FontSize" Value="20"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                     <ItemsControl ItemsSource="{Binding Trainers}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
