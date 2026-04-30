@@ -40,18 +40,29 @@
             Træning
         </Label>
         <StackPanel Margin="20" Grid.Column="1" Grid.Row="1">
-            <DatePicker SelectedDate="{Binding SelectedDate}" Margin="5"/>
-
-            <TextBox Text="{Binding PracticeName}" Margin="5"/>
-            <TextBox Text="{Binding StartTime}" Margin="5"/>
-            <TextBox Text="{Binding EndTime}" Margin="5"/>
+            <DockPanel>
+                <TextBlock FontWeight="Bold" Text="Dato:" VerticalAlignment="Center" Width="53"/>
+                <DatePicker SelectedDate="{Binding SelectedDate}" Margin="5"/>
+            </DockPanel>
+            <DockPanel>
+                <TextBlock FontWeight="Bold" Text="Træning:" VerticalAlignment="Center" Width="53"/>
+                <TextBox Text="{Binding PracticeName}" Margin="5"/>
+            </DockPanel>
+            <DockPanel>
+                <TextBlock FontWeight="Bold" Text="Start Tid:" VerticalAlignment="Center" Width="53"/>
+                <TextBox Text="{Binding StartTime}" Margin="5"/>
+            </DockPanel>
+            <DockPanel>
+                <TextBlock FontWeight="Bold" Text="Slut Tid:" VerticalAlignment="Center" Width="53"/>
+                <TextBox Text="{Binding EndTime}" Margin="5"/>
+            </DockPanel>
             <StackPanel x:Name="TrainerTrainingCommands">
                 <Button Content="Opret træning" Command="{Binding CreatePracticeCommand}" Background="#FF2DC72D"/>
                 <Button Content="Rediger træning" Command="{Binding UpdatePracticeCommand}" Background="#FF679ECE"/>
                 <Button Content="Aflys træning" Command="{Binding DeletePracticeCommand}" Background="#FFDE4444"/>
             </StackPanel>
             <!--  Practices list  -->
-            <StackPanel Margin="0,10">
+            <DockPanel Margin="0,10">
                 <ListBox ItemsSource="{Binding SelectedPractices}" MinHeight="228" BorderThickness="1" BorderBrush="Black"                         
                         SelectedItem="{Binding SelectedPractice}">
                     <ListBox.ItemTemplate>
@@ -62,9 +73,9 @@
                                 <TextBlock Text="{Binding EndTime}"/>
                             </StackPanel>
                         </DataTemplate>
-                    </ListBox.ItemTemplate>                           
+                    </ListBox.ItemTemplate>
                 </ListBox>
-            </StackPanel>
+            </DockPanel>
         </StackPanel>
         <!--  Calendar  -->
         <StackPanel Margin="0,15" Grid.Row="1" Grid.Column="2">

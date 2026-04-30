@@ -14,6 +14,7 @@ namespace _2_Semester_Eksamen.Views
 
         public Practice ThisPractice { get; set; }
         public string Error { get; set; }
+        public string ErrorEvent { get; set; } = "Ingen Events"; //skal bindes til noget, har bare givet den en værdi
 
 
         public HomeWindow()
