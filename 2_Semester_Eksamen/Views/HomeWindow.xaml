@@ -28,7 +28,6 @@
             <Label
                 Grid.Row="0"
                 Grid.ColumnSpan="4"
-                Margin="30"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center">
                 Odense Fægte-Klub
@@ -38,7 +37,7 @@
             <Border
                 Grid.Row="1"
                 Grid.Column="1"
-                Margin="0,0,20,30"
+                Margin="0,20,20,30"
                 BorderBrush="Black"
                 BorderThickness="2">
                 <Grid Background="#FFF3F35D">
@@ -52,10 +51,13 @@
                         FontWeight="Bold"
                         Text="Træninger:" />
                     <TextBlock
+                        x:Name="TrainingError_txt"
+                        Visibility="Hidden"
                         Grid.Row="0"
-                        Margin="40,0"                       
+                        Margin="40,40,0,0"                       
                         FontWeight="Bold"
-                        Text="{Binding Error}" />
+                        FontSize="16"
+                        Text="{Binding Error}"/>
                     <ListBox
                         FontSize="16"
                         Grid.Row="1"
@@ -97,7 +99,7 @@
             <Border
      Grid.Row="1"
      Grid.Column="2"
-     Margin="0,0,20,30"
+     Margin="0,20,20,30"
      BorderBrush="Black"
      BorderThickness="2">
                 <Grid Background="#FFF3F35D">
@@ -112,7 +114,7 @@
              Text="Begivenheder:" />
                     <TextBlock
              Grid.Row="0"
-             FontSize="20"
+             FontSize="16"
              Margin="40,40"                       
              FontWeight="Bold"                        
              Text="{Binding ErrorEvent}" />

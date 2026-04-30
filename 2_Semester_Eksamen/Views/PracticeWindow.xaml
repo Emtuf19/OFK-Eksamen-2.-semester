@@ -69,8 +69,15 @@
                         <DataTemplate>
                             <StackPanel>
                                 <TextBlock Text="{Binding PracticeName}" FontWeight="Bold"/>
-                                <TextBlock Text="{Binding StartTime}"/>
-                                <TextBlock Text="{Binding EndTime}"/>
+                                <DockPanel>
+                                    <TextBlock Text="Start: "/>
+                                    <TextBlock Text="{Binding StartTime}"/>
+                                    <TextBlock Text="Slut: "/>
+                                    <TextBlock Text="{Binding EndTime}"/>
+                                    <TextBlock Text="Antal Tilmeldte: "/>
+                                    <!-- ny binding her til AntalTilmeldte -->
+                                    <TextBlock Text="{Binding EndTime}"/>
+                                </DockPanel>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
