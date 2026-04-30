@@ -50,11 +50,11 @@
             </DockPanel>
             <DockPanel>
                 <TextBlock FontWeight="Bold" Text="Start Tid:" VerticalAlignment="Center" Width="53"/>
-                <TextBox Text="{Binding StartTime}" Margin="5"/>
+                <TextBox Text="{Binding StartTime, StringFormat=HH:mm, ConverterCulture=da-DK}" Margin="5"/>
             </DockPanel>
             <DockPanel>
                 <TextBlock FontWeight="Bold" Text="Slut Tid:" VerticalAlignment="Center" Width="53"/>
-                <TextBox Text="{Binding EndTime}" Margin="5"/>
+                <TextBox Text="{Binding EndTime, StringFormat=HH:mm, ConverterCulture=da-DK}" Margin="5"/>
             </DockPanel>
             <StackPanel x:Name="TrainerTrainingCommands">
                 <Button Content="Opret træning" Command="{Binding CreatePracticeCommand}" Background="#FF2DC72D"/>
@@ -71,9 +71,9 @@
                                 <TextBlock Text="{Binding PracticeName}" FontWeight="Bold"/>
                                 <DockPanel>
                                     <TextBlock Text="Start: "/>
-                                    <TextBlock Text="{Binding StartTime}"/>
+                                    <TextBlock Text="{Binding StartTime, ConverterCulture=da-DK}"/>
                                     <TextBlock Text="Slut: "/>
-                                    <TextBlock Text="{Binding EndTime}"/>
+                                    <TextBlock Text="{Binding EndTime, ConverterCulture=da-DK}"/>
                                     <TextBlock Text="Antal Tilmeldte: "/>
                                     <!-- ny binding her til AntalTilmeldte -->
                                     <TextBlock Text="{Binding EndTime}"/>

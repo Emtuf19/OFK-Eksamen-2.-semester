@@ -35,7 +35,7 @@ namespace _2_Semester_Eksamen.Views
             {
                 TrainerTrainingCommands.Visibility = Visibility.Collapsed;
             }
-            DataContext = new CalendarViewModel();
+            DataContext = new PracticeViewModel();
         }        
     }
 }

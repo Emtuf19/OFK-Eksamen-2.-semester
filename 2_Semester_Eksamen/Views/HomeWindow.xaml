@@ -125,7 +125,7 @@
              FontSize="25"
              FontWeight="Bold"
              Text="Begivenheder:" />
-                    <TextBlock
+                    <TextBlock             
              Grid.Row="0"
              FontSize="16"
              Margin="40,40"                       
