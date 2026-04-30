@@ -42,6 +42,8 @@
         <Style TargetType="Label">
             <Setter Property="FontSize" Value="50" />
             <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="20" />
+            
         </Style>
 
     </Application.Resources>

@@ -15,19 +15,19 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Label
-                Grid.Row="1"
-                Grid.ColumnSpan="2"
-                Margin="30"
+                Grid.Row="0"
+                Grid.ColumnSpan="4"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center">
                 Odense Fægte-Klub
@@ -35,9 +35,9 @@
             
             <!--  List over Træning  -->
             <Border
-                Grid.Row="3"
-                Grid.Column="0"
-                Margin="40,0,20,30"
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="0,20,20,30"
                 BorderBrush="Black"
                 BorderThickness="2">
                 <Grid Background="#FFF3F35D">
@@ -51,10 +51,13 @@
                         FontWeight="Bold"
                         Text="Træninger:" />
                     <TextBlock
+                        x:Name="TrainingError_txt"
+                        Visibility="Hidden"
                         Grid.Row="0"
-                        Margin="40,0"                       
+                        Margin="40,40,0,0"                       
                         FontWeight="Bold"
-                        Text="{Binding Error}" />
+                        FontSize="16"
+                        Text="{Binding Error}"/>
                     <ListBox
                         FontSize="16"
                         Grid.Row="1"
@@ -106,16 +109,32 @@
             </Border>
 
             <!--  Preview over Kalender  -->
-            <ListBox
-                Grid.Row="3"
-                Grid.Column="1"
-                Margin="20,0,40,30"
-                d:ItemsSource="{d:SampleData ItemCount=5}" />
-
-
-
-
-
+            <Border
+     Grid.Row="1"
+     Grid.Column="2"
+     Margin="0,20,20,30"
+     BorderBrush="Black"
+     BorderThickness="2">
+                <Grid Background="#FFF3F35D">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+             HorizontalAlignment="Center"
+             FontSize="25"
+             FontWeight="Bold"
+             Text="Begivenheder:" />
+                    <TextBlock
+             Grid.Row="0"
+             FontSize="16"
+             Margin="40,40"                       
+             FontWeight="Bold"                        
+             Text="{Binding ErrorEvent}" />
+                    <ListBox Background="Transparent" BorderThickness="0">                        
+                    </ListBox>
+                </Grid>
+            </Border>            
         </Grid>
     </Grid>
 </Page>

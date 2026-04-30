@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using _2_Semester_Eksamen.ViewModel;
 using _2_Semester_Eksamen.Model;
 
+
 namespace _2_Semester_Eksamen.Views
 {
     /// <summary>
@@ -20,10 +21,21 @@ namespace _2_Semester_Eksamen.Views
     /// </summary>
     public partial class PracticeWindow : Page
     {
+
         public PracticeWindow()
         {
             InitializeComponent();
-            DataContext = new PracticeViewModel();
-        }
+            var mainWindow = (MainWindow)Application.Current.MainWindow;
+
+            if (mainWindow.CurrentRole == "Trainer")
+            {
+                TrainerTrainingCommands.Visibility = Visibility.Visible;
+            }
+            else if (mainWindow.CurrentRole == "Member")
+            {
+                TrainerTrainingCommands.Visibility = Visibility.Collapsed;
+            }
+            DataContext = new CalendarViewModel();
+        }        
     }
 }

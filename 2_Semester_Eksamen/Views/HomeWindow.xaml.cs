@@ -14,6 +14,7 @@ namespace _2_Semester_Eksamen.Views
 
         public Practice ThisPractice { get; set; }
         public string Error { get; set; }
+        public string ErrorEvent { get; set; } = "Ingen Events"; //skal bindes til noget, har bare givet den en værdi
 
 
         public HomeWindow()
@@ -31,13 +32,13 @@ namespace _2_Semester_Eksamen.Views
                 {
                     Practices.Add(practice);
                 }
-
             }
             catch (Exception ex) 
             {
-                Error = "Ingen Trænning";                
+                Error = "Ingen Trænning";
+                TrainingError_txt.Visibility = Visibility.Visible;
             }
-            DataContext = this;
+                DataContext = this;
         }
 
 

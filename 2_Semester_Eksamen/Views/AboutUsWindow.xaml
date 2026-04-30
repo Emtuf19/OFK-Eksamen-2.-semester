@@ -8,29 +8,36 @@
       d:DesignHeight="720" d:DesignWidth="1280"
       Background="White"
       Title="AboutUsWindow">
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+    </Page.Resources>
+
     <Grid>
-        <Grid Margin="10,0,10,0">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
             <Label
-            Grid.Row="1"
-            Grid.ColumnSpan="2"
-            Margin="30"
+            Grid.Row="0"
+            Grid.ColumnSpan="4"    
             HorizontalAlignment="Center"
             VerticalAlignment="Center">
                 Odense FægteKlub af 1970
             </Label>
-            
-            <Border BorderBrush="Transparent" BorderThickness="1" Grid.Column="1" Grid.Row="3" Margin="10,10,10,10">
+
+            <Border BorderBrush="Transparent" BorderThickness="1" Grid.Column="2" Grid.Row="1" Margin="10,10,10,10">
                 <Image  Margin="0,20" HorizontalAlignment="Center">
                     <Image.Source>
                         <BitmapImage DecodePixelWidth="350"
@@ -38,39 +45,25 @@
                     </Image.Source>
                 </Image>
             </Border>
-            <Border BorderBrush="Transparent" BorderThickness="1" Grid.Row="3" Margin="10,90,10,10">
-                <TextBlock TextWrapping="WrapWithOverflow"  Padding="6">
+            <Border BorderBrush="Transparent" BorderThickness="1"  Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
+                <StackPanel>
+                <TextBlock TextWrapping="WrapWithOverflow">                   
                     <Bold>
                         Hvem er vi?
                     </Bold>
                     <LineBreak/>
+                    <LineBreak/>
                     <Run Text="Odense Fægteklub af 1970 (OFK) er en Odense Fægteklub af 1970 (OFK) er en fægteklub med hjemsted i Odense Kommune.
-                         
-                         
-                         
-                         
                          
                          Vi arbejder for at fremme interessen for at dyrke fægtning og skabe gode rammer for både træning og udvikling – uanset om du er ny i sporten eller har fægtet i mange år.
                          
-                         
-                         
                          Ud over selve sporten prioriterer vi fællesskab og et stærkt socialt klubmiljø."/>
-                    
-                    <LineBreak/>
-                    <LineBreak/>
-                    <LineBreak/>
-                    <LineBreak/>
-                    
-                    <Bold>
-                        Adresse: Roesskovsvej 125, 5200 Odense
-                    </Bold>
-                    
-                    <LineBreak/>
-                    <LineBreak/>
-
                 </TextBlock>
-                
+                </StackPanel>
             </Border>
+            <TextBlock FontWeight="Bold" VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="1">                 
+                    Adresse: Roesskovsvej 125, 5200 Odense
+            </TextBlock>
 
 
 
