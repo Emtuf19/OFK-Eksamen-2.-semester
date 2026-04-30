@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Controls;
 using _2_Semester_Eksamen.Commands;
 using System.Windows;
+using System.Security.Policy;
 
 namespace _2_Semester_Eksamen.ViewModel
 {
@@ -16,6 +17,18 @@ namespace _2_Semester_Eksamen.ViewModel
         public ObservableCollection<Practice> Practices { get; set; } = new();
 
         public ObservableCollection<Practice> SelectedPractices { get; set; } = new();
+
+        private int _memberIDInput;
+        public int MemberIDInput
+        {
+            get => _memberIDInput; 
+            set
+            {
+                _memberIDInput = value;
+                OnPropertyChanged();
+                CancelParticipationCommand?.RaiseCanExecuteChanged();
+            }
+        }
 
         private Practice _selectedPractice;
         public Practice SelectedPractice
@@ -92,6 +105,36 @@ namespace _2_Semester_Eksamen.ViewModel
         public RelayCommand DeletePracticeCommand { get; }
         public RelayCommand CreatePracticeCommand { get; }
         public RelayCommand UpdatePracticeCommand { get; }
+        public RelayCommand CancelParticipationCommand { get; }
+
+        private bool CanExecuteCancelParticipation()
+        {
+            return SelectedPractice != null && MemberIDInput > 0;
+        }
+
+        private void ExecuteCancelParticipation()
+        {
+            try
+            {
+                var repo = new PracticeRepository();
+                repo.RemoveMemberFromPractice(SelectedPractice.PracticeID, MemberIDInput);
+
+                MessageBox.Show($"Medlem {MemberIDInput} er afmeldt træningen.", "Afmelding fuldført", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                var member = SelectedPractice.Members?.FirstOrDefault(m => m.MemberID == MemberIDInput);
+
+                if (member != null)
+                {
+                    SelectedPractice.Members.Remove(member);
+                }
+
+                MemberIDInput = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Kunne ikke afmelde medlem.\n" + ex.Message, "Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         private bool CanExecuteDeletePractice()
         {
@@ -192,6 +235,7 @@ namespace _2_Semester_Eksamen.ViewModel
             DeletePracticeCommand = new RelayCommand(ExecuteDeletePractice, CanExecuteDeletePractice);
             CreatePracticeCommand = new RelayCommand(ExecuteCreatePractice, CanExecuteCreatePractice);
             UpdatePracticeCommand = new RelayCommand(ExecuteUpdatePractice, CanExecuteUpdatePractice);
+            CancelParticipationCommand = new RelayCommand(ExecuteCancelParticipation, CanExecuteCancelParticipation);
         }
 
         private void LoadPractices()

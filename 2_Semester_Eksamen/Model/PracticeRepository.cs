@@ -244,6 +244,21 @@ namespace _2_Semester_Eksamen.Model
             }
         }
 
+        //metode til at fjerne medlemmer fra practice
+        public void RemoveMemberFromPractice(int practiceID, int memberID)
+        {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
+                using SqlCommand cmd = new SqlCommand("sp_CancelParticipation", con);
+                
+                cmd.CommandType= CommandType.StoredProcedure;
+                cmd.Parameters.Add("@PracticeID", SqlDbType.Int).Value = practiceID;
+                cmd.Parameters.Add("@MemberID", SqlDbType.Int).Value = memberID;
+                cmd.ExecuteNonQuery();
+            }
+        }
+
     }
 
 }
