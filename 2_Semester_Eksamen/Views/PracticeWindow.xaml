@@ -68,15 +68,30 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <TextBlock Text="{Binding PracticeName}" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding PracticeName}" FontWeight="Bold">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="Black"/>
+
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding PracticeName}" Value="Træning Aflyst">
+                                                    <Setter Property="Foreground" Value="Red"/>
+                                                    <Setter Property="FontSize" Value="16"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                                 <DockPanel>
-                                    <TextBlock Text="Start: "/>
+                                    <TextBlock Text="Start: " FontWeight="Bold"/>
                                     <TextBlock Text="{Binding StartTime, ConverterCulture=da-DK}"/>
-                                    <TextBlock Text="Slut: "/>
+                                    <TextBlock Text="  Slut: " FontWeight="Bold"/>
                                     <TextBlock Text="{Binding EndTime, ConverterCulture=da-DK}"/>
-                                    <TextBlock Text="Antal Tilmeldte: "/>
+                                </DockPanel>
+                                <DockPanel>
+                                    <TextBlock Text="Antal Tilmeldte: " FontWeight="Bold"/>
                                     <!-- ny binding her til AntalTilmeldte -->
-                                    <TextBlock Text="{Binding EndTime}"/>
+                                    <TextBlock Text="{Binding MemberCount}"/>
                                 </DockPanel>
                             </StackPanel>
                         </DataTemplate>

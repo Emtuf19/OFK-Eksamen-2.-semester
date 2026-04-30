@@ -31,10 +31,11 @@ namespace _2_Semester_Eksamen.ViewModel
                     PracticeName = _selectedPractice.PracticeName;
                     StartTime = _selectedPractice.StartTime;
                     EndTime = _selectedPractice.EndTime;
-                }
 
-                DeletePracticeCommand?.RaiseCanExecuteChanged();
-                UpdatePracticeCommand?.RaiseCanExecuteChanged();
+
+                    DeletePracticeCommand?.RaiseCanExecuteChanged();
+                    UpdatePracticeCommand?.RaiseCanExecuteChanged();
+                }
             }
         }
 
@@ -118,7 +119,7 @@ namespace _2_Semester_Eksamen.ViewModel
         private bool CanExecuteCreatePractice()
         {
             return SelectedDate != null && !string.IsNullOrWhiteSpace(PracticeName) 
-                   && StartTime.TimeOfDay < EndTime.TimeOfDay;
+                   && StartTime.TimeOfDay != null && EndTime.TimeOfDay != null;
         }
 
         private void ExecuteCreatePractice()
@@ -133,9 +134,17 @@ namespace _2_Semester_Eksamen.ViewModel
             };
 
             var repo = new PracticeRepository();
-            repo.Create(newPractice);
 
-            Practices.Add(newPractice);
+            if (newPractice.StartTime >= newPractice.EndTime)
+            {
+                MessageBox.Show("Ugyldige tider!", "Ugyldige tider", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+            {
+                repo.Create(newPractice);
+                Practices.Add(newPractice);
+            }
+
             UpdateSelectedPractices();
 
             ClearInputFields();
