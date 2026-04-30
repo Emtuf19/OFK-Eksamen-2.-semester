@@ -61,6 +61,11 @@
                 <Button Content="Rediger træning" Command="{Binding UpdatePracticeCommand}" Background="#FF679ECE"/>
                 <Button Content="Aflys træning" Command="{Binding DeletePracticeCommand}" Background="#FFDE4444"/>
             </StackPanel>
+            <Button x:Name="CancelParticipation" Content="Afmeld træning" Command="{Binding CancelParticipationCommand}" Background="#FFDE4444"/>
+            <StackPanel x:Name="MemberIDInputTextBox" Orientation="Horizontal">
+                <Label Content="MemberID" FontWeight="Bold" FontSize="12"/>
+                <TextBox Text="{Binding MemberIDInput}" Height="25"/>
+            </StackPanel>
             <!--  Practices list  -->
             <DockPanel Margin="0,10">
                 <ListBox ItemsSource="{Binding SelectedPractices}" MinHeight="228" BorderThickness="1" BorderBrush="Black"                         
