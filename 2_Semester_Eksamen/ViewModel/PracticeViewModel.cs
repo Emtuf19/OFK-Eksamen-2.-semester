@@ -135,7 +135,7 @@ namespace _2_Semester_Eksamen.ViewModel
 
             var repo = new PracticeRepository();
 
-            if (newPractice.StartTime >= newPractice.EndTime)
+            if (newPractice.StartTime >= newPractice.EndTime || newPractice.StartTime < DateTime.Now)
             {
                 MessageBox.Show("Ugyldige tider!", "Ugyldige tider", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
@@ -171,7 +171,7 @@ namespace _2_Semester_Eksamen.ViewModel
             SelectedPractice.EndTime = date.Add(EndTime.TimeOfDay);
 
             var repo = new PracticeRepository();
-            if (SelectedPractice.StartTime >= SelectedPractice.EndTime)
+            if (SelectedPractice.StartTime >= SelectedPractice.EndTime || SelectedPractice.StartTime < DateTime.Now)
             {
                 MessageBox.Show("Ugyldige tider!", "Ugyldige tider", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
