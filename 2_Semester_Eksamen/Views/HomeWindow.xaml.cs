@@ -32,13 +32,12 @@ namespace _2_Semester_Eksamen.Views
                     Practices.Add(practice);
                 }
 
-                DataContext = this;
             }
             catch (Exception ex) 
             {
-                Error = "Ingen Trænning";
-                DataContext = this;
+                Error = "Ingen Trænning";                
             }
+            DataContext = this;
         }
 
 

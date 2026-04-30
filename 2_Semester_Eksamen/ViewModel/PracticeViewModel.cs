@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Controls;
 using _2_Semester_Eksamen.Commands;
+using System.Windows;
 
 namespace _2_Semester_Eksamen.ViewModel
 {
@@ -101,8 +102,10 @@ namespace _2_Semester_Eksamen.ViewModel
 
             PracticeName = "Træning Aflyst";
             SelectedPractice.PracticeName = PracticeName;
-            SelectedPractice.StartTime = StartTime;
-            SelectedPractice.EndTime = EndTime;
+
+            var date = SelectedPractice.StartTime.Date; // Behold den oprindelige dato
+            SelectedPractice.StartTime = date.Add(StartTime.TimeOfDay);
+            SelectedPractice.EndTime = date.Add(EndTime.TimeOfDay);
             
             var repo = new PracticeRepository();
             
@@ -153,16 +156,20 @@ namespace _2_Semester_Eksamen.ViewModel
         private void ExecuteUpdatePractice()
         {
             SelectedPractice.PracticeName = PracticeName;
-            SelectedPractice.StartTime = StartTime;
-            SelectedPractice.EndTime = EndTime;
+
+            var date = SelectedPractice.StartTime.Date; // Behold den oprindelige dato
+            SelectedPractice.StartTime = date.Add(StartTime.TimeOfDay);
+            SelectedPractice.EndTime = date.Add(EndTime.TimeOfDay);
 
             var repo = new PracticeRepository();
-            repo.Update(SelectedPractice);
-
-            // No need to update the collection as we are modifying the existing object?
-            //OnPropertyChanged(nameof(SelectedPractices));
-
-            //opdater listen over valgte praksisser for at reflektere ændringerne
+            if (SelectedPractice.StartTime >= SelectedPractice.EndTime)
+            {
+                MessageBox.Show("Ugyldige tider!", "Ugyldige tider", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+            {
+                repo.Update(SelectedPractice);
+            }
             UpdateSelectedPractices();
         }
 

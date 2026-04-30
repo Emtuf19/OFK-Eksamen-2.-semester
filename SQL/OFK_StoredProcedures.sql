@@ -551,6 +551,7 @@ BEGIN
         StartTime,
         EndTime
     FROM Practice;
+    --ORDER BY StartTime ASC;
 
     -- 2️ Alle members koblet til practices
     SELECT
@@ -561,6 +562,7 @@ BEGIN
     FROM Member_Practice mp
     INNER JOIN Member m
         ON mp.MemberID = m.MemberID;
+    --ORDER BY m.MemberLastName;
 
     -- 3️ Alle trainers koblet til practices
     SELECT
@@ -572,7 +574,8 @@ BEGIN
         t.TrainerEmail
     FROM Trainer_Practice tp
     INNER JOIN Trainer t
-        ON tp.TrainerID = t.TrainerID;
+        ON tp.TrainerID = t.TrainerID
+    ORDER BY StartTime ASC;
 END;
 
 
@@ -589,7 +592,8 @@ BEGIN
         Price,
         AgeGroup,
         Time
-    FROM Event;
+    FROM Event
+    ORDER BY Time ASC;
 
     -- 2️ Alle members koblet til events
     SELECT
@@ -599,7 +603,8 @@ BEGIN
         m.MemberLastName
     FROM Member_Event me
     INNER JOIN Member m
-        ON me.MemberID = m.MemberID;
+        ON me.MemberID = m.MemberID
+    ORDER BY m.MemberLastName;
 
     -- 3️ Alle trainers koblet til events
     SELECT
@@ -611,7 +616,8 @@ BEGIN
         t.TrainerEmail
     FROM Trainer_Event te
     INNER JOIN Trainer t
-        ON te.TrainerID = t.TrainerID;
+        ON te.TrainerID = t.TrainerID
+    ORDER BY t.TrainerLastName;
 END;
 
 
