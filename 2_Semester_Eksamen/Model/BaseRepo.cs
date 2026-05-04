@@ -16,7 +16,7 @@ namespace _2_Semester_Eksamen.Model
         protected List<TEntity> entities;
 
 
-        protected readonly string ConnectionString;
+        protected readonly string ConnectionString = string.Empty;
 
         protected BaseRepo()
         {
@@ -31,7 +31,7 @@ namespace _2_Semester_Eksamen.Model
             return new SqlConnection(ConnectionString);
         }
 
-        public abstract TEntity GetById(int entity);
+        public abstract TEntity? GetById(int entity);
 
         public abstract List<TEntity> GetAll();
 
