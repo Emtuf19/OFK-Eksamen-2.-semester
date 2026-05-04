@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using _2_Semester_Eksamen.ViewModel;
 
 namespace _2_Semester_Eksamen.Views
 {
@@ -21,6 +22,9 @@ namespace _2_Semester_Eksamen.Views
         public EventWindow()
         {
             InitializeComponent();
+
+            var vm = new EventViewModel();
+            DataContext = vm;
         }
     }
 }

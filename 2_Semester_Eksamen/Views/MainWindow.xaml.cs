@@ -137,7 +137,7 @@ namespace _2_Semester_Eksamen
             //    MessageBox.Show($"Error while calling PracticeRepository.GetAll(): {ex.Message}\n\n{ex}", "Error");
             //}
 
-            // EventRepo quick test : call EventRepository.GetAll() and show results, including members and trainers
+            //EventRepo quick test: call EventRepository.GetAll() and show results, including members and trainers
             //try
             //{
             //    var repository = new EventRepository();
