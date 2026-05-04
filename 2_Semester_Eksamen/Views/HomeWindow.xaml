@@ -46,7 +46,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock HorizontalAlignment="Center" FontSize="25" FontWeight="Bold" Text="Træninger:"/>
-                    <TextBlock x:Name="TrainingError_txt" Text="{Binding Error}" Visibility="Hidden" Grid.Row="0" Margin="40,40,0,0" FontWeight="Bold" FontSize="16"/>
+                    <TextBlock x:Name="TrainingError_txt" Text="{Binding Error}" Visibility="Collapsed" Grid.Row="0" Margin="10,40,0,0" FontWeight="Bold" FontSize="20"/>
                     <ListBox ItemsSource="{Binding Practices}" FontSize="16" Grid.Row="1" Background="Transparent" BorderThickness="0">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
@@ -100,7 +100,7 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <TextBlock HorizontalAlignment="Center" FontSize="25" FontWeight="Bold" Text="Begivenheder:"/>
-                    <TextBlock Grid.Row="0" FontSize="16" Margin="40,40" FontWeight="Bold" Text="{Binding ErrorEvent}"/>
+                    <TextBlock x:Name="EventError_txt" Grid.Row="0" FontSize="20" Margin="10,40" FontWeight="Bold" Visibility="Collapsed" Text="{Binding ErrorEvent}"/>
                     <ListBox ItemsSource="{Binding Events}" FontSize="16" Grid.Row="1" Background="Transparent" BorderThickness="0">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
@@ -133,7 +133,7 @@
                                     </ItemsControl>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock FontWeight="Bold" Text="Start: " />
-                                        <TextBlock Text="{Binding StartTime, StringFormat=dd-MM-yyyy HH:mm}" />
+                                        <TextBlock Text="{Binding Time, StringFormat=dd-MM-yyyy HH:mm}" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">                                       
                                         <TextBlock Text="{Binding Description}" />

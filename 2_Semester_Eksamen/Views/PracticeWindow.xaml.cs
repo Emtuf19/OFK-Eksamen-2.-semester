@@ -22,6 +22,7 @@ namespace _2_Semester_Eksamen.Views
     public partial class PracticeWindow : Page
     {
 
+
         public PracticeWindow()
         {
             InitializeComponent();
@@ -30,12 +31,16 @@ namespace _2_Semester_Eksamen.Views
             if (mainWindow.CurrentRole == "Trainer")
             {
                 TrainerTrainingCommands.Visibility = Visibility.Visible;
+                CancelParticipation.Visibility = Visibility.Collapsed;
+                MemberIDInputTextBox.Visibility = Visibility.Collapsed;
             }
             else if (mainWindow.CurrentRole == "Member")
             {
                 TrainerTrainingCommands.Visibility = Visibility.Collapsed;
+                CancelParticipation.Visibility = Visibility.Visible;
+                MemberIDInputTextBox.Visibility = Visibility.Visible;
             }
             DataContext = new PracticeViewModel();
-        }        
+        }
     }
 }
