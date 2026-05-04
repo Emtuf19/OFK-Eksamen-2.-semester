@@ -188,10 +188,10 @@ namespace _2_Semester_Eksamen.Model
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@EventID", SqlDbType.Int).Value = event1.EventID;
                 cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 50).Value = event1.EventName;
-                cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 1000).Value = event1.Description;
-                cmd.Parameters.Add("@EventName", SqlDbType.Float).Value = event1.Price;
-                cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 50).Value = event1.AgeGroup;
-                cmd.Parameters.Add("@StartTime", SqlDbType.DateTime2).Value = event1.Time;
+                cmd.Parameters.Add("@Description", SqlDbType.NVarChar, 1000).Value = event1.Description;
+                cmd.Parameters.Add("@Price", SqlDbType.Float).Value = event1.Price;
+                cmd.Parameters.Add("@AgeGroup", SqlDbType.NVarChar, 50).Value = event1.AgeGroup;
+                cmd.Parameters.Add("@Time", SqlDbType.DateTime2).Value = event1.Time;
                 cmd.ExecuteNonQuery();
             }
         }

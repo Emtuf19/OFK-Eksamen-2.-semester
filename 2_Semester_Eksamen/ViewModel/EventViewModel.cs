@@ -14,7 +14,9 @@ namespace _2_Semester_Eksamen.ViewModel
 
         public RelayCommand DeleteEventCommand { get; set; }
         public RelayCommand CreateEventCommand { get; set; }
-        public RelayCommand UpdateEventCommand { get; set; }
+        public RelayCommand EditEventCommand { get; set; }
+        public RelayCommand SaveEventCommand { get; set; }
+        public RelayCommand CancelEditEventCommand { get; set; }
 
         private Event _selectedEvent;
         public Event SelectedEvent
@@ -24,17 +26,7 @@ namespace _2_Semester_Eksamen.ViewModel
             {
                 _selectedEvent = value;
                 OnPropertyChanged();
-
-                if (_selectedEvent != null)
-                {
-                    EventName = _selectedEvent?.EventName;
-                    Description = _selectedEvent?.Description;
-                    AgeGroup = _selectedEvent?.AgeGroup;
-                    Price = _selectedEvent?.Price ?? 0;
-                    Time = _selectedEvent.Time;
-
-                    DeleteEventCommand?.RaiseCanExecuteChanged();
-                }
+                DeleteEventCommand?.RaiseCanExecuteChanged();
             }
         }
 
@@ -93,13 +85,72 @@ namespace _2_Semester_Eksamen.ViewModel
             }
         }
 
+        private bool _isEditEventPopupOpen;
+        public bool IsEditEventPopupOpen
+        {
+            get => _isEditEventPopupOpen;
+            set
+            {
+                _isEditEventPopupOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Event _editingEvent;
+        public Event EditingEvent
+        {
+            get => _editingEvent;
+            set
+            {
+                _editingEvent = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<int> Hours { get; } = Enumerable.Range(0, 24).ToList();
+        public List<int> Minutes { get; } = new List<int> { 00, 15, 30, 45 };
+        private int _selectedHour;
+        public int SelectedHour
+        {
+            get => _selectedHour;
+            set
+            {
+                _selectedHour = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _selectedMinute;
+        public int SelectedMinute
+        {
+            get => _selectedMinute;
+            set
+            {
+                _selectedMinute = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private DateTime _datePart;
+        public DateTime DatePart
+        {
+            get => _datePart;
+            set
+            {
+                _datePart = value;
+                OnPropertyChanged();
+            }
+        }
+
         public EventViewModel()
         {
             LoadEvents();
 
             DeleteEventCommand = new RelayCommand(DeleteEvent, CanDeleteEvent);
             CreateEventCommand = new RelayCommand(CreateEvent, CanCreateEvent);
-            UpdateEventCommand = new RelayCommand(UpdateEvent, CanUpdateEvent);
+            EditEventCommand = new RelayCommand(EditEvent);
+            SaveEventCommand = new RelayCommand(UpdateEvent);
+            CancelEditEventCommand = new RelayCommand(CancelEdit);
         }
 
         private void DeleteEvent()
@@ -142,28 +193,51 @@ namespace _2_Semester_Eksamen.ViewModel
             return !string.IsNullOrEmpty(EventName) && !string.IsNullOrEmpty(Description) && !string.IsNullOrEmpty(AgeGroup) && Price >= 0;
         }
 
-        // Called by the View when the user confirmed update in the dialog
+        private void EditEvent()
+        {
+            if (SelectedEvent == null)
+                return;
+
+            EditingEvent = new Event
+            {
+                EventID = SelectedEvent.EventID,
+                EventName = SelectedEvent.EventName,
+                Description = SelectedEvent.Description,
+                AgeGroup = SelectedEvent.AgeGroup,
+                Price = SelectedEvent.Price,
+                Time = SelectedEvent.Time
+            };
+
+            DatePart = EditingEvent.Time.Date;
+            SelectedHour = EditingEvent.Time.Hour;
+            SelectedMinute = EditingEvent.Time.Minute;
+
+            IsEditEventPopupOpen = true;
+        }
+
         public void UpdateEvent()
         {
-            if (SelectedEvent != null)
-            {
-                SelectedEvent.EventName = EventName;
-                SelectedEvent.Description = Description;
-                SelectedEvent.AgeGroup = AgeGroup;
-                SelectedEvent.Price = Price;
-                SelectedEvent.Time = Time;
+            if (SelectedEvent == null || EditingEvent == null)
+                return;
 
-                var repo = new EventRepository();
-                repo.Update(SelectedEvent);
-            }
+            EditingEvent.Time = DatePart.AddHours(SelectedHour).AddMinutes(SelectedMinute);
 
+            SelectedEvent.EventName = EditingEvent.EventName;
+            SelectedEvent.Description = EditingEvent.Description;
+            SelectedEvent.AgeGroup = EditingEvent.AgeGroup;
+            SelectedEvent.Price = EditingEvent.Price;
+            SelectedEvent.Time = EditingEvent.Time;
+            var repo = new EventRepository();
+            repo.Update(SelectedEvent);
+            
+            IsEditEventPopupOpen = false;
             LoadEvents();
         }
 
-
-        private bool CanUpdateEvent()
+        private void CancelEdit()
         {
-            return SelectedEvent != null && !string.IsNullOrEmpty(EventName) && !string.IsNullOrEmpty(Description) && !string.IsNullOrEmpty(AgeGroup) && Price >= 0;
+            EditingEvent = null;
+            IsEditEventPopupOpen = false;
         }
 
         private void LoadEvents()
