@@ -11,10 +11,12 @@ namespace _2_Semester_Eksamen.Views
     public partial class HomeWindow : Page
     {
         public ObservableCollection<Practice> Practices { get; set; }
+        public ObservableCollection<Event> Events { get; set; }
 
         public Practice ThisPractice { get; set; }
+        public Event ThisEvent { get; set; }
         public string Error { get; set; }
-        public string ErrorEvent { get; set; } = "Ingen Events"; //skal bindes til noget, har bare givet den en værdi
+        public string ErrorEvent { get; set; }
 
 
         public HomeWindow()
@@ -38,7 +40,24 @@ namespace _2_Semester_Eksamen.Views
                 Error = "Ingen Trænning";
                 TrainingError_txt.Visibility = Visibility.Visible;
             }
-                DataContext = this;
+            DataContext = this;
+
+            try
+            {
+                Events = new ObservableCollection<Event>();
+
+                var repo = new EventRepository();
+                var eventsFromDb = repo.GetAll();
+
+                foreach (var ev in eventsFromDb)
+                {
+                    Events.Add(ev);
+                }
+            }
+            catch (Exception ex2)
+            {
+                ErrorEvent = "Ingen Events";
+            }
         }
 
 

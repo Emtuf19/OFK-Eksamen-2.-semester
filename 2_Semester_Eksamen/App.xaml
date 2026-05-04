@@ -10,7 +10,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <ContentPresenter />
+                        <ContentPresenter/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -42,9 +42,7 @@
         <Style TargetType="Label">
             <Setter Property="FontSize" Value="50" />
             <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Margin" Value="20" />
-            
+            <Setter Property="Margin" Value="20" />            
         </Style>
-
     </Application.Resources>
 </Application>

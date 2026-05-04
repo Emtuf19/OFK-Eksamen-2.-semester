@@ -23,7 +23,7 @@
                 <Button.Template>
                     <ControlTemplate>
                         <Image
-                Height="80"
+                Height="70"
                 Margin="10,10"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"

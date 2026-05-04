@@ -39,6 +39,8 @@ namespace _2_Semester_Eksamen.ViewModel
         }
 
         private string _practiceName;
+
+
         public string PracticeName
         {
             get { return _practiceName; }
