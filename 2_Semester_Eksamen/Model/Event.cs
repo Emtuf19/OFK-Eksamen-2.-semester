@@ -10,6 +10,7 @@ namespace _2_Semester_Eksamen.Model
         public string EventName { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public double Price { get; set; }      
+        public string AgeGroup { get; set; }
         public DateTime Time { get; set; }
 
         public List<Member> Members { get; set; } = new();
