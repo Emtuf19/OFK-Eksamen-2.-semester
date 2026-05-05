@@ -8,9 +8,9 @@ namespace _2_Semester_Eksamen.Model
     {
         public int ContactPersonID { get; set; }
         public int MemberID { get; set; }
-        public string ContactFirstName { get; set; }
-        public string ContactLastName { get; set; }
-        public string ContactPhoneNumber { get; set; }
-        public string ContactEmail { get; set; }
+        public string ContactFirstName { get; set; } = string.Empty;
+        public string ContactLastName { get; set; } = string.Empty;
+        public string ContactPhoneNumber { get; set; } = string.Empty;
+        public string ContactEmail { get; set; } = string.Empty;
     }
 }
