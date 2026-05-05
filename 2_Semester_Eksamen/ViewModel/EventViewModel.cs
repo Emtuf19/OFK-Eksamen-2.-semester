@@ -14,6 +14,7 @@ namespace _2_Semester_Eksamen.ViewModel
 
         public RelayCommand DeleteEventCommand { get; set; }
         public RelayCommand CreateEventCommand { get; set; }
+        public RelayCommand SaveCreateEventCommand { get; set; }
         public RelayCommand EditEventCommand { get; set; }
         public RelayCommand SaveEventCommand { get; set; }
         public RelayCommand CancelEditEventCommand { get; set; }
@@ -96,6 +97,17 @@ namespace _2_Semester_Eksamen.ViewModel
             }
         }
 
+        private bool _isCreateEventPopupOpen;
+        public bool IsCreateEventPopupOpen
+        {
+            get => _isCreateEventPopupOpen;
+            set
+            {
+                _isCreateEventPopupOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
         private Event _editingEvent;
         public Event EditingEvent
         {
@@ -147,7 +159,8 @@ namespace _2_Semester_Eksamen.ViewModel
             LoadEvents();
 
             DeleteEventCommand = new RelayCommand(DeleteEvent, CanDeleteEvent);
-            CreateEventCommand = new RelayCommand(CreateEvent, CanCreateEvent);
+            CreateEventCommand = new RelayCommand(OpenCreateEvent);
+            SaveCreateEventCommand = new RelayCommand(SaveCreateEvent);
             EditEventCommand = new RelayCommand(EditEvent);
             SaveEventCommand = new RelayCommand(UpdateEvent);
             CancelEditEventCommand = new RelayCommand(CancelEdit);
@@ -170,27 +183,35 @@ namespace _2_Semester_Eksamen.ViewModel
             return SelectedEvent != null;
         }
 
-        // Called by the View when the user confirmed creation in the dialog
-        public void CreateEvent()
+        private void OpenCreateEvent()
         {
-            var newEvent = new Event
+            EditingEvent = new Event
             {
-                EventName = EventName,
-                Description = Description,
-                AgeGroup = AgeGroup,
-                Price = Price,
-                Time = Time
+                Time = DateTime.Now
             };
-            var repo = new EventRepository();
-            repo.Add(newEvent);
-            Events.Add(newEvent);
 
-            LoadEvents();
+            DatePart = EditingEvent.Time.Date;
+            SelectedHour = EditingEvent.Time.Hour;
+            SelectedMinute = EditingEvent.Time.Minute;
+
+            IsCreateEventPopupOpen = true;
         }
 
-        private bool CanCreateEvent()
+        public void SaveCreateEvent()
         {
-            return !string.IsNullOrEmpty(EventName) && !string.IsNullOrEmpty(Description) && !string.IsNullOrEmpty(AgeGroup) && Price >= 0;
+            if (EditingEvent == null)
+                return;
+
+            EditingEvent.Time = DatePart.AddHours(SelectedHour).AddMinutes(SelectedMinute);
+
+            var repo = new EventRepository();
+            repo.Add(EditingEvent);
+            Events.Add(EditingEvent);
+
+            IsCreateEventPopupOpen = false;
+            EditingEvent = null;
+
+            LoadEvents();
         }
 
         private void EditEvent()
