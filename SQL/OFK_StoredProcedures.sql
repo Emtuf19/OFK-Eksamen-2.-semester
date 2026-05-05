@@ -42,7 +42,7 @@ GO
 CREATE PROC sp_InsertIntoContactInfo
 	@contactFirstName NVarChar(50),
 	@contactLastName NVarChar(50),
-	@contactPhoneNumber VarChar(8),
+	@contactPhoneNumber NVarChar(30),
 	@contactEmail NVarChar(100),
 	@memberID Int
 AS
@@ -75,13 +75,13 @@ CREATE PROC sp_InsertIntoMemberWithContacts
     -- Contact person 1 (påkrævet)
     @contact1FirstName NVARCHAR(50),
     @contact1LastName  NVARCHAR(50),
-    @contact1Phone     VARCHAR(8),
+    @contact1Phone     NVarChar(30),
     @contact1Email     NVARCHAR(100),
 
     -- Contact person 2 (valgfri - send NULL hvis ingen)
     @contact2FirstName NVARCHAR(50) = NULL,
     @contact2LastName  NVARCHAR(50) = NULL,
-    @contact2Phone     VARCHAR(8)   = NULL,
+    @contact2Phone     NVarChar(30)   = NULL,
     @contact2Email     NVARCHAR(100)= NULL,
 
     -- OUTPUT IDs
@@ -173,7 +173,7 @@ GO
 CREATE PROC sp_InsertIntoTrainer
 @trainerFirstName NVarChar(50),
 @trainerLastName NVarChar(50),
-@trainerPhoneNumber VarChar(8),
+@trainerPhoneNumber NVarChar(30),
 @trainerEmail NVarChar(100),
 @newTrainerID INT OUTPUT
 AS
@@ -551,6 +551,7 @@ BEGIN
         StartTime,
         EndTime
     FROM Practice;
+    --ORDER BY StartTime ASC;
 
     -- 2️ Alle members koblet til practices
     SELECT
@@ -561,6 +562,7 @@ BEGIN
     FROM Member_Practice mp
     INNER JOIN Member m
         ON mp.MemberID = m.MemberID;
+    --ORDER BY m.MemberLastName;
 
     -- 3️ Alle trainers koblet til practices
     SELECT
@@ -572,7 +574,7 @@ BEGIN
         t.TrainerEmail
     FROM Trainer_Practice tp
     INNER JOIN Trainer t
-        ON tp.TrainerID = t.TrainerID;
+        ON tp.TrainerID = t.TrainerID
 END;
 
 
@@ -589,7 +591,8 @@ BEGIN
         Price,
         AgeGroup,
         Time
-    FROM Event;
+    FROM Event
+    ORDER BY Time ASC;
 
     -- 2️ Alle members koblet til events
     SELECT
@@ -599,7 +602,8 @@ BEGIN
         m.MemberLastName
     FROM Member_Event me
     INNER JOIN Member m
-        ON me.MemberID = m.MemberID;
+        ON me.MemberID = m.MemberID
+    ORDER BY m.MemberLastName;
 
     -- 3️ Alle trainers koblet til events
     SELECT
@@ -611,7 +615,8 @@ BEGIN
         t.TrainerEmail
     FROM Trainer_Event te
     INNER JOIN Trainer t
-        ON te.TrainerID = t.TrainerID;
+        ON te.TrainerID = t.TrainerID
+    ORDER BY t.TrainerLastName;
 END;
 
 
@@ -807,7 +812,7 @@ CREATE PROC sp_UpdateTrainer
 @trainerID INT,
 @trainerFirstName NVARCHAR(50) = NULL,
 @trainerLastName NVARCHAR(50) = NULL,
-@trainerPhoneNumber VARCHAR(8) = NULL,
+@trainerPhoneNumber NVarChar(30) = NULL,
 @trainerEmail NVARCHAR(100) = NULL
 AS
 BEGIN
@@ -860,7 +865,7 @@ CREATE PROC sp_UpdateContactInfo
 @contactPersonID INT,
 @contactFirstName NVarChar(50),
 @contactLastName NVarChar(50),
-@contactPhoneNumber VarChar(8),
+@contactPhoneNumber NVarChar(30),
 @contactEmail NVarChar(100)
 AS
 BEGIN

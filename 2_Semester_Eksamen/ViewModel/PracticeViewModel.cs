@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Controls;
 using _2_Semester_Eksamen.Commands;
+using System.Windows;
+using System.Security.Policy;
 
 namespace _2_Semester_Eksamen.ViewModel
 {
@@ -15,6 +17,18 @@ namespace _2_Semester_Eksamen.ViewModel
         public ObservableCollection<Practice> Practices { get; set; } = new();
 
         public ObservableCollection<Practice> SelectedPractices { get; set; } = new();
+
+        private int _memberIDInput;
+        public int MemberIDInput
+        {
+            get => _memberIDInput; 
+            set
+            {
+                _memberIDInput = value;
+                OnPropertyChanged();
+                CancelParticipationCommand?.RaiseCanExecuteChanged();
+            }
+        }
 
         private Practice _selectedPractice;
         public Practice SelectedPractice
@@ -30,10 +44,11 @@ namespace _2_Semester_Eksamen.ViewModel
                     PracticeName = _selectedPractice.PracticeName;
                     StartTime = _selectedPractice.StartTime;
                     EndTime = _selectedPractice.EndTime;
-                }
 
-                DeletePracticeCommand?.RaiseCanExecuteChanged();
-                UpdatePracticeCommand?.RaiseCanExecuteChanged();
+
+                    DeletePracticeCommand?.RaiseCanExecuteChanged();
+                    UpdatePracticeCommand?.RaiseCanExecuteChanged();
+                }
             }
         }
 
@@ -45,6 +60,7 @@ namespace _2_Semester_Eksamen.ViewModel
             {
                 _practiceName = value;
                 OnPropertyChanged();
+                CreatePracticeCommand?.RaiseCanExecuteChanged();
             }
         }
 
@@ -56,6 +72,7 @@ namespace _2_Semester_Eksamen.ViewModel
             {
                 _startTime = value;
                 OnPropertyChanged();
+                CreatePracticeCommand?.RaiseCanExecuteChanged();
             }
         }
 
@@ -67,6 +84,7 @@ namespace _2_Semester_Eksamen.ViewModel
             {
                 _endTime = value;
                 OnPropertyChanged();
+                CreatePracticeCommand?.RaiseCanExecuteChanged();
             }
         }
 
@@ -87,6 +105,44 @@ namespace _2_Semester_Eksamen.ViewModel
         public RelayCommand DeletePracticeCommand { get; }
         public RelayCommand CreatePracticeCommand { get; }
         public RelayCommand UpdatePracticeCommand { get; }
+        public RelayCommand CancelParticipationCommand { get; }
+
+        private bool CanExecuteCancelParticipation()
+        {
+            return SelectedPractice != null && MemberIDInput > 0;
+        }
+
+        private void ExecuteCancelParticipation()
+        {
+            try
+            {
+                var repo = new PracticeRepository();
+                repo.RemoveMemberFromPractice(SelectedPractice.PracticeID, MemberIDInput);
+
+                bool memberExists = SelectedPractice.Members?.Any(m => m.MemberID == MemberIDInput) ?? false;
+
+                if (!memberExists)
+                {
+                    MessageBox.Show($"Medlem {MemberIDInput} er ikke tilmeldt træningen.", "Afmelding mislykket", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                MessageBox.Show($"Medlem {MemberIDInput} er afmeldt træningen.", "Afmelding fuldført", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                var member = SelectedPractice.Members?.FirstOrDefault(m => m.MemberID == MemberIDInput);
+
+                if (member != null)
+                {
+                    SelectedPractice.Members.Remove(member);
+                }
+
+                MemberIDInput = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Kunne ikke afmelde medlem.\n" + ex.Message, "Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         private bool CanExecuteDeletePractice()
         {
@@ -98,8 +154,10 @@ namespace _2_Semester_Eksamen.ViewModel
 
             PracticeName = "Træning Aflyst";
             SelectedPractice.PracticeName = PracticeName;
-            SelectedPractice.StartTime = StartTime;
-            SelectedPractice.EndTime = EndTime;
+
+            var date = SelectedPractice.StartTime.Date; // Behold den oprindelige dato
+            SelectedPractice.StartTime = date.Add(StartTime.TimeOfDay);
+            SelectedPractice.EndTime = date.Add(EndTime.TimeOfDay);
             
             var repo = new PracticeRepository();
             
@@ -111,26 +169,43 @@ namespace _2_Semester_Eksamen.ViewModel
 
         private bool CanExecuteCreatePractice()
         {
-            return SelectedDate != null;
+            return SelectedDate != null && !string.IsNullOrWhiteSpace(PracticeName) 
+                   && StartTime.TimeOfDay != null && EndTime.TimeOfDay != null;
         }
 
         private void ExecuteCreatePractice()
         {
-            DateTime date = SelectedDate.Value;
+            DateTime date = SelectedDate!.Value;
 
             var newPractice = new Practice
             {
-                PracticeName = "New Practice",
-                StartTime = date.Date.AddHours(18), // Default to 6 PM on the selected date
-                EndTime = date.Date.AddHours(20) // Default to 8 PM on the selected date
-
+                PracticeName = PracticeName,
+                StartTime = date.Date.Add(StartTime.TimeOfDay), // Combine selected date with the time from StartTime
+                EndTime = date.Date.Add(EndTime.TimeOfDay) // Combine selected date with the time from EndTime
             };
 
             var repo = new PracticeRepository();
-            repo.Create(newPractice);
 
-            Practices.Add(newPractice);
+            if (newPractice.StartTime >= newPractice.EndTime || newPractice.StartTime < DateTime.Now)
+            {
+                MessageBox.Show("Ugyldige tider!", "Ugyldige tider", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+            {
+                repo.Create(newPractice);
+                Practices.Add(newPractice);
+            }
+
             UpdateSelectedPractices();
+
+            ClearInputFields();
+        }
+
+        private void ClearInputFields()
+        {
+            PracticeName = string.Empty;
+            StartTime = DateTime.Now;
+            EndTime = DateTime.Now.AddHours(1);
         }
 
         private bool CanExecuteUpdatePractice()
@@ -141,16 +216,20 @@ namespace _2_Semester_Eksamen.ViewModel
         private void ExecuteUpdatePractice()
         {
             SelectedPractice.PracticeName = PracticeName;
-            SelectedPractice.StartTime = StartTime;
-            SelectedPractice.EndTime = EndTime;
+
+            var date = SelectedPractice.StartTime.Date; // Behold den oprindelige dato
+            SelectedPractice.StartTime = date.Add(StartTime.TimeOfDay);
+            SelectedPractice.EndTime = date.Add(EndTime.TimeOfDay);
 
             var repo = new PracticeRepository();
-            repo.Update(SelectedPractice);
-
-            // No need to update the collection as we are modifying the existing object?
-            //OnPropertyChanged(nameof(SelectedPractices));
-
-            //opdater listen over valgte praksisser for at reflektere ændringerne
+            if (SelectedPractice.StartTime >= SelectedPractice.EndTime || SelectedPractice.StartTime < DateTime.Now)
+            {
+                MessageBox.Show("Ugyldige tider!", "Ugyldige tider", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+            {
+                repo.Update(SelectedPractice);
+            }
             UpdateSelectedPractices();
         }
 
@@ -158,9 +237,13 @@ namespace _2_Semester_Eksamen.ViewModel
         {
             LoadPractices();
 
+            // Sæt default værdier for StartTime og EndTime
+            ClearInputFields();
+
             DeletePracticeCommand = new RelayCommand(ExecuteDeletePractice, CanExecuteDeletePractice);
             CreatePracticeCommand = new RelayCommand(ExecuteCreatePractice, CanExecuteCreatePractice);
             UpdatePracticeCommand = new RelayCommand(ExecuteUpdatePractice, CanExecuteUpdatePractice);
+            CancelParticipationCommand = new RelayCommand(ExecuteCancelParticipation, CanExecuteCancelParticipation);
         }
 
         private void LoadPractices()

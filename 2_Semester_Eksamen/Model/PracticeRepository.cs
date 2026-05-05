@@ -161,7 +161,9 @@ namespace _2_Semester_Eksamen.Model
                     }
                 }
             }
-            return practices;
+            //Tilføjet filter for at kun vise fremtidige practices, og sortering på starttidspunkt
+            practices = practices.Where(p => p.StartTime >= DateTime.Now).ToList();
+            return practices.OrderBy(p => p.StartTime).ToList();
         }
 
 
@@ -239,6 +241,21 @@ namespace _2_Semester_Eksamen.Model
                 practice.PracticeID = newId;
 
                 return newId;
+            }
+        }
+
+        //metode til at fjerne medlemmer fra practice
+        public void RemoveMemberFromPractice(int practiceID, int memberID)
+        {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
+                using SqlCommand cmd = new SqlCommand("sp_CancelParticipation", con);
+                
+                cmd.CommandType= CommandType.StoredProcedure;
+                cmd.Parameters.Add("@PracticeID", SqlDbType.Int).Value = practiceID;
+                cmd.Parameters.Add("@MemberID", SqlDbType.Int).Value = memberID;
+                cmd.ExecuteNonQuery();
             }
         }
 
