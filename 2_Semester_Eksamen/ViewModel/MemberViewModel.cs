@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using _2_Semester_Eksamen.Model;
 
 namespace _2_Semester_Eksamen.ViewModel
 {
     
-    public class MemberViewModel : INotifyPropertyChanged
+    public class MemberViewModel : ViewModelBase
     {
         public readonly Member _member;
         
@@ -45,7 +46,7 @@ namespace _2_Semester_Eksamen.ViewModel
 
         public string MemberLastName
         {
-            get => _member.MemberLastName ?? string.Empty:
+            get => _member.MemberLastName ?? string.Empty;
             set
             {
                 if ((_member.MemberLastName ?? string.Empty) != (value ?? string.Empty))
@@ -60,10 +61,6 @@ namespace _2_Semester_Eksamen.ViewModel
         public string Fullname => $"{MemberFirstName} {MemberLastName}".Trim();
 
         public Member ToModel() => _member;
-
-        public event PropertyChangedEventHandler? Propertychanged;
-        protected void OnPropertyChanged(string propName) => Propertychanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-
     }
 
 }
