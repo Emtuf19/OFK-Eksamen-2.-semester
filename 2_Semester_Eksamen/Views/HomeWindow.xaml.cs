@@ -14,8 +14,8 @@ namespace _2_Semester_Eksamen.Views
         public ObservableCollection<Event> Events { get; set; }
       
         //Fejl Meddelelser
-        public string Error { get; set; }
-        public string ErrorEvent { get; set; }
+        public string? Error { get; set; }
+        public string? ErrorEvent { get; set; }
 
         public HomeWindow()
         {
