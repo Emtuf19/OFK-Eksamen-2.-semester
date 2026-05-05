@@ -37,7 +37,7 @@
         <StackPanel  Grid.Row="2" Margin="0,50,0,0">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel>
-                    <!--Flere af denne list box, for flere følgeseddler-->
+                    
                     <ListBox ItemsSource="{Binding Events}" Background="White" Margin="0" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Hidden" SelectedItem="{Binding SelectedEvent}">
                         <ListBox.Resources>
                             <Style TargetType="TextBlock">
@@ -116,151 +116,50 @@
             </ScrollViewer>
         </StackPanel>
 
-        <Grid Background="#80000000"
-      Visibility="{Binding IsEventPopupOpen,
-                   Converter={StaticResource BoolToVisibilityConverter}}">
+        <Grid Background="#80000000" Visibility="{Binding IsEventPopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
 
-            <Border Width="350"
-            Background="White"
-            Padding="15"
-            CornerRadius="8"
-            VerticalAlignment="Center"
-            HorizontalAlignment="Center">
+            <Border Width="400" Background="White" Padding="15" CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center">
 
                 <StackPanel>
 
-                    <!-- Titel -->
-                    <TextBlock FontSize="18"
-                       FontWeight="Bold"
-                       Text="{Binding IsEditMode, Converter={StaticResource EditModeToTitleConverter}}" />
+                    <TextBlock FontSize="18" FontWeight="Bold" Text="{Binding IsEditMode, Converter={StaticResource EditModeToTitleConverter}}" />
 
-                    <TextBox Text="{Binding EditingEvent.EventName}" />
-                    <TextBox Text="{Binding EditingEvent.Description}" Margin="0,5,0,0"/>
-                    <TextBox Text="{Binding EditingEvent.AgeGroup}" Margin="0,5,0,0"/>
-                    <TextBox Text="{Binding EditingEvent.Price}" Margin="0,5,0,0"/>
+                    <DockPanel>
+                        <TextBlock FontWeight="Bold" Text="Titel:" VerticalAlignment="Center" Width="60"/>
+                        <TextBox Text="{Binding EditingEvent.EventName}" />
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock FontWeight="Bold" Text="Beskrivelse:" VerticalAlignment="Center" Width="60"/>
+                        <TextBox Text="{Binding EditingEvent.Description}" Margin="0,5,0,0"/>
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock FontWeight="Bold" Text="Aldersgruppe:" VerticalAlignment="Center" Width="60"/>
+                        <TextBox Text="{Binding EditingEvent.AgeGroup}" Margin="0,5,0,0"/>
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock FontWeight="Bold" Text="Pris:" VerticalAlignment="Center" Width="60"/>
+                        <TextBox Text="{Binding EditingEvent.Price}" Margin="0,5,0,0"/>
+                    </DockPanel>
 
-                    <DatePicker SelectedDate="{Binding DatePart}" Margin="0,5,0,0"/>
+                    <DockPanel>
+                        <TextBlock FontWeight="Bold" Text="Dato:" VerticalAlignment="Center" Width="60"/>
+                        <DatePicker SelectedDate="{Binding DatePart}" Margin="0,5,0,0"/>
+                    </DockPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                        <ComboBox Width="60"
-                          ItemsSource="{Binding Hours}"
-                          SelectedItem="{Binding SelectedHour}" />
-                        <TextBlock Text=":" Margin="5,0" />
-                        <ComboBox Width="60"
-                          ItemsSource="{Binding Minutes}"
-                          SelectedItem="{Binding SelectedMinute}" />
+                        <DockPanel>
+                            <TextBlock FontWeight="Bold" Text="Tid:" VerticalAlignment="Center" Width="60"/>
+                            <ComboBox Width="60" ItemsSource="{Binding Hours}" SelectedItem="{Binding SelectedHour}" />
+                            <TextBlock Text=":" Margin="5,0" />
+                            <ComboBox Width="60" ItemsSource="{Binding Minutes}" SelectedItem="{Binding SelectedMinute}" />
+                        </DockPanel>
                     </StackPanel>
 
-                    <Button Content="Gem"
-                    Margin="0,10,0,0"
-                    Command="{Binding SaveEventCommand}" />
-
-                    <Button Content="Annuller"
-                    Margin="0,5,0,0"
-                    Command="{Binding CancelEditEventCommand}" />
+                    <Button Content="Gem" Margin="0,10,0,0" Command="{Binding SaveEventCommand}" />
+                    <Button Content="Annuller" Margin="0,5,0,0" Command="{Binding CancelEditEventCommand}" />
 
                 </StackPanel>
             </Border>
         </Grid>
-
-
-        <!-- <Grid Background="#80000000" Visibility="{Binding IsEditEventPopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
-
-            <Border Width="350"
-                Background="White"
-                Padding="15"
-                CornerRadius="8"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center">
-
-                <StackPanel>
-
-                    <TextBlock Text="Rediger Event"
-                           FontSize="18"
-                           FontWeight="Bold"/>
-
-                    <TextBox Text="{Binding EditingEvent.EventName, UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBox Text="{Binding EditingEvent.Description}" Margin="0,5,0,0"/>
-                    <TextBox Text="{Binding EditingEvent.AgeGroup}" Margin="0,5,0,0"/>
-                    <TextBox Text="{Binding EditingEvent.Price}" Margin="0,5,0,0"/>
-
-                    <DatePicker SelectedDate="{Binding DatePart}" Margin="0,5,0,0"/>
-                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                        <ComboBox Width="60" ItemsSource="{Binding Hours}" SelectedItem="{Binding SelectedHour}"/>
-                        <TextBlock Text=":" VerticalAlignment="Center" Margin="5,0"/>
-                        <ComboBox Width="60" ItemsSource="{Binding Minutes}" SelectedItem="{Binding SelectedMinute}"/>
-                    </StackPanel>
-
-                    <Button Content="Gem"
-                        Margin="0,10,0,0"
-                        Command="{Binding SaveEventCommand}"/>
-
-                    <Button Content="Annuller"
-                        Margin="0,5,0,0"
-                        Command="{Binding CancelEditEventCommand}"/>
-                </StackPanel>
-            </Border>
-
-
-            <Grid Background="#80000000" Visibility="{Binding IsCreateEventPopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
-
-                <Border Width="350"
-            Background="White"
-            Padding="15"
-            CornerRadius="8"
-            VerticalAlignment="Center"
-            HorizontalAlignment="Center">
-
-                    <StackPanel>
-
-                        <TextBlock Text="Opret Event"
-                       FontSize="18"
-                       FontWeight="Bold"/>
-
-                        <TextBox Text="{Binding EditingEvent.EventName, UpdateSourceTrigger=PropertyChanged}" />
-
-                        <TextBox Text="{Binding EditingEvent.Description}"
-                     Margin="0,5,0,0"/>
-
-                        <TextBox Text="{Binding EditingEvent.AgeGroup}"
-                     Margin="0,5,0,0"/>
-
-                        <TextBox Text="{Binding EditingEvent.Price}"
-                     Margin="0,5,0,0"/>
-
-                        <DatePicker SelectedDate="{Binding DatePart}"
-                        Margin="0,5,0,0"/>
-
-                        <StackPanel Orientation="Horizontal"
-                        Margin="0,5,0,0">
-
-                            <ComboBox Width="60"
-                          ItemsSource="{Binding Hours}"
-                          SelectedItem="{Binding SelectedHour}"/>
-
-                            <TextBlock Text=":"
-                           VerticalAlignment="Center"
-                           Margin="5,0"/>
-
-                            <ComboBox Width="60"
-                          ItemsSource="{Binding Minutes}"
-                          SelectedItem="{Binding SelectedMinute}"/>
-
-                        </StackPanel>
-
-                        <Button Content="Gem"
-                    Margin="0,10,0,0"
-                    Command="{Binding SaveCreateEventCommand}"/>
-
-                        <Button Content="Annuller"
-                    Margin="0,5,0,0"
-                    Command="{Binding CancelEditEventCommand}"/>
-
-                    </StackPanel>
-                </Border>
-            </Grid>
-    
-        </Grid> -->
-
     </Grid>
 </Page>

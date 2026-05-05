@@ -10,11 +10,9 @@ namespace _2_Semester_Eksamen.ViewModel
     public class EventViewModel : ViewModelBase
     {
         public ObservableCollection<Event> Events { get; set; } = new();
-        //public ObservableCollection<Event> SelectedEvents { get; set; } = new();
 
         public RelayCommand DeleteEventCommand { get; set; }
         public RelayCommand CreateEventCommand { get; set; }
-        public RelayCommand SaveCreateEventCommand { get; set; }
         public RelayCommand EditEventCommand { get; set; }
         public RelayCommand SaveEventCommand { get; set; }
         public RelayCommand CancelEditEventCommand { get; set; }
@@ -108,28 +106,6 @@ namespace _2_Semester_Eksamen.ViewModel
             }
         }
 
-        private bool _isEditEventPopupOpen;
-        public bool IsEditEventPopupOpen
-        {
-            get => _isEditEventPopupOpen;
-            set
-            {
-                _isEditEventPopupOpen = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _isCreateEventPopupOpen;
-        public bool IsCreateEventPopupOpen
-        {
-            get => _isCreateEventPopupOpen;
-            set
-            {
-                _isCreateEventPopupOpen = value;
-                OnPropertyChanged();
-            }
-        }
-
         private Event _editingEvent;
         public Event EditingEvent
         {
@@ -182,9 +158,7 @@ namespace _2_Semester_Eksamen.ViewModel
 
             DeleteEventCommand = new RelayCommand(DeleteEvent, CanDeleteEvent);
             CreateEventCommand = new RelayCommand(OpenCreateEvent);
-            SaveCreateEventCommand = new RelayCommand(SaveCreateEvent);
             EditEventCommand = new RelayCommand(EditEvent);
-            //SaveEventCommand = new RelayCommand(UpdateEvent);
             SaveEventCommand = new RelayCommand(SaveEvent);
             CancelEditEventCommand = new RelayCommand(CancelEdit);
         }
@@ -219,23 +193,6 @@ namespace _2_Semester_Eksamen.ViewModel
 
             IsEditMode = false;
             IsEventPopupOpen = true;
-        }
-
-        public void SaveCreateEvent()
-        {
-            if (EditingEvent == null)
-                return;
-
-            EditingEvent.Time = DatePart.AddHours(SelectedHour).AddMinutes(SelectedMinute);
-
-            var repo = new EventRepository();
-            repo.Add(EditingEvent);
-            Events.Add(EditingEvent);
-
-            IsCreateEventPopupOpen = false;
-            EditingEvent = null;
-
-            LoadEvents();
         }
 
         private void EditEvent()
@@ -294,25 +251,6 @@ namespace _2_Semester_Eksamen.ViewModel
         {
             IsEventPopupOpen = false;
             EditingEvent = null;
-        }
-
-        public void UpdateEvent()
-        {
-            if (SelectedEvent == null || EditingEvent == null)
-                return;
-
-            EditingEvent.Time = DatePart.AddHours(SelectedHour).AddMinutes(SelectedMinute);
-
-            SelectedEvent.EventName = EditingEvent.EventName;
-            SelectedEvent.Description = EditingEvent.Description;
-            SelectedEvent.AgeGroup = EditingEvent.AgeGroup;
-            SelectedEvent.Price = EditingEvent.Price;
-            SelectedEvent.Time = EditingEvent.Time;
-            var repo = new EventRepository();
-            repo.Update(SelectedEvent);
-            
-            IsEditEventPopupOpen = false;
-            LoadEvents();
         }
 
         private void CancelEdit()
