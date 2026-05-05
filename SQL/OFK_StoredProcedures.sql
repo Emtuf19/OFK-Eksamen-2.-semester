@@ -575,7 +575,6 @@ BEGIN
     FROM Trainer_Practice tp
     INNER JOIN Trainer t
         ON tp.TrainerID = t.TrainerID
-    ORDER BY StartTime ASC;
 END;
 
 

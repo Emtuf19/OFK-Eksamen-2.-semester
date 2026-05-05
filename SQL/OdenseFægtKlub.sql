@@ -23,27 +23,6 @@ CREATE TABLE ContactInfo
 
 );
 
-GO
-CREATE TRIGGER trg_MaxTwoContacts
-ON ContactInfo
-AFTER INSERT, UPDATE
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    IF EXISTS
-    (
-        SELECT c.MemberID
-        FROM ContactInfo c
-        INNER JOIN inserted i ON c.MemberID = i.MemberID
-        GROUP BY c.MemberID
-        HAVING COUNT(*) > 2
-    )
-    BEGIN
-        THROW 50000, 'maximum of 2 contact persons', 1;
-    END
-END;
-
 CREATE TABLE Trainer
 (
 	TrainerID Int IDENTITY(1,1) PRIMARY KEY,
@@ -115,3 +94,24 @@ CREATE TABLE Trainer_Practice
 	CONSTRAINT FK_TrainerPractice_Practice FOREIGN KEY (PracticeID) REFERENCES Practice(PracticeID) ON DELETE CASCADE,
 	CONSTRAINT uq_TrainerPractice UNIQUE (TrainerID, PracticeID)
 );
+
+GO
+CREATE TRIGGER trg_MaxTwoContacts
+ON ContactInfo
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF EXISTS
+    (
+        SELECT c.MemberID
+        FROM ContactInfo c
+        INNER JOIN inserted i ON c.MemberID = i.MemberID
+        GROUP BY c.MemberID
+        HAVING COUNT(*) > 2
+    )
+    BEGIN
+        THROW 50000, 'maximum of 2 contact persons', 1;
+    END
+END;
