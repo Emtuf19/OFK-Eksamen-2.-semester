@@ -162,21 +162,23 @@ namespace _2_Semester_Eksamen.Model
             }
         }
 
-        public override void Add(Event event1)
-        {
-            using (SqlConnection con = CreateConnection())
-            {
-                con.Open();
+        //public override void Add(Event event1)
+        //{
+        //    using (SqlConnection con = CreateConnection())
+        //    {
+        //        con.Open();
 
-                using SqlCommand cmd = new SqlCommand("dbo.sp_InsertIntoEvent", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 50).Value = event1.EventName;
-                cmd.Parameters.Add("@Description", SqlDbType.NVarChar, 1000).Value = event1.Description;
-                cmd.Parameters.Add("@Price", SqlDbType.Float).Value = event1.Price;
-                cmd.Parameters.Add("@AgeGroup", SqlDbType.NVarChar, 50).Value = event1.AgeGroup;
-                cmd.Parameters.Add("@StartTime", SqlDbType.DateTime2).Value = event1.Time;
-            }
-        }
+        //        using SqlCommand cmd = new SqlCommand("dbo.sp_InsertIntoEvent", con);
+        //        cmd.CommandType = CommandType.StoredProcedure;
+        //        cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 50).Value = event1.EventName;
+        //        cmd.Parameters.Add("@Description", SqlDbType.NVarChar, 1000).Value = event1.Description;
+        //        cmd.Parameters.Add("@Price", SqlDbType.Float).Value = event1.Price;
+        //        cmd.Parameters.Add("@AgeGroup", SqlDbType.NVarChar, 50).Value = event1.AgeGroup;
+        //        cmd.Parameters.Add("@Time", SqlDbType.DateTime2).Value = event1.Time;
+
+        //        cmd.ExecuteNonQuery();
+        //    }
+        //}
 
         public override void Update(Event event1)
         {
@@ -207,6 +209,31 @@ namespace _2_Semester_Eksamen.Model
                     cmd.Parameters.Add("@ID", SqlDbType.Int).Value = ID;
                     cmd.ExecuteNonQuery();
                 }
+            }
+        }
+
+        public override void Add(Event ev)
+        {
+            using (SqlConnection conn = CreateConnection())
+            using (SqlCommand cmd = new SqlCommand("sp_InsertIntoEvent", conn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@eventName", SqlDbType.NVarChar, 100).Value = ev.EventName;
+                cmd.Parameters.Add("@description", SqlDbType.NVarChar, 250).Value = ev.Description;
+                cmd.Parameters.Add("@price", SqlDbType.Float).Value = ev.Price;
+                cmd.Parameters.Add("@ageGroup", SqlDbType.NVarChar, 20).Value = ev.AgeGroup;
+                cmd.Parameters.Add("@time", SqlDbType.DateTime2).Value = ev.Time;
+
+                // OUTPUT parameter
+                SqlParameter outputId = cmd.Parameters.Add("@newEventID", SqlDbType.Int);
+                outputId.Direction = ParameterDirection.Output;
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+
+                // Sæt ID tilbage på objektet
+                ev.EventID = (int)outputId.Value;
             }
         }
 
