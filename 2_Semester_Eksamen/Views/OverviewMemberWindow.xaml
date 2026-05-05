@@ -91,33 +91,38 @@
                         </Grid.RowDefinitions>
 
                         <!-- Fornavn -->
-                        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Fornavn:"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Medlems ID:"/>
                         <TextBox   Grid.Row="0" Grid.Column="2" MinWidth="180"
+                                   Text="{Binding SelectedMember.MemberID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="Fornavn:"/>
+                        <TextBox   Grid.Row="2" Grid.Column="2" MinWidth="180"
                                    Text="{Binding SelectedMember.MemberFirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
+
                         <!-- Efternavn -->
-                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="Efternavn:"/>
-                        <TextBox   Grid.Row="2" Grid.Column="2"
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="Efternavn:"/>
+                        <TextBox   Grid.Row="4" Grid.Column="2"
                                    Text="{Binding SelectedMember.MemberLastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <!-- Kontaktperson fornavn -->
-                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="Kontaktperson fornavn:"/>
-                        <TextBox   Grid.Row="4" Grid.Column="2"
+                        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Text="Kontaktperson fornavn:"/>
+                        <TextBox   Grid.Row="6" Grid.Column="2"
                                    Text="{Binding SelectedContact.ContactFirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <!-- Kontaktperson efternavn -->
-                        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Text="Kontaktperson efternavn:"/>
-                        <TextBox   Grid.Row="6" Grid.Column="2"
+                        <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Text="Kontaktperson efternavn:"/>
+                        <TextBox   Grid.Row="8" Grid.Column="2"
                                    Text="{Binding SelectedContact.ContactLastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <!-- Email -->
-                        <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Text="Email:"/>
-                        <TextBox   Grid.Row="8" Grid.Column="2"
+                        <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Text="Email:"/>
+                        <TextBox   Grid.Row="10" Grid.Column="2"
                                    Text="{Binding SelectedContact.ContactEmail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <!-- Telefon -->
-                        <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Text="Telefon:"/>
-                        <TextBox   Grid.Row="10" Grid.Column="2"
+                        <TextBlock Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" Text="Telefon:"/>
+                        <TextBox   Grid.Row="12" Grid.Column="2"
                                    Text="{Binding SelectedContact.ContactPhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                 </Border>
