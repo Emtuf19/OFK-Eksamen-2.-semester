@@ -9,6 +9,130 @@
       Title="OverviewMemberWindow">
 
     <Grid>
-        
+        <Grid Margin="10,0,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="1"
+                   Grid.ColumnSpan="2"
+                   Margin="10"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Content="Medlemmer" />
+
+            <!-- Venstre side -->
+            <Border Grid.Row="3"
+                    Grid.Column="0"
+                    Margin="10"
+                    BorderBrush="Black"
+                    BorderThickness="1">
+                
+                <ListBox x:Name="MembersListBox"
+                         ItemsSource="{Binding Members}"
+                         SelectedItem="{Binding SelectedMember, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <!--<TextBlock Text="{binding FullName}"/>-->
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+
+            <!-- Højre side -->
+            <Grid Grid.Row="3"
+                  Grid.Column="1"
+                  Margin="10">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Buttons -->
+                    <RowDefinition Height="10"/>
+                    <!-- Spacer -->
+                    <RowDefinition Height="*"/>
+                    <!-- Form -->
+                </Grid.RowDefinitions>
+
+                
+                <StackPanel Grid.Row="0">
+                    <Button Name="AddMemberButton" Content="Tilføje medlem" Margin="0,0,0,8" Height="30" Click="AddMemberButton_Click"/>
+                    <Button Name="EditMemberButton" Content="Rediger medlem" Margin="0,0,0,8" Height="30" Click="EditMemberButton_Click"/>
+                    <Button Name="DeleteMemberButton" Content="Slet medlem" Margin="0,0,0,8" Height="30" Click="DeleteMemberButton_Click"/>
+                    <Button Name="SafeMemberButton" Content="Gem" Height="30" Click="SafeMemberButton_Click"/>
+                </StackPanel>
+
+               
+                <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1" Padding="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="4"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="4"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="4"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="4"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="4"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="4"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="4"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Fornavn -->
+                        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Fornavn:"/>
+                        <TextBox   Grid.Row="0" Grid.Column="2" MinWidth="180"
+                                   Text="{Binding SelecetedMember.MemberFristName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <!-- Efternavn -->
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="Efternavn:"/>
+                        <TextBox   Grid.Row="2" Grid.Column="2"
+                                   Text="{Binding SelecetedMember.MemberLastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <!-- Kontaktperson fornavn -->
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="Kontaktperson fornavn:"/>
+                        <TextBox   Grid.Row="4" Grid.Column="2"
+                                   Text="{Binding SelectedMember.ContactPerson[0].contactFirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <!-- Kontaktperson efternavn -->
+                        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Text="Kontaktperson efternavn:"/>
+                        <TextBox   Grid.Row="6" Grid.Column="2"
+                                   Text="{Binding SelectedMember.ContactPerson[0].contactLastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <!-- Email -->
+                        <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Text="Email:"/>
+                        <TextBox   Grid.Row="8" Grid.Column="2"
+                                   Text="{Binding SelectedMember.ContactPerson[0].contactEmail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <!-- Telefon -->
+                        <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Text="Telefon:"/>
+                        <TextBox   Grid.Row="10" Grid.Column="2"
+                                   Text="{Binding SelectedMember.ContactPerson[0].contactPhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <!-- Adresse -->
+                        <TextBlock Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" Text="Adresse:"/>
+                        <TextBox   Grid.Row="12" Grid.Column="2"/>
+                    </Grid>
+                </Border>
+
+            </Grid>
+        </Grid>
     </Grid>
 </Page>
