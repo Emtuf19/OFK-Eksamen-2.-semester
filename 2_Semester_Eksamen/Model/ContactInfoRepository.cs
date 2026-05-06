@@ -11,22 +11,6 @@ namespace _2_Semester_Eksamen.Model
     {
         private List<ContactInfo> contactInfos = new List<ContactInfo>();
 
-        public override ContactInfo? GetById(int ID)
-        {
-            using (SqlConnection con = CreateConnection())
-            {
-                con.Open();
-
-                ContactInfo contactInfo = new ContactInfo();
-
-                using SqlCommand cmd = new SqlCommand("dbo.GetByID", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@ID", SqlDbType.Int).Value = ID;
-
-                return contactInfo;
-            }
-        }
-
         public override List<ContactInfo> GetAll()
         {
             return contactInfos;
