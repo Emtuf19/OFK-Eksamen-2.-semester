@@ -23,8 +23,19 @@ namespace _2_Semester_Eksamen.Views
         {
             InitializeComponent();
 
-            var vm = new EventViewModel();
-            DataContext = vm;
+            var mainWindow = (MainWindow)Application.Current.MainWindow;
+
+            if (mainWindow.CurrentRole == "Trainer")
+            {
+                EventButtonsTrainer.Visibility = Visibility.Visible;
+                EventButtonsMember.Visibility = Visibility.Collapsed;
+            }
+            else if (mainWindow.CurrentRole == "Member")
+            {
+                EventButtonsTrainer.Visibility = Visibility.Collapsed;
+                EventButtonsMember.Visibility = Visibility.Visible;
+            }
+            DataContext = new EventViewModel();
         }
     }
 }
