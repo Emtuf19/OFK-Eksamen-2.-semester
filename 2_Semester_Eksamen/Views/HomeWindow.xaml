@@ -9,8 +9,7 @@
     d:DesignHeight="720"
     d:DesignWidth="1280"
     Background="White"
-    mc:Ignorable="d">
-
+    mc:Ignorable="d">   
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -46,7 +45,22 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock HorizontalAlignment="Center" FontSize="25" FontWeight="Bold" Text="Træninger:"/>
-                    <TextBlock x:Name="TrainingError_txt" Text="{Binding Error}" Visibility="Collapsed" Grid.Row="0" Margin="10,40,0,0" FontWeight="Bold" FontSize="20"/>
+                    <!--Fejl Besked Træning-->
+                    <TextBlock x:Name="TrainingError_txt" Text="{Binding Error}" Grid.Row="0" Margin="10,40,0,0" FontWeight="Bold" FontSize="20">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Error}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Error}">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                     <ListBox ItemsSource="{Binding Practices}" FontSize="16" Grid.Row="1" Background="Transparent" BorderThickness="0">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
@@ -100,7 +114,22 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <TextBlock HorizontalAlignment="Center" FontSize="25" FontWeight="Bold" Text="Begivenheder:"/>
-                    <TextBlock x:Name="EventError_txt" Grid.Row="0" FontSize="20" Margin="10,40" FontWeight="Bold" Visibility="Collapsed" Text="{Binding ErrorEvent}"/>
+                    <!--Fejl Besked Events-->
+                    <TextBlock Grid.Row="0" Margin="10,40" FontSize="20" FontWeight="Bold" Text="{Binding ErrorEvent}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ErrorEvent}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ErrorEvent}">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                     <ListBox ItemsSource="{Binding Events}" FontSize="16" Grid.Row="1" Background="Transparent" BorderThickness="0">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
