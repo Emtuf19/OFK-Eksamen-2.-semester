@@ -29,10 +29,10 @@
         <Label VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="4">
             Begivenheder
         </Label>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Margin="0,10,0,10">
-            <Button Content="Opret begivenhed" Command="{Binding CreateEventCommand}" Background="#FF2DC72D"/>
-            <Button Content="Rediger begivenhed" Command="{Binding EditEventCommand}" Background="#FF2DC72D" Margin="10,0,0,0"/>
-            <Button Content="Slet begivenhed" Command="{Binding DeleteEventCommand}" Background="#FF2DC72D" Margin="10,0,0,0"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Margin="0,10,0,10" >
+            <Button Content="Opret begivenhed" Command="{Binding CreateEventCommand}" Background="#FF2DC72D" Padding="10"/>
+            <Button Content="Rediger begivenhed" Command="{Binding EditEventCommand}" Background="#FF679ECE" Margin="10,0,0,0"/>
+            <Button Content="Slet begivenhed" Command="{Binding DeleteEventCommand}" Background="#FFDE4444" Margin="10,0,0,0"/>
         </StackPanel>
         <StackPanel  Grid.Row="2" Margin="0,50,0,0">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -118,47 +118,51 @@
 
         <Grid Background="#80000000" Visibility="{Binding IsEventPopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
 
-            <Border Width="400" Background="White" Padding="15" CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Border Width="450" Height="330" Background="White" Padding="15" CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center">
 
-                <StackPanel>
+                <Grid RowDefinitions="*,*,*,*,*,*,*,*,*">
 
-                    <TextBlock FontSize="18" FontWeight="Bold" Text="{Binding IsEditMode, Converter={StaticResource EditModeToTitleConverter}}" />
+                    <TextBlock Grid.Row="0" FontSize="18" FontWeight="Bold" Text="{Binding IsEditMode, Converter={StaticResource EditModeToTitleConverter}}" />
 
-                    <DockPanel>
-                        <TextBlock FontWeight="Bold" Text="Titel:" VerticalAlignment="Center" Width="60"/>
-                        <TextBox Text="{Binding EditingEvent.EventName}" />
+                    <DockPanel Grid.Row="1">
+                        <TextBlock FontWeight="Bold" Text="Titel:" VerticalAlignment="Center" Width="82"/>
+                        <TextBox Text="{Binding EditingEvent.EventName}" VerticalContentAlignment="Center"/>
                     </DockPanel>
-                    <DockPanel>
-                        <TextBlock FontWeight="Bold" Text="Beskrivelse:" VerticalAlignment="Center" Width="60"/>
-                        <TextBox Text="{Binding EditingEvent.Description}" Margin="0,5,0,0"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock FontWeight="Bold" Text="Aldersgruppe:" VerticalAlignment="Center" Width="60"/>
-                        <TextBox Text="{Binding EditingEvent.AgeGroup}" Margin="0,5,0,0"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock FontWeight="Bold" Text="Pris:" VerticalAlignment="Center" Width="60"/>
-                        <TextBox Text="{Binding EditingEvent.Price}" Margin="0,5,0,0"/>
+                    
+                    <DockPanel Grid.Row="2">
+                        <TextBlock FontWeight="Bold" Text="Beskrivelse:" VerticalAlignment="Center" Width="82"/>
+                        <TextBox Text="{Binding EditingEvent.Description}" Margin="0,5,0,0" VerticalContentAlignment="Center"/>
                     </DockPanel>
 
-                    <DockPanel>
-                        <TextBlock FontWeight="Bold" Text="Dato:" VerticalAlignment="Center" Width="60"/>
-                        <DatePicker SelectedDate="{Binding DatePart}" Margin="0,5,0,0"/>
+                    <DockPanel Grid.Row="3">
+                        <TextBlock FontWeight="Bold" Text="Aldersgruppe:" VerticalAlignment="Center" Width="82"/>
+                        <TextBox Text="{Binding EditingEvent.AgeGroup}" Margin="0,5,0,0" VerticalContentAlignment="Center"/>
                     </DockPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                        <DockPanel>
-                            <TextBlock FontWeight="Bold" Text="Tid:" VerticalAlignment="Center" Width="60"/>
-                            <ComboBox Width="60" ItemsSource="{Binding Hours}" SelectedItem="{Binding SelectedHour}" />
+                    <DockPanel Grid.Row="4">
+                        <TextBlock FontWeight="Bold" Text="Pris:" VerticalAlignment="Center" Width="82"/>
+                        <TextBox Text="{Binding EditingEvent.Price}" Margin="0,5,0,0" VerticalContentAlignment="Center"/>
+                    </DockPanel>
+
+                    <DockPanel Grid.Row="5">
+                        <TextBlock FontWeight="Bold" Text="Dato:" VerticalAlignment="Center" Width="82"/>
+                        <DatePicker SelectedDate="{Binding DatePart}" Margin="0,5,0,0" VerticalContentAlignment="Center"/>
+                    </DockPanel>
+
+
+                    <DockPanel Grid.Row="6">
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock FontWeight="Bold" Text="Tid:" VerticalAlignment="Center" Width="82"/>
+                            <ComboBox Width="70" ItemsSource="{Binding Hours}" SelectedItem="{Binding SelectedHour}" VerticalContentAlignment="Center"/>
                             <TextBlock Text=":" Margin="5,0" />
-                            <ComboBox Width="60" ItemsSource="{Binding Minutes}" SelectedItem="{Binding SelectedMinute}" />
-                        </DockPanel>
-                    </StackPanel>
+                            <ComboBox Width="70" ItemsSource="{Binding Minutes}" SelectedItem="{Binding SelectedMinute}" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                    </DockPanel>
 
-                    <Button Content="Gem" Margin="0,10,0,0" Command="{Binding SaveEventCommand}" />
-                    <Button Content="Annuller" Margin="0,5,0,0" Command="{Binding CancelEditEventCommand}" />
+                    <Button Grid.Row="7" Content="Gem" Margin="82,5,0,0" Command="{Binding SaveEventCommand}" />
+                    <Button Grid.Row="8" Content="Annuller" Margin="82,5,0,0" Command="{Binding CancelEditEventCommand}" />
 
-                </StackPanel>
+                </Grid>
             </Border>
         </Grid>
     </Grid>

@@ -26,6 +26,7 @@ namespace _2_Semester_Eksamen.ViewModel
                 _selectedEvent = value;
                 OnPropertyChanged();
                 DeleteEventCommand?.RaiseCanExecuteChanged();
+                EditEventCommand?.RaiseCanExecuteChanged();
             }
         }
 
@@ -156,9 +157,9 @@ namespace _2_Semester_Eksamen.ViewModel
         {
             LoadEvents();
 
-            DeleteEventCommand = new RelayCommand(DeleteEvent, CanDeleteEvent);
+            DeleteEventCommand = new RelayCommand(DeleteEvent, () => SelectedEvent != null);
             CreateEventCommand = new RelayCommand(OpenCreateEvent);
-            EditEventCommand = new RelayCommand(EditEvent);
+            EditEventCommand = new RelayCommand(EditEvent, () => SelectedEvent != null);
             SaveEventCommand = new RelayCommand(SaveEvent);
             CancelEditEventCommand = new RelayCommand(CancelEdit);
         }
@@ -173,11 +174,6 @@ namespace _2_Semester_Eksamen.ViewModel
             }
             
             LoadEvents();
-        }
-
-        private bool CanDeleteEvent()
-        {
-            return SelectedEvent != null;
         }
 
         private void OpenCreateEvent()
