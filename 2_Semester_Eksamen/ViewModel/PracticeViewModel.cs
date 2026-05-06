@@ -53,8 +53,6 @@ namespace _2_Semester_Eksamen.ViewModel
         }
 
         private string _practiceName;
-
-
         public string PracticeName
         {
             get { return _practiceName; }
@@ -109,11 +107,6 @@ namespace _2_Semester_Eksamen.ViewModel
         public RelayCommand UpdatePracticeCommand { get; }
         public RelayCommand CancelParticipationCommand { get; }
 
-        private bool CanExecuteCancelParticipation()
-        {
-            return SelectedPractice != null && MemberIDInput > 0;
-        }
-
         private void ExecuteCancelParticipation()
         {
             try
@@ -145,11 +138,6 @@ namespace _2_Semester_Eksamen.ViewModel
             }
         }
 
-        private bool CanExecuteDeletePractice()
-        {
-            return SelectedPractice != null;
-        }
-
         private void ExecuteDeletePractice()
         {
 
@@ -164,12 +152,6 @@ namespace _2_Semester_Eksamen.ViewModel
 
             LoadPractices();
 
-        }
-
-        private bool CanExecuteCreatePractice()
-        {
-            return SelectedDate != null && !string.IsNullOrWhiteSpace(PracticeName) 
-                   && StartTime.TimeOfDay != null && EndTime.TimeOfDay != null;
         }
 
         private void ExecuteCreatePractice()
@@ -205,11 +187,6 @@ namespace _2_Semester_Eksamen.ViewModel
             EndTime = DateTime.Now.AddHours(1);
         }
 
-        private bool CanExecuteUpdatePractice()
-        {
-            return SelectedPractice != null;
-        }
-
         private void ExecuteUpdatePractice()
         {
             SelectedPractice.PracticeName = PracticeName;
@@ -236,10 +213,11 @@ namespace _2_Semester_Eksamen.ViewModel
             // Sæt default værdier for StartTime og EndTime
             ClearInputFields();
 
-            DeletePracticeCommand = new RelayCommand(ExecuteDeletePractice, CanExecuteDeletePractice);
-            CreatePracticeCommand = new RelayCommand(ExecuteCreatePractice, CanExecuteCreatePractice);
-            UpdatePracticeCommand = new RelayCommand(ExecuteUpdatePractice, CanExecuteUpdatePractice);
-            CancelParticipationCommand = new RelayCommand(ExecuteCancelParticipation, CanExecuteCancelParticipation);
+            DeletePracticeCommand = new RelayCommand(ExecuteDeletePractice, ()=> SelectedPractice != null);
+            CreatePracticeCommand = new RelayCommand(ExecuteCreatePractice, ()=> SelectedDate != null && !string.IsNullOrWhiteSpace(PracticeName)
+                   && StartTime.TimeOfDay != null && EndTime.TimeOfDay != null);
+            UpdatePracticeCommand = new RelayCommand(ExecuteUpdatePractice, ()=> SelectedPractice != null);
+            CancelParticipationCommand = new RelayCommand(ExecuteCancelParticipation, ()=> SelectedPractice != null && MemberIDInput > 0);
         }
 
         private void LoadPractices()
