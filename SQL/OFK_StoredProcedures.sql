@@ -911,3 +911,34 @@ BEGIN
         ContactEmail = COALESCE(@contactEmail, ContactEmail)
     WHERE ContactPersonID = @contactPersonID
 END;
+
+GO
+CREATE PROC sp_CancelSignUpEvent
+@eventID INT,
+@memberID INT
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    DELETE FROM Member_Event
+    WHERE EventID = @eventID AND MemberID = @memberID;
+END;
+
+GO
+CREATE PROC sp_SignUpEvent
+@eventID INT,
+@memberID INT
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    IF NOT EXISTS 
+    (
+        SELECT 1 FROM Member_Event
+        WHERE EventID = @eventID AND MemberID = @memberID
+    )
+    BEGIN
+        INSERT INTO Member_Event (EventID, MemberID)
+        VALUES(@eventID, @memberID)
+    END;
+END;
