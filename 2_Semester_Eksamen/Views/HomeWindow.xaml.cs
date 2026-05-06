@@ -11,72 +11,57 @@ namespace _2_Semester_Eksamen.Views
     public partial class HomeWindow : Page
     {
         public ObservableCollection<Practice> Practices { get; set; }
-
-        public Practice ThisPractice { get; set; }
-        public string Error { get; set; }
-        public string ErrorEvent { get; set; } = "Ingen Events"; //skal bindes til noget, har bare givet den en værdi
-
+        public ObservableCollection<Event> Events { get; set; }
+      
+        //Fejl Meddelelser
+        public string? Error { get; set; }
+        public string? ErrorEvent { get; set; }
 
         public HomeWindow()
         {
             InitializeComponent();
-            try
+            // Pratice 
+            Practices = new ObservableCollection<Practice>();
+
+            var repoPractice = new PracticeRepository();
+            var practicesFromDb = repoPractice.GetAll();
+
+            // hvis db er tom
+            if (practicesFromDb == null)
             {
-                Practices = new ObservableCollection<Practice>();
-
-                var repo = new PracticeRepository();
-                var practicesFromDb = repo.GetAll();
-
-
+                Error = "Ingen Trænning";
+                TrainingError_txt.Visibility = Visibility.Visible;
+            }
+            // hvis db ikke er tom
+            else
+            {
                 foreach (var practice in practicesFromDb)
                 {
                     Practices.Add(practice);
                 }
             }
-            catch (Exception ex) 
+
+            //Events 
+            Events = new ObservableCollection<Event>();
+
+            var repoEvent = new EventRepository();
+            var eventsFromDb = repoEvent.GetAll();
+
+            // hvis db er tom
+            if (eventsFromDb == null)
             {
-                Error = "Ingen Trænning";
-                TrainingError_txt.Visibility = Visibility.Visible;
+                ErrorEvent = "Ingen Events";
+                EventError_txt.Visibility = Visibility.Visible;
             }
-                DataContext = this;
+            // hvis db ikke er tom
+            else
+            {
+                foreach (var ev in eventsFromDb)
+                {
+                    Events.Add(ev);
+                }
+            }
+            DataContext = this;
         }
-
-
-        private void Home_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new HomeWindow());
-        }
-
-        private void Practice_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new PracticeWindow());
-        }
-
-        private void Event_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new EventWindow());
-        }
-
-        private void OverviewMember_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new OverviewMemberWindow());
-        }
-
-        private void AboutUs_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new AboutUsWindow());
-        }
-
-        private void Staff_Click(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new StaffWindow());
-        }
-
-        private void Logout_Click(object sender, RoutedEventArgs e)
-        {
-            //View Medlem Page
-            NavigationService.Navigate(new LoginWindow());
-        }
-
     }
 }

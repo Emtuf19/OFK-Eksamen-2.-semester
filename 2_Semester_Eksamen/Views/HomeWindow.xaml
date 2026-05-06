@@ -10,7 +10,7 @@
     d:DesignWidth="1280"
     Background="White"
     mc:Ignorable="d">
-    
+
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -32,7 +32,7 @@
                 VerticalAlignment="Center">
                 Odense Fægte-Klub
             </Label>
-            
+
             <!--  List over Træning  -->
             <Border
                 Grid.Row="1"
@@ -42,28 +42,12 @@
                 BorderThickness="2">
                 <Grid Background="#FFF3F35D">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock
-                        HorizontalAlignment="Center"
-                        FontSize="25"
-                        FontWeight="Bold"
-                        Text="Træninger:" />
-                    <TextBlock
-                        x:Name="TrainingError_txt"
-                        Visibility="Hidden"
-                        Grid.Row="0"
-                        Margin="40,40,0,0"                       
-                        FontWeight="Bold"
-                        FontSize="16"
-                        Text="{Binding Error}"/>
-                    <ListBox
-                        FontSize="16"
-                        Grid.Row="1"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        ItemsSource="{Binding Practices}">
+                    <TextBlock HorizontalAlignment="Center" FontSize="25" FontWeight="Bold" Text="Træninger:"/>
+                    <TextBlock x:Name="TrainingError_txt" Text="{Binding Error}" Visibility="Collapsed" Grid.Row="0" Margin="10,40,0,0" FontWeight="Bold" FontSize="20"/>
+                    <ListBox ItemsSource="{Binding Practices}" FontSize="16" Grid.Row="1" Background="Transparent" BorderThickness="0">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Margin="5">
@@ -71,7 +55,7 @@
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Foreground" Value="Black"/>
-
+                                                
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding PracticeName}" Value="Træning Aflyst">
                                                         <Setter Property="Foreground" Value="Red"/>
@@ -109,32 +93,65 @@
             </Border>
 
             <!--  Preview over Kalender  -->
-            <Border
-     Grid.Row="1"
-     Grid.Column="2"
-     Margin="0,20,20,30"
-     BorderBrush="Black"
-     BorderThickness="2">
+            <Border Grid.Row="1" Grid.Column="2" Margin="0,20,20,30" BorderBrush="Black" BorderThickness="2">
                 <Grid Background="#FFF3F35D">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock
-             HorizontalAlignment="Center"
-             FontSize="25"
-             FontWeight="Bold"
-             Text="Begivenheder:" />
-                    <TextBlock             
-             Grid.Row="0"
-             FontSize="16"
-             Margin="40,40"                       
-             FontWeight="Bold"                        
-             Text="{Binding ErrorEvent}" />
-                    <ListBox Background="Transparent" BorderThickness="0">                        
+                    <TextBlock HorizontalAlignment="Center" FontSize="25" FontWeight="Bold" Text="Begivenheder:"/>
+                    <TextBlock x:Name="EventError_txt" Grid.Row="0" FontSize="20" Margin="10,40" FontWeight="Bold" Visibility="Collapsed" Text="{Binding ErrorEvent}"/>
+                    <ListBox ItemsSource="{Binding Events}" FontSize="16" Grid.Row="1" Background="Transparent" BorderThickness="0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="5">
+                                    <TextBlock FontWeight="Bold" Text="{Binding EventName}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="Black"/>
+
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding EventName}" Value="Træning Aflyst">
+                                                        <Setter Property="Foreground" Value="Red"/>
+                                                        <Setter Property="FontSize" Value="20"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <ItemsControl ItemsSource="{Binding Trainers}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Rectangle Height="1" Fill="Black"></Rectangle>
+                                                    <TextBlock FontWeight="Bold" Text="Træner: " />
+                                                    <TextBlock Text="{Binding TrainerFirstName}" />
+                                                    <TextBlock Text="{Binding TrainerLastName}" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold" Text="Start: " />
+                                        <TextBlock Text="{Binding Time, StringFormat=dd-MM-yyyy HH:mm}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">                                       
+                                        <TextBlock Text="{Binding Description}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold" Text="Pris: " />
+                                        <TextBlock Text="{Binding Price}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold" Text="Alders Gruppe: " />
+                                        <TextBlock Text="{Binding AgeGroup}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
-            </Border>            
+            </Border>
         </Grid>
     </Grid>
 </Page>

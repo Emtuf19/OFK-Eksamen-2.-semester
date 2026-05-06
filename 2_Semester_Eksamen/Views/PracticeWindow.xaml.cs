@@ -22,6 +22,7 @@ namespace _2_Semester_Eksamen.Views
     public partial class PracticeWindow : Page
     {
 
+
         public PracticeWindow()
         {
             InitializeComponent();
@@ -40,6 +41,6 @@ namespace _2_Semester_Eksamen.Views
                 MemberIDInputTextBox.Visibility = Visibility.Visible;
             }
             DataContext = new PracticeViewModel();
-        }        
+        }
     }
 }

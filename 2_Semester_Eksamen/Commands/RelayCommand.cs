@@ -16,17 +16,17 @@ namespace _2_Semester_Eksamen.Commands
             _canExecute = canExecute;
         }
 
-        public bool CanExecute(object parameter)
+        public bool CanExecute(object? parameter)
         {
             return _canExecute == null || _canExecute();
         }
 
-        public void Execute(object parameter)
+        public void Execute(object? parameter)
         {
             _execute();
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged;
 
         public void RaiseCanExecuteChanged()
         {
