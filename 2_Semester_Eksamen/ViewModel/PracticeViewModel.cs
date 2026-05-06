@@ -16,7 +16,7 @@ namespace _2_Semester_Eksamen.ViewModel
     {
         public ObservableCollection<Practice> Practices { get; set; } = new();
 
-        public ObservableCollection<Practice> SelectedPractices { get; set; } = new();
+        private PracticeRepository _practiceRepository = new PracticeRepository();
 
         private int _memberIDInput;
         public int MemberIDInput
@@ -100,7 +100,7 @@ namespace _2_Semester_Eksamen.ViewModel
                 _selectedDate = value;
                 OnPropertyChanged();
                 CreatePracticeCommand?.RaiseCanExecuteChanged();
-                UpdateSelectedPractices();
+                LoadPractices();
             }
         }
 
@@ -118,8 +118,7 @@ namespace _2_Semester_Eksamen.ViewModel
         {
             try
             {
-                var repo = new PracticeRepository();
-                repo.RemoveMemberFromPractice(SelectedPractice.PracticeID, MemberIDInput);
+                _practiceRepository.RemoveMemberFromPractice(SelectedPractice.PracticeID, MemberIDInput);
 
                 bool memberExists = SelectedPractice.Members?.Any(m => m.MemberID == MemberIDInput) ?? false;
 
@@ -160,12 +159,10 @@ namespace _2_Semester_Eksamen.ViewModel
             var date = SelectedPractice.StartTime.Date; // Behold den oprindelige dato
             SelectedPractice.StartTime = date.Add(StartTime.TimeOfDay);
             SelectedPractice.EndTime = date.Add(EndTime.TimeOfDay);
-            
-            var repo = new PracticeRepository();
-            
-            repo.Update(SelectedPractice);
-            
-            UpdateSelectedPractices();
+
+            _practiceRepository.Update(SelectedPractice);
+
+            LoadPractices();
 
         }
 
@@ -186,19 +183,17 @@ namespace _2_Semester_Eksamen.ViewModel
                 EndTime = date.Date.Add(EndTime.TimeOfDay) // Combine selected date with the time from EndTime
             };
 
-            var repo = new PracticeRepository();
-
             if (newPractice.StartTime >= newPractice.EndTime || newPractice.StartTime < DateTime.Now)
             {
                 MessageBox.Show("Ugyldige tider!", "Ugyldige tider", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             else
             {
-                repo.Create(newPractice);
+                _practiceRepository.Create(newPractice);
                 Practices.Add(newPractice);
             }
 
-            UpdateSelectedPractices();
+            LoadPractices();
 
             ClearInputFields();
         }
@@ -223,16 +218,15 @@ namespace _2_Semester_Eksamen.ViewModel
             SelectedPractice.StartTime = date.Add(StartTime.TimeOfDay);
             SelectedPractice.EndTime = date.Add(EndTime.TimeOfDay);
 
-            var repo = new PracticeRepository();
             if (SelectedPractice.StartTime >= SelectedPractice.EndTime || SelectedPractice.StartTime < DateTime.Now)
             {
                 MessageBox.Show("Ugyldige tider!", "Ugyldige tider", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             else
             {
-                repo.Update(SelectedPractice);
+                _practiceRepository.Update(SelectedPractice);
             }
-            UpdateSelectedPractices();
+            LoadPractices();
         }
 
         public PracticeViewModel()
@@ -250,25 +244,16 @@ namespace _2_Semester_Eksamen.ViewModel
 
         private void LoadPractices()
         {
-            var repo = new PracticeRepository();
-            var PracticesFromDB = repo.GetAll();
+            Practices.Clear();
 
-            foreach (var p in PracticesFromDB)
-            {
-                Practices.Add(p);
-            }
-        }
-
-        private void UpdateSelectedPractices()
-        {
-            SelectedPractices.Clear();
+            var PracticesFromDB = _practiceRepository.GetAll();
 
             if (SelectedDate == null)
                 return;
 
-            foreach (var p in Practices.Where(p => p.StartTime.Date == SelectedDate.Value.Date))
+            foreach (var p in PracticesFromDB.Where(p => p.StartTime.Date == SelectedDate.Value.Date))
             {
-                SelectedPractices.Add(p);
+                Practices.Add(p);
             }
         }
     }

@@ -68,7 +68,7 @@
             </DockPanel>
             <!--  Practices list  -->
             <DockPanel MinHeight="220" Margin="0,10,0,0">
-                <ListBox ItemsSource="{Binding SelectedPractices}"  BorderThickness="1" BorderBrush="Black"                         
+                <ListBox ItemsSource="{Binding Practices}"  BorderThickness="1" BorderBrush="Black"                         
                         SelectedItem="{Binding SelectedPractice}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
