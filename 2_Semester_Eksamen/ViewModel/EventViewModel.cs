@@ -43,6 +43,7 @@ namespace _2_Semester_Eksamen.ViewModel
                 _memberIDInput = value;
                 OnPropertyChanged();
                 CancelSignUpEventCommand?.RaiseCanExecuteChanged();
+                SignUpEventCommand?.RaiseCanExecuteChanged();
             }
         }
 
@@ -180,6 +181,7 @@ namespace _2_Semester_Eksamen.ViewModel
             CancelEditEventCommand = new RelayCommand(CancelEdit);
 
             CancelSignUpEventCommand = new RelayCommand(CancelSignUpEvent, () => SelectedEvent != null && MemberIDInput > 0);
+            SignUpEventCommand = new RelayCommand(SignUpEvent, () => SelectedEvent != null && MemberIDInput > 0);
         }
 
         private void DeleteEvent()
@@ -190,7 +192,7 @@ namespace _2_Semester_Eksamen.ViewModel
                 repo.Delete(SelectedEvent.EventID);
                 Events.Remove(SelectedEvent);
             }
-            
+
             LoadEvents();
         }
 
@@ -315,6 +317,33 @@ namespace _2_Semester_Eksamen.ViewModel
             catch (Exception ex)
             {
                 MessageBox.Show("Kunne ikke afmelde medlem.\n" + ex.Message, "Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void SignUpEvent()
+        {
+            try
+            {
+                var repo = new EventRepository();
+                repo.AddMemberToEvent(SelectedEvent.EventID, MemberIDInput);
+
+                bool memberExists = SelectedEvent.Members?.Any(m => m.MemberID == MemberIDInput) ?? false;
+
+                if (memberExists)
+                {
+                    MessageBox.Show($"Medlem {MemberIDInput} er allerede tilmeldt Begivenhed.", "Tilmelding mislykket", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                MessageBox.Show($"Medlem {MemberIDInput} er tilmeldt Begivenhed.", "Tilmelding fuldført", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                var member = new Member { MemberID = MemberIDInput };
+                SelectedEvent.Members.Add(member);
+                MemberIDInput = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Kunne ikke tilmelde medlem.\n" + ex.Message, "Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

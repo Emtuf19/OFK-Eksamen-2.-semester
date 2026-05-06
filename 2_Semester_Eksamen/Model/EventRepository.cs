@@ -252,5 +252,20 @@ namespace _2_Semester_Eksamen.Model
             }
         }
 
+        public void AddMemberToEvent(int eventID, int memberID)
+        {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
+                using SqlCommand cmd = new SqlCommand("sp_SignUpEvent", con);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@EventID", SqlDbType.Int).Value = eventID;
+                cmd.Parameters.Add("@MemberID", SqlDbType.Int).Value = memberID;
+
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
 }
