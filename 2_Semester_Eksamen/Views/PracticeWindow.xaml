@@ -50,7 +50,7 @@
 
                 <Border Width="450" Height="330" Background="White" Padding="15" CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center">
 
-                    <Grid RowDefinitions="*,*,*,*,*,*">
+                    <Grid RowDefinitions="*,*,*,*,*,*,*">
 
                         <TextBlock Grid.Row="0" FontSize="18" FontWeight="Bold" Text="{Binding IsEditMode, Converter={StaticResource EditModeToTitleConverter}, ConverterParameter=Træning}" />
 
@@ -67,23 +67,32 @@
 
                         <DockPanel Grid.Row="3">
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock FontWeight="Bold" Text="Tid:" VerticalAlignment="Center" Width="82"/>
-                                <ComboBox Width="70" ItemsSource="{Binding Hours}" SelectedItem="{Binding SelectedHour}" VerticalContentAlignment="Center"/>
+                                <TextBlock FontWeight="Bold" Text="Start tid:" VerticalAlignment="Center" Width="82"/>
+                                <ComboBox Width="70" ItemsSource="{Binding Hours}" SelectedItem="{Binding StartHour}" VerticalContentAlignment="Center"/>
                                 <TextBlock Text=":" Margin="5,0" />
-                                <ComboBox Width="70" ItemsSource="{Binding Minutes}" SelectedItem="{Binding SelectedMinute}" VerticalContentAlignment="Center"/>
+                                <ComboBox Width="70" ItemsSource="{Binding Minutes}" SelectedItem="{Binding StartMinute}" VerticalContentAlignment="Center"/>
                             </StackPanel>
                         </DockPanel>
 
-                        <Button Grid.Row="4" Content="Gem" Margin="82,5,0,0" Command="{Binding SaveEventCommand}" />
-                        <Button Grid.Row="5" Content="Annuller" Margin="82,5,0,0" Command="{Binding CancelEditPracticeCommand}" />
+                        <DockPanel Grid.Row="4">
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock FontWeight="Bold" Text="Slut tid:" VerticalAlignment="Center" Width="82"/>
+                                <ComboBox Width="70" ItemsSource="{Binding Hours}" SelectedItem="{Binding EndHour}" VerticalContentAlignment="Center"/>
+                                <TextBlock Text=":" Margin="5,0" />
+                                <ComboBox Width="70" ItemsSource="{Binding Minutes}" SelectedItem="{Binding EndMinute}" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <Button Grid.Row="5" Content="Gem" Background="DarkGray" Margin="82,5,0,0" Command="{Binding SavePracticeCommand}" />
+                        <Button Grid.Row="6" Content="Annuller" Background="DarkGray" Margin="82,5,0,0" Command="{Binding CancelEditPracticeCommand}" />
 
                     </Grid>
                 </Border>
             </Grid>
 
             <StackPanel x:Name="TrainerTrainingCommands">
-                <Button Content="Opret træning" Command="{Binding CreatePracticeCommand}" Background="#FF2DC72D"/>
-                <Button Content="Rediger træning" Command="{Binding UpdatePracticeCommand}" Background="#FF679ECE"/>
+                <Button Content="Opret træning" Command="{Binding OpenCreatePracticeCommand}" Background="#FF2DC72D"/>
+                <Button Content="Rediger træning" Command="{Binding EditPracticeCommand}" Background="#FF679ECE"/>
                 <Button Content="Aflys træning" Command="{Binding DeletePracticeCommand}" Background="#FFDE4444"/>
             </StackPanel>
             <Button x:Name="CancelParticipation" Content="Afmeld træning" Command="{Binding CancelParticipationCommand}" Background="#FFDE4444"/>

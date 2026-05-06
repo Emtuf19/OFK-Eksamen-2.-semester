@@ -41,53 +41,11 @@ namespace _2_Semester_Eksamen.ViewModel
 
                 if (SelectedPractice != null)
                 {
-                    PracticeName = _selectedPractice.PracticeName;
-                    StartTime = _selectedPractice.StartTime;
-                    EndTime = _selectedPractice.EndTime;
-
-
                     DeletePracticeCommand?.RaiseCanExecuteChanged();
-                    UpdatePracticeCommand?.RaiseCanExecuteChanged();
+                    EditPracticeCommand?.RaiseCanExecuteChanged();
                 }
             }
         }
-
-        private string _practiceName;
-        public string PracticeName
-        {
-            get { return _practiceName; }
-            set
-            {
-                _practiceName = value;
-                OnPropertyChanged();
-                CreatePracticeCommand?.RaiseCanExecuteChanged();
-            }
-        }
-
-        private DateTime _startTime;
-        public DateTime StartTime
-        {
-            get => _startTime;
-            set
-            {
-                _startTime = value;
-                OnPropertyChanged();
-                CreatePracticeCommand?.RaiseCanExecuteChanged();
-            }
-        }
-
-        private DateTime _endTime;
-        public DateTime EndTime
-        {
-            get => _endTime;
-            set
-            {
-                _endTime = value;
-                OnPropertyChanged();
-                CreatePracticeCommand?.RaiseCanExecuteChanged();
-            }
-        }
-
 
         private DateTime? _selectedDate;
         public DateTime? SelectedDate
@@ -97,7 +55,6 @@ namespace _2_Semester_Eksamen.ViewModel
             {
                 _selectedDate = value;
                 OnPropertyChanged();
-                CreatePracticeCommand?.RaiseCanExecuteChanged();
                 LoadPractices();
             }
         }
@@ -137,24 +94,47 @@ namespace _2_Semester_Eksamen.ViewModel
 
         public List<int> Hours { get; } = Enumerable.Range(0, 24).ToList();
         public List<int> Minutes { get; } = new List<int> { 00, 15, 30, 45 };
-        private int _selectedHour;
-        public int SelectedHour
+
+        private int _startHour;
+        public int StartHour
         {
-            get => _selectedHour;
+            get => _startHour;
             set
             {
-                _selectedHour = value;
+                _startHour = value;
                 OnPropertyChanged();
             }
         }
 
-        private int _selectedMinute;
-        public int SelectedMinute
+        private int _startMinute;
+        public int StartMinute
         {
-            get => _selectedMinute;
+            get => _startMinute;
             set
             {
-                _selectedMinute = value;
+                _startMinute = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _endHour;
+        public int EndHour
+        {
+            get => _endHour;
+            set
+            {
+                _endHour = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _endMinute;
+        public int EndMinute
+        {
+            get => _endMinute;
+            set
+            {
+                _endMinute = value;
                 OnPropertyChanged();
             }
         }
@@ -171,11 +151,12 @@ namespace _2_Semester_Eksamen.ViewModel
         }
 
         public RelayCommand DeletePracticeCommand { get; }
-        public RelayCommand CreatePracticeCommand { get; }
-        public RelayCommand UpdatePracticeCommand { get; }
-        public RelayCommand CancelParticipationCommand { get; }
-
+        public RelayCommand OpenCreatePracticeCommand { get; set; }
+        public RelayCommand EditPracticeCommand { get; set; }
+        public RelayCommand SavePracticeCommand { get; set; }
         public RelayCommand CancelEditPracticeCommand { get; }
+
+        public RelayCommand CancelParticipationCommand { get; }
 
         private void ExecuteCancelParticipation()
         {
@@ -210,86 +191,107 @@ namespace _2_Semester_Eksamen.ViewModel
 
         private void ExecuteDeletePractice()
         {
+            if (SelectedPractice == null)
+                return;
 
-            PracticeName = "Træning Aflyst";
-            SelectedPractice.PracticeName = PracticeName;
-
-            var date = SelectedPractice.StartTime.Date; // Behold den oprindelige dato
-            SelectedPractice.StartTime = date.Add(StartTime.TimeOfDay);
-            SelectedPractice.EndTime = date.Add(EndTime.TimeOfDay);
+            SelectedPractice.PracticeName = "Træning Aflyst";
 
             _practiceRepository.Update(SelectedPractice);
-
             LoadPractices();
 
-        }
-
-        private void ExecuteCreatePractice()
-        {
-            DateTime date = SelectedDate!.Value;
-
-            var newPractice = new Practice
-            {
-                PracticeName = PracticeName,
-                StartTime = date.Date.Add(StartTime.TimeOfDay), // Combine selected date with the time from StartTime
-                EndTime = date.Date.Add(EndTime.TimeOfDay) // Combine selected date with the time from EndTime
-            };
-
-            if (newPractice.StartTime >= newPractice.EndTime || newPractice.StartTime < DateTime.Now)
-            {
-                MessageBox.Show("Ugyldige tider!", "Ugyldige tider", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            else
-            {
-                _practiceRepository.Create(newPractice);
-                Practices.Add(newPractice);
-            }
-
-            LoadPractices();
-
-            ClearInputFields();
-        }
-
-        private void ClearInputFields()
-        {
-            PracticeName = string.Empty;
-            StartTime = DateTime.Now;
-            EndTime = DateTime.Now.AddHours(1);
-        }
-
-        private void ExecuteUpdatePractice()
-        {
-            SelectedPractice.PracticeName = PracticeName;
-
-            var date = SelectedPractice.StartTime.Date; // Behold den oprindelige dato
-            SelectedPractice.StartTime = date.Add(StartTime.TimeOfDay);
-            SelectedPractice.EndTime = date.Add(EndTime.TimeOfDay);
-
-            if (SelectedPractice.StartTime >= SelectedPractice.EndTime || SelectedPractice.StartTime < DateTime.Now)
-            {
-                MessageBox.Show("Ugyldige tider!", "Ugyldige tider", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            else
-            {
-                _practiceRepository.Update(SelectedPractice);
-            }
-            LoadPractices();
         }
 
         public PracticeViewModel()
         {
             LoadPractices();
 
-            // Sæt default værdier for StartTime og EndTime
-            ClearInputFields();
-
             DeletePracticeCommand = new RelayCommand(ExecuteDeletePractice, ()=> SelectedPractice != null);
-            CreatePracticeCommand = new RelayCommand(ExecuteCreatePractice, ()=> SelectedDate != null && !string.IsNullOrWhiteSpace(PracticeName)
-                   && StartTime.TimeOfDay != null && EndTime.TimeOfDay != null);
-            UpdatePracticeCommand = new RelayCommand(ExecuteUpdatePractice, ()=> SelectedPractice != null);
-            CancelParticipationCommand = new RelayCommand(ExecuteCancelParticipation, ()=> SelectedPractice != null && MemberIDInput > 0);
-
+            OpenCreatePracticeCommand = new RelayCommand(OpenCreatePractice);
+            EditPracticeCommand = new RelayCommand(EditPractice, ()=> SelectedPractice != null);
+            SavePracticeCommand = new RelayCommand(SavePractice);
             CancelEditPracticeCommand = new RelayCommand(CancelEdit);
+
+            CancelParticipationCommand = new RelayCommand(ExecuteCancelParticipation, ()=> SelectedPractice != null && MemberIDInput > 0);
+        }
+
+        private void OpenCreatePractice()
+        {
+            EditingPractice = new Practice
+            {
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now.AddHours(1)
+            };
+
+            DatePart = EditingPractice.StartTime.Date;
+
+            StartHour = EditingPractice.StartTime.Hour;
+            StartMinute = EditingPractice.StartTime.Minute;
+
+            EndHour = EditingPractice.EndTime.Hour;
+            EndMinute = EditingPractice.EndTime.Minute;
+
+            IsEditMode = false;
+            IsPracticePopupOpen = true;
+        }
+
+        private void EditPractice()
+        {
+            if (SelectedPractice == null)
+                return;
+
+            EditingPractice = new Practice
+            {
+                PracticeID = SelectedPractice.PracticeID,
+                PracticeName = SelectedPractice.PracticeName,
+                StartTime = SelectedPractice.StartTime,
+                EndTime = SelectedPractice.EndTime
+            };
+
+            DatePart = EditingPractice.StartTime.Date;
+
+            StartHour = EditingPractice.StartTime.Hour;
+            StartMinute = EditingPractice.StartTime.Minute;
+
+            EndHour = EditingPractice.EndTime.Hour;
+            EndMinute = EditingPractice.EndTime.Minute;
+
+            IsEditMode = true;
+            IsPracticePopupOpen = true;
+        }
+
+        private void SavePractice()
+        {
+            if (EditingPractice == null)
+                return;
+
+            var start = EditingPractice.StartTime = DatePart.Date.AddHours(StartHour).AddMinutes(StartMinute);
+            var end = EditingPractice.EndTime = DatePart.Date.AddHours(EndHour).AddMinutes(EndMinute);
+
+            if (start >= end || start < DateTime.Now)
+            {
+                MessageBox.Show("Ugyldige tider!", "Fejl", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (IsEditMode)
+            {
+                SelectedPractice.PracticeName = EditingPractice.PracticeName;
+                SelectedPractice.StartTime = start;
+                SelectedPractice.EndTime = end;
+
+                _practiceRepository.Update(EditingPractice);
+            }
+            else
+            {
+                EditingPractice.StartTime = start;
+                EditingPractice.EndTime = end;
+
+                _practiceRepository.Create(EditingPractice);
+                Practices.Add(EditingPractice);
+            }
+
+            CancelEdit();
+            LoadPractices();
         }
 
         private void LoadPractices()
@@ -305,11 +307,6 @@ namespace _2_Semester_Eksamen.ViewModel
             {
                 Practices.Add(p);
             }
-        }
-        private void ClosePopup()
-        {
-            IsPracticePopupOpen = false;
-            EditingPractice = null;
         }
 
         private void CancelEdit()
