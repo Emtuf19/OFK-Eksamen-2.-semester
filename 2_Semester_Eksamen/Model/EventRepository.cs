@@ -237,5 +237,20 @@ namespace _2_Semester_Eksamen.Model
             }
         }
 
+        //metode til at fjerne medlemmer fra Event
+        public void RemoveMemberFromEvent(int eventID, int memberID)
+        {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
+                using SqlCommand cmd = new SqlCommand("sp_CancelSignUpEvent", con);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@EventID", SqlDbType.Int).Value = eventID;
+                cmd.Parameters.Add("@MemberID", SqlDbType.Int).Value = memberID;
+                cmd.ExecuteNonQuery();
+            }
+        }
+
     }
 }

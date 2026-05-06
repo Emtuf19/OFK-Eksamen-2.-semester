@@ -17,6 +17,9 @@ namespace _2_Semester_Eksamen.ViewModel
         public RelayCommand SaveEventCommand { get; set; }
         public RelayCommand CancelEditEventCommand { get; set; }
 
+        public RelayCommand SignUpEventCommand { get; set; }
+        public RelayCommand CancelSignUpEventCommand { get; set; }
+
         private Event _selectedEvent;
         public Event SelectedEvent
         {
