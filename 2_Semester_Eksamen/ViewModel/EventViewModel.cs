@@ -1,9 +1,10 @@
-﻿using System;
+﻿using _2_Semester_Eksamen.Commands;
+using _2_Semester_Eksamen.Model;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
-using _2_Semester_Eksamen.Commands;
-using _2_Semester_Eksamen.Model;
+using System.Windows;
 
 namespace _2_Semester_Eksamen.ViewModel
 {
@@ -30,6 +31,18 @@ namespace _2_Semester_Eksamen.ViewModel
                 OnPropertyChanged();
                 DeleteEventCommand?.RaiseCanExecuteChanged();
                 EditEventCommand?.RaiseCanExecuteChanged();
+            }
+        }
+
+        private int _memberIDInput;
+        public int MemberIDInput
+        {
+            get => _memberIDInput;
+            set
+            {
+                _memberIDInput = value;
+                OnPropertyChanged();
+                CancelSignUpEventCommand?.RaiseCanExecuteChanged();
             }
         }
 
@@ -165,6 +178,8 @@ namespace _2_Semester_Eksamen.ViewModel
             EditEventCommand = new RelayCommand(EditEvent, () => SelectedEvent != null);
             SaveEventCommand = new RelayCommand(SaveEvent);
             CancelEditEventCommand = new RelayCommand(CancelEdit);
+
+            CancelSignUpEventCommand = new RelayCommand(CancelSignUpEvent, () => SelectedEvent != null && MemberIDInput > 0);
         }
 
         private void DeleteEvent()
@@ -268,6 +283,38 @@ namespace _2_Semester_Eksamen.ViewModel
             foreach (var ev in EventsFromDB)
             {
                 Events.Add(ev);
+            }
+        }
+
+        private void CancelSignUpEvent()
+        {
+            try
+            {
+                var repo = new EventRepository();
+                repo.RemoveMemberFromEvent(SelectedEvent.EventID, MemberIDInput);
+
+                bool memberExists = SelectedEvent.Members?.Any(m => m.MemberID == MemberIDInput) ?? false;
+
+                if (!memberExists)
+                {
+                    MessageBox.Show($"Medlem {MemberIDInput} er ikke tilmeldt Begivenhed.", "Afmelding mislykket", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                MessageBox.Show($"Medlem {MemberIDInput} er afmeldt Begivenhed.", "Afmelding fuldført", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                var member = SelectedEvent.Members?.FirstOrDefault(m => m.MemberID == MemberIDInput);
+
+                if (member != null)
+                {
+                    SelectedEvent.Members.Remove(member);
+                }
+
+                MemberIDInput = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Kunne ikke afmelde medlem.\n" + ex.Message, "Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
