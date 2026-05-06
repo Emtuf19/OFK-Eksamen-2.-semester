@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Linq;
 using _2_Semester_Eksamen.Commands;
+using System.Net.Mail;
 
 namespace _2_Semester_Eksamen.ViewModel
 {
@@ -87,11 +88,43 @@ namespace _2_Semester_Eksamen.ViewModel
             if (SelectedMember == null) return;
 
                 var id = SelectedMember.MemberID;
+
+            if (!IsValidEmail(SelectedContact.ContactEmail))
+            {
+                MessageBox.Show("Angiv gyldig mail");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(SelectedContact.ContactFirstName) || string.IsNullOrWhiteSpace(SelectedContact.ContactLastName))
+            {
+                MessageBox.Show("Angiv både For- og efternavn.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(SelectedContact.ContactPhoneNumber) || SelectedContact.ContactPhoneNumber.Length != 8)
+            {
+                MessageBox.Show("Angiv gyldigt telefonnummer");
+                return;
+            }
+
                 _repo.Update(SelectedMember);
 
                 Load();
                 SelectedMember = null;
                 SelectedMember = Members.FirstOrDefault(m => m.MemberID == id);
+        }
+
+        public bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private void ExecuteDelete()
