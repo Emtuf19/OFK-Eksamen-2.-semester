@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using _2_Semester_Eksamen.ViewModel;
 
 namespace _2_Semester_Eksamen.Views
 {
@@ -21,6 +22,20 @@ namespace _2_Semester_Eksamen.Views
         public EventWindow()
         {
             InitializeComponent();
+
+            var mainWindow = (MainWindow)Application.Current.MainWindow;
+
+            if (mainWindow.CurrentRole == "Trainer")
+            {
+                EventButtonsTrainer.Visibility = Visibility.Visible;
+                EventButtonsMember.Visibility = Visibility.Collapsed;
+            }
+            else if (mainWindow.CurrentRole == "Member")
+            {
+                EventButtonsTrainer.Visibility = Visibility.Collapsed;
+                EventButtonsMember.Visibility = Visibility.Visible;
+            }
+            DataContext = new EventViewModel();
         }
     }
 }

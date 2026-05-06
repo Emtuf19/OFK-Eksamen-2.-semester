@@ -10,75 +10,6 @@ namespace _2_Semester_Eksamen.Model
     {
         private List<Event> events = new List<Event>();
 
-        public override Event? GetById(int ID)
-        {
-            using (SqlConnection con = CreateConnection())
-            {
-                con.Open();
-
-                Event? event1 = null;
-
-                using SqlCommand cmd = new SqlCommand("sp_GetEventByIDWithMembersAndTrainers", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@EventID", SqlDbType.Int).Value = ID;
-
-                using SqlDataReader reader = cmd.ExecuteReader();
-
-                if (!reader.HasRows)
-                    return null;
-
-                if (reader.Read())
-                {
-                    event1 = new Event
-                    {
-                        EventID = Convert.ToInt32(reader["EventID"]),
-                        EventName = reader["EventName"] is DBNull ? string.Empty : (string)reader["EventName"],
-                        Description = reader["Description"] is DBNull ? string.Empty : (string)reader["Description"],
-                        Price = reader["Price"] is DBNull ? 0.0 : Convert.ToDouble(reader["Price"]),
-                        AgeGroup = reader["AgeGroup"] is DBNull ? string.Empty : (string)reader["AgeGroup"],
-                        Time = reader["Time"] is DBNull ? DateTime.MinValue : Convert.ToDateTime(reader["Time"])
-                    };
-                }
-
-                if (reader.NextResult())
-                {
-                    while (reader.Read())
-                    {
-                        if (event1 == null) break;
-
-                        var member = new Member
-                        {
-                            MemberID = reader["MemberID"] is DBNull ? 0 : Convert.ToInt32(reader["MemberID"]),
-                            MemberFirstName = reader["MemberFirstName"] is DBNull ? string.Empty : (string)reader["MemberFirstName"],
-                            MemberLastName = reader["MemberLastName"] is DBNull ? string.Empty : (string)reader["MemberLastName"]
-                        };
-
-                        event1.Members.Add(member);
-                    }
-                }
-
-                if (reader.NextResult())
-                {
-                    while (reader.Read())
-                    {
-                        if (event1 == null) break;
-
-                        var trainer = new Trainer
-                        {
-                            TrainerID = reader["TrainerID"] is DBNull ? 0 : Convert.ToInt32(reader["TrainerID"]),
-                            TrainerFirstName = reader["TrainerFirstName"] is DBNull ? string.Empty : (string)reader["TrainerFirstName"],
-                            TrainerLastName = reader["TrainerLastName"] is DBNull ? string.Empty : (string)reader["TrainerLastName"],
-                            TrainerPhoneNumber = reader["TrainerPhoneNumber"] is DBNull ? string.Empty : (string)reader["TrainerPhoneNumber"],
-                            TrainerEmail = reader["TrainerEmail"] is DBNull ? string.Empty : (string)reader["TrainerEmail"]
-                        };
-
-                        event1.Trainers.Add(trainer);
-                    }
-                }
-                return event1;
-            }
-        }
-
         public override List<Event> GetAll()
         {
             using (SqlConnection con = CreateConnection())
@@ -162,22 +93,6 @@ namespace _2_Semester_Eksamen.Model
             }
         }
 
-        public override void Add(Event event1)
-        {
-            using (SqlConnection con = CreateConnection())
-            {
-                con.Open();
-
-                using SqlCommand cmd = new SqlCommand("dbo.sp_InsertIntoEvent", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 50).Value = event1.EventName;
-                cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 1000).Value = event1.Description;
-                cmd.Parameters.Add("@EventName", SqlDbType.Float).Value = event1.Price;
-                cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 50).Value = event1.AgeGroup;
-                cmd.Parameters.Add("@StartTime", SqlDbType.DateTime2).Value = event1.Time;
-            }
-        }
-
         public override void Update(Event event1)
         {
             using (SqlConnection con = CreateConnection())
@@ -188,10 +103,10 @@ namespace _2_Semester_Eksamen.Model
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@EventID", SqlDbType.Int).Value = event1.EventID;
                 cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 50).Value = event1.EventName;
-                cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 1000).Value = event1.Description;
-                cmd.Parameters.Add("@EventName", SqlDbType.Float).Value = event1.Price;
-                cmd.Parameters.Add("@EventName", SqlDbType.NVarChar, 50).Value = event1.AgeGroup;
-                cmd.Parameters.Add("@StartTime", SqlDbType.DateTime2).Value = event1.Time;
+                cmd.Parameters.Add("@Description", SqlDbType.NVarChar, 1000).Value = event1.Description;
+                cmd.Parameters.Add("@Price", SqlDbType.Float).Value = event1.Price;
+                cmd.Parameters.Add("@AgeGroup", SqlDbType.NVarChar, 50).Value = event1.AgeGroup;
+                cmd.Parameters.Add("@Time", SqlDbType.DateTime2).Value = event1.Time;
                 cmd.ExecuteNonQuery();
             }
         }
@@ -210,5 +125,60 @@ namespace _2_Semester_Eksamen.Model
             }
         }
 
+        public override void Add(Event ev)
+        {
+            using (SqlConnection conn = CreateConnection())
+            using (SqlCommand cmd = new SqlCommand("sp_InsertIntoEvent", conn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@eventName", SqlDbType.NVarChar, 100).Value = ev.EventName;
+                cmd.Parameters.Add("@description", SqlDbType.NVarChar, 250).Value = ev.Description;
+                cmd.Parameters.Add("@price", SqlDbType.Float).Value = ev.Price;
+                cmd.Parameters.Add("@ageGroup", SqlDbType.NVarChar, 20).Value = ev.AgeGroup;
+                cmd.Parameters.Add("@time", SqlDbType.DateTime2).Value = ev.Time;
+
+                // OUTPUT parameter
+                SqlParameter outputId = cmd.Parameters.Add("@newEventID", SqlDbType.Int);
+                outputId.Direction = ParameterDirection.Output;
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+
+                // Sæt ID tilbage på objektet
+                ev.EventID = (int)outputId.Value;
+            }
+        }
+
+        //metode til at fjerne medlemmer fra Event
+        public void RemoveMemberFromEvent(int eventID, int memberID)
+        {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
+                using SqlCommand cmd = new SqlCommand("sp_CancelSignUpEvent", con);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@EventID", SqlDbType.Int).Value = eventID;
+                cmd.Parameters.Add("@MemberID", SqlDbType.Int).Value = memberID;
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void AddMemberToEvent(int eventID, int memberID)
+        {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
+                using SqlCommand cmd = new SqlCommand("sp_SignUpEvent", con);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@EventID", SqlDbType.Int).Value = eventID;
+                cmd.Parameters.Add("@MemberID", SqlDbType.Int).Value = memberID;
+
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
 }
