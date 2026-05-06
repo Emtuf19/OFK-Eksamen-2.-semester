@@ -10,35 +10,6 @@ namespace _2_Semester_Eksamen.Model
     {
         private List<Trainer> trainers = new List<Trainer>();
 
-        public override Trainer? GetById(int ID)
-        {
-            using (SqlConnection con = CreateConnection())
-            {
-                con.Open();
-
-                Trainer? trainer = null;
-
-                using SqlCommand cmd = new SqlCommand("dbo.GetByTrainerID", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@ID", SqlDbType.Int).Value = ID;
-
-                using SqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    trainer = new Trainer
-                    {
-                        TrainerID = Convert.ToInt32(reader["TrainerID"]),
-                        TrainerFirstName = reader["TrainerFirstName"] is DBNull ? string.Empty : (string)reader["TrainerFirstName"],
-                        TrainerLastName = reader["TrainerLastName"] is DBNull ? string.Empty : (string)reader["TrainerLastName"],
-                        TrainerPhoneNumber = reader["TrainerPhoneNumber"] is DBNull ? string.Empty : (string)reader["TrainerPhoneNumber"],
-                        TrainerEmail = reader["TrainerEmail"] is DBNull ? string.Empty : (string)reader["TrainerEmail"]
-                    };
-                }
-                return trainer;
-            }
-        }
-
         public override List<Trainer> GetAll()
         {
             using (SqlConnection con = CreateConnection())
