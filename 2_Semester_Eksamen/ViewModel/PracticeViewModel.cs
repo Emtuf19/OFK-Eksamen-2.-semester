@@ -102,10 +102,80 @@ namespace _2_Semester_Eksamen.ViewModel
             }
         }
 
+        private bool _isPracticePopupOpen;
+        public bool IsPracticePopupOpen
+        {
+            get => _isPracticePopupOpen;
+            set
+            {
+                _isPracticePopupOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isEditMode;
+        public bool IsEditMode
+        {
+            get => _isEditMode;
+            set
+            {
+                _isEditMode = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Practice _editingPractice;
+        public Practice EditingPractice
+        {
+            get => _editingPractice;
+            set
+            {
+                _editingPractice = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<int> Hours { get; } = Enumerable.Range(0, 24).ToList();
+        public List<int> Minutes { get; } = new List<int> { 00, 15, 30, 45 };
+        private int _selectedHour;
+        public int SelectedHour
+        {
+            get => _selectedHour;
+            set
+            {
+                _selectedHour = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _selectedMinute;
+        public int SelectedMinute
+        {
+            get => _selectedMinute;
+            set
+            {
+                _selectedMinute = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private DateTime _datePart;
+        public DateTime DatePart
+        {
+            get => _datePart;
+            set
+            {
+                _datePart = value;
+                OnPropertyChanged();
+            }
+        }
+
         public RelayCommand DeletePracticeCommand { get; }
         public RelayCommand CreatePracticeCommand { get; }
         public RelayCommand UpdatePracticeCommand { get; }
         public RelayCommand CancelParticipationCommand { get; }
+
+        public RelayCommand CancelEditPracticeCommand { get; }
 
         private void ExecuteCancelParticipation()
         {
@@ -218,6 +288,8 @@ namespace _2_Semester_Eksamen.ViewModel
                    && StartTime.TimeOfDay != null && EndTime.TimeOfDay != null);
             UpdatePracticeCommand = new RelayCommand(ExecuteUpdatePractice, ()=> SelectedPractice != null);
             CancelParticipationCommand = new RelayCommand(ExecuteCancelParticipation, ()=> SelectedPractice != null && MemberIDInput > 0);
+
+            CancelEditPracticeCommand = new RelayCommand(CancelEdit);
         }
 
         private void LoadPractices()
@@ -233,6 +305,17 @@ namespace _2_Semester_Eksamen.ViewModel
             {
                 Practices.Add(p);
             }
+        }
+        private void ClosePopup()
+        {
+            IsPracticePopupOpen = false;
+            EditingPractice = null;
+        }
+
+        private void CancelEdit()
+        {
+            EditingPractice = null;
+            IsPracticePopupOpen = false;
         }
     }
 }

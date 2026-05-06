@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:_2_Semester_Eksamen.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:viewmodel="clr-namespace:_2_Semester_Eksamen.ViewModel" 
+    xmlns:conv="clr-namespace:_2_Semester_Eksamen.Converters"
     d:DataContext="{d:DesignInstance Type=viewmodel:PracticeViewModel}"
     Title="PracticeWindow"
     d:DesignHeight="720"
@@ -13,6 +14,8 @@
     Background="White"
     mc:Ignorable="d">
     <Page.Resources>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <conv:EditModeToTitleConverter x:Key="EditModeToTitleConverter"/>
         <Style TargetType="Button">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="FontSize" Value="15"/>
@@ -42,22 +45,42 @@
             Træning
         </Label>
         <StackPanel Margin="20,0" Grid.Column="1" Grid.Row="1">
-            <DockPanel>
-                <TextBlock FontWeight="Bold" Text="Dato:" VerticalAlignment="Center" Width="53"/>
-                <DatePicker SelectedDate="{Binding SelectedDate}" Margin="5"/>
-            </DockPanel>
-            <DockPanel>
-                <TextBlock FontWeight="Bold" Text="Træning:" VerticalAlignment="Center" Width="53"/>
-                <TextBox Text="{Binding PracticeName}" Margin="5"/>
-            </DockPanel>
-            <DockPanel>
-                <TextBlock FontWeight="Bold" Text="Start Tid:" VerticalAlignment="Center" Width="53"/>
-                <TextBox Text="{Binding StartTime, StringFormat=HH:mm, ConverterCulture=da-DK}" Margin="5"/>
-            </DockPanel>
-            <DockPanel>
-                <TextBlock FontWeight="Bold" Text="Slut Tid:" VerticalAlignment="Center" Width="53"/>
-                <TextBox Text="{Binding EndTime, StringFormat=HH:mm, ConverterCulture=da-DK}" Margin="5"/>
-            </DockPanel>
+
+            <Grid Background="#80000000" Visibility="{Binding IsPracticePopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
+
+                <Border Width="450" Height="330" Background="White" Padding="15" CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                    <Grid RowDefinitions="*,*,*,*,*,*">
+
+                        <TextBlock Grid.Row="0" FontSize="18" FontWeight="Bold" Text="{Binding IsEditMode, Converter={StaticResource EditModeToTitleConverter}, ConverterParameter=Træning}" />
+
+                        <DockPanel Grid.Row="1">
+                            <TextBlock FontWeight="Bold" Text="Titel:" VerticalAlignment="Center" Width="82"/>
+                            <TextBox Text="{Binding EditingPractice.PracticeName}" VerticalContentAlignment="Center"/>
+                        </DockPanel>
+
+                        <DockPanel Grid.Row="2">
+                            <TextBlock FontWeight="Bold" Text="Dato:" VerticalAlignment="Center" Width="82"/>
+                            <DatePicker SelectedDate="{Binding DatePart}" Margin="0,5,0,0" VerticalContentAlignment="Center"/>
+                        </DockPanel>
+
+
+                        <DockPanel Grid.Row="3">
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock FontWeight="Bold" Text="Tid:" VerticalAlignment="Center" Width="82"/>
+                                <ComboBox Width="70" ItemsSource="{Binding Hours}" SelectedItem="{Binding SelectedHour}" VerticalContentAlignment="Center"/>
+                                <TextBlock Text=":" Margin="5,0" />
+                                <ComboBox Width="70" ItemsSource="{Binding Minutes}" SelectedItem="{Binding SelectedMinute}" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <Button Grid.Row="4" Content="Gem" Margin="82,5,0,0" Command="{Binding SaveEventCommand}" />
+                        <Button Grid.Row="5" Content="Annuller" Margin="82,5,0,0" Command="{Binding CancelEditPracticeCommand}" />
+
+                    </Grid>
+                </Border>
+            </Grid>
+
             <StackPanel x:Name="TrainerTrainingCommands">
                 <Button Content="Opret træning" Command="{Binding CreatePracticeCommand}" Background="#FF2DC72D"/>
                 <Button Content="Rediger træning" Command="{Binding UpdatePracticeCommand}" Background="#FF679ECE"/>
