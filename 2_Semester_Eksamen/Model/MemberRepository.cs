@@ -35,7 +35,7 @@ namespace _2_Semester_Eksamen.Model
                         {
                             MemberID = Convert.ToInt32(reader["MemberID"]),
                             MemberFirstName = reader["MemberFirstName"] is DBNull ? string.Empty : (string)reader["MemberFirstName"],
-                            MemberLastName = reader["MemberLastName"]  is DBNull ? string.Empty : (string)reader["MemberLastName"]
+                            MemberLastName = reader["MemberLastName"] is DBNull ? string.Empty : (string)reader["MemberLastName"]
                         };
                     }
 
@@ -106,7 +106,22 @@ namespace _2_Semester_Eksamen.Model
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add("@MemberFirstName", SqlDbType.NVarChar, 50).Value = member.MemberFirstName;
                 cmd.Parameters.Add("@MemberLastName", SqlDbType.NVarChar, 50).Value = member.MemberLastName;
+
+                var outParam = cmd.Parameters.Add("@newMemberID", SqlDbType.Int);
+                outParam.Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+
+                int newId = 0;
+                if (outParam.Value != null && outParam.Value != DBNull.Value)
+                {
+                    newId = Convert.ToInt32(outParam.Value);
+                }
+
+                if (newId != 0)
+                    member.MemberID = newId;
             }
+
             members.Add(member);
         }
 
@@ -123,6 +138,21 @@ namespace _2_Semester_Eksamen.Model
                 cmd.Parameters.Add("@MemberFirstName", SqlDbType.NVarChar, 50).Value = member.MemberFirstName;
                 cmd.Parameters.Add("@MemberLastName", SqlDbType.NVarChar, 50).Value = member.MemberLastName;
                 cmd.ExecuteNonQuery();
+            }
+
+            var contactRepo = new ContactInfoRepository();
+            foreach (var contact in member.ContactPersons)
+            {
+                contact.MemberID = member.MemberID;
+
+                if (contact.ContactPersonID <= 0)
+                {
+                    contactRepo.Add(contact);
+                }
+                else
+                {
+                    contactRepo.Update(contact);
+                }
             }
         }
 
