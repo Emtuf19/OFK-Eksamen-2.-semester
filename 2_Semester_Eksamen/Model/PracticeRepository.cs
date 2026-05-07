@@ -192,6 +192,37 @@ namespace _2_Semester_Eksamen.Model
             }
         }
 
-    }
+        public void AddMemberToPractice(int practiceID, int memberID)
+        {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
+                using SqlCommand cmd = new SqlCommand("sp_SignUpPractice", con);
 
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@PracticeID", SqlDbType.Int).Value = practiceID;
+                cmd.Parameters.Add("@MemberID", SqlDbType.Int).Value = memberID;
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        //bruges til at tjekke om et medlem eksistere, før man tilføjer det til en practice, for at undgå fejl
+        public bool MemberExists(int memberId)
+        {
+            using (SqlConnection con = CreateConnection())
+            {
+                string query = "SELECT COUNT(1) FROM Member WHERE MemberID = @MemberID";
+
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@MemberID", memberId);
+                    con.Open();
+
+                    return (int)cmd.ExecuteScalar() > 0;
+                }
+            }
+        }
+    }
 }

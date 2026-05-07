@@ -31,6 +31,8 @@ namespace _2_Semester_Eksamen.ViewModel
                 OnPropertyChanged();
                 DeleteEventCommand?.RaiseCanExecuteChanged();
                 EditEventCommand?.RaiseCanExecuteChanged();
+                CancelSignUpEventCommand?.RaiseCanExecuteChanged();
+                SignUpEventCommand?.RaiseCanExecuteChanged();
             }
         }
 
@@ -312,6 +314,7 @@ namespace _2_Semester_Eksamen.ViewModel
                     SelectedEvent.Members.Remove(member);
                 }
 
+                LoadEvents();
                 MemberIDInput = 0;
             }
             catch (Exception ex)
@@ -325,7 +328,13 @@ namespace _2_Semester_Eksamen.ViewModel
             try
             {
                 var repo = new EventRepository();
-                repo.AddMemberToEvent(SelectedEvent.EventID, MemberIDInput);
+
+                bool memberExistsInDB = repo.MemberExists(MemberIDInput);
+                if (!memberExistsInDB)
+                {
+                    MessageBox.Show($"Medlem {MemberIDInput} findes ikke i systemet.", "Tilmelding mislykket", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
                 bool memberExists = SelectedEvent.Members?.Any(m => m.MemberID == MemberIDInput) ?? false;
 
@@ -337,8 +346,12 @@ namespace _2_Semester_Eksamen.ViewModel
 
                 MessageBox.Show($"Medlem {MemberIDInput} er tilmeldt Begivenhed.", "Tilmelding fuldført", MessageBoxButton.OK, MessageBoxImage.Information);
 
+                repo.AddMemberToEvent(SelectedEvent.EventID, MemberIDInput);
+
                 var member = new Member { MemberID = MemberIDInput };
                 SelectedEvent.Members.Add(member);
+
+                LoadEvents();
                 MemberIDInput = 0;
             }
             catch (Exception ex)

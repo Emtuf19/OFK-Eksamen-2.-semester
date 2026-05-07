@@ -33,12 +33,14 @@ namespace _2_Semester_Eksamen.Views
                 TrainerTrainingCommands.Visibility = Visibility.Visible;
                 CancelParticipation.Visibility = Visibility.Collapsed;
                 MemberIDInputTextBox.Visibility = Visibility.Collapsed;
+                SignUpForPractice.Visibility = Visibility.Collapsed;
             }
             else if (mainWindow.CurrentRole == "Member")
             {
                 TrainerTrainingCommands.Visibility = Visibility.Collapsed;
                 CancelParticipation.Visibility = Visibility.Visible;
                 MemberIDInputTextBox.Visibility = Visibility.Visible;
+                SignUpForPractice.Visibility = Visibility.Visible;
             }
             DataContext = new PracticeViewModel();
         }

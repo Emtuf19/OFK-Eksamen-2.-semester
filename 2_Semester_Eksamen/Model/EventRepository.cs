@@ -175,5 +175,22 @@ namespace _2_Semester_Eksamen.Model
                 cmd.ExecuteNonQuery();
             }
         }
+
+        //bruges til at tjekke om et medlem eksistere, før man tilføjer det til en event, for at undgå fejl
+        public bool MemberExists(int memberId)
+        {
+            using (SqlConnection con = CreateConnection())
+            {
+                string query = "SELECT COUNT(1) FROM Member WHERE MemberID = @MemberID";
+
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@MemberID", memberId);
+                    con.Open();
+
+                    return (int)cmd.ExecuteScalar() > 0;
+                }
+            }
+        }
     }
 }
