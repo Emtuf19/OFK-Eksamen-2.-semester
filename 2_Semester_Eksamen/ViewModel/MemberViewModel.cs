@@ -81,6 +81,7 @@ namespace _2_Semester_Eksamen.ViewModel
             _repo.Add(newMember);
             Members.Add(newMember);
             SelectedMember = newMember;
+            Load();
         }
 
         private void ExecuteUpdate()

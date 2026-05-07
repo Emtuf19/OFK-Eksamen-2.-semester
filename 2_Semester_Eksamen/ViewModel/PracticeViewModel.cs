@@ -286,7 +286,7 @@ namespace _2_Semester_Eksamen.ViewModel
                 EditingPractice.StartTime = start;
                 EditingPractice.EndTime = end;
 
-                _practiceRepository.Create(EditingPractice);
+                _practiceRepository.Add(EditingPractice);
                 Practices.Add(EditingPractice);
             }
 

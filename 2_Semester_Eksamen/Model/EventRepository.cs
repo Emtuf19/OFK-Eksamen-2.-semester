@@ -89,7 +89,8 @@ namespace _2_Semester_Eksamen.Model
                         }
                     }
                 }
-                return events;
+                events = events.Where(p => p.Time >= DateTime.Now).ToList();
+                return events.OrderBy(p => p.Time).ToList();
             }
         }
 
@@ -127,9 +128,11 @@ namespace _2_Semester_Eksamen.Model
 
         public override void Add(Event ev)
         {
-            using (SqlConnection conn = CreateConnection())
-            using (SqlCommand cmd = new SqlCommand("sp_InsertIntoEvent", conn))
+            using (SqlConnection con = CreateConnection())
             {
+                con.Open();
+
+                using SqlCommand cmd = new SqlCommand("sp_InsertIntoEvent", con);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.Add("@eventName", SqlDbType.NVarChar, 100).Value = ev.EventName;
@@ -138,15 +141,7 @@ namespace _2_Semester_Eksamen.Model
                 cmd.Parameters.Add("@ageGroup", SqlDbType.NVarChar, 20).Value = ev.AgeGroup;
                 cmd.Parameters.Add("@time", SqlDbType.DateTime2).Value = ev.Time;
 
-                // OUTPUT parameter
-                SqlParameter outputId = cmd.Parameters.Add("@newEventID", SqlDbType.Int);
-                outputId.Direction = ParameterDirection.Output;
-
-                conn.Open();
                 cmd.ExecuteNonQuery();
-
-                // Sæt ID tilbage på objektet
-                ev.EventID = (int)outputId.Value;
             }
         }
 

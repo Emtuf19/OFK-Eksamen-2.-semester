@@ -4,8 +4,7 @@ GO
 --Stored Procedure til INSERT INTO Member
 CREATE PROC sp_InsertIntoMember
 @memberFirstName NVarChar(50),
-@memberLastName NVarChar(50),
-@newMemberID INT OUTPUT
+@memberLastName NVarChar(50)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -34,7 +33,6 @@ BEGIN
 		@memberFirstName,
 		@memberLastName
 	);
-	SET @newMemberID = SCOPE_IDENTITY();
 END;
 
 --Stored Procedure til INSERT INTO ContactInfo
@@ -65,143 +63,12 @@ BEGIN
 	);
 END;
 
---Insert into member with contact person
-GO
-CREATE PROC sp_InsertIntoMemberWithContacts
-    -- Member info
-    @memberFirstName NVARCHAR(50),
-    @memberLastName  NVARCHAR(50),
-
-    -- Contact person 1 (påkrævet)
-    @contact1FirstName NVARCHAR(50),
-    @contact1LastName  NVARCHAR(50),
-    @contact1Phone     NVarChar(30),
-    @contact1Email     NVARCHAR(100),
-
-    -- Contact person 2 (valgfri - send NULL hvis ingen)
-    @contact2FirstName NVARCHAR(50) = NULL,
-    @contact2LastName  NVARCHAR(50) = NULL,
-    @contact2Phone     NVarChar(30)   = NULL,
-    @contact2Email     NVARCHAR(100)= NULL,
-
-    -- OUTPUT IDs
-    @newMemberID INT OUTPUT,
-    @newContact1ID INT OUTPUT,
-    @newContact2ID INT OUTPUT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    BEGIN TRY
-        BEGIN TRANSACTION;
-        -- 1. Insert Member
-        INSERT INTO Member (MemberFirstName, MemberLastName)
-        VALUES (@memberFirstName, @memberLastName);
-
-        SET @newMemberID = SCOPE_IDENTITY();
-
-        -- 2. Insert Contact Person #1 (påkrævet)
-        INSERT INTO ContactInfo
-        (
-            ContactFirstName, ContactLastName,
-            ContactPhoneNumber, ContactEmail,
-            MemberID
-        )
-        VALUES
-        (
-            @contact1FirstName, @contact1LastName,
-            @contact1Phone, @contact1Email,
-            @newMemberID
-        );
-
-        SET @newContact1ID = SCOPE_IDENTITY();
-
-        -- 3. Insert Contact Person #2 (valgfri)
-        IF @contact2FirstName IS NOT NULL AND @contact2LastName IS NOT NULL
-        BEGIN
-            INSERT INTO ContactInfo
-            (
-                ContactFirstName, ContactLastName,
-                ContactPhoneNumber, ContactEmail,
-                MemberID
-            )
-            VALUES
-            (
-                @contact2FirstName, @contact2LastName,
-                @contact2Phone, @contact2Email,
-                @newMemberID
-            );
-
-            SET @newContact2ID = SCOPE_IDENTITY();
-        END
-        ELSE
-        BEGIN
-            SET @newContact2ID = NULL;
-        END
-
-        -- SUCCESS
-        COMMIT TRANSACTION;
-    END TRY
-    BEGIN CATCH
-        IF @@TRANCOUNT > 0
-            ROLLBACK TRANSACTION;
-        
-        -----------------------------------------------------------
-        -- FANG TRIGGER-FEJL HER
-        -----------------------------------------------------------
-        DECLARE @ErrMsg NVARCHAR(4000) = ERROR_MESSAGE();
-        DECLARE @ErrSeverity INT = ERROR_SEVERITY();
-
-        -- Hvis fejlen kommet fra triggeren
-        IF @ErrMsg LIKE '%maximum of 2 contact persons%'
-        BEGIN
-            RAISERROR('Det er kun tilladt at tilføje maks 2 kontaktpersoner til et medlem.', 16, 1);
-            RETURN;
-        END
-
-        -----------------------------------------------------------
-        -- Hvis det er en anden fejl, kast den videre
-        -----------------------------------------------------------
-        RAISERROR(@ErrMsg, @ErrSeverity, 1);
-
-        --THROW;
-    END CATCH
-END;
-
-GO
---Stored Procedure til INSERT INTO Trainer
-CREATE PROC sp_InsertIntoTrainer
-@trainerFirstName NVarChar(50),
-@trainerLastName NVarChar(50),
-@trainerPhoneNumber NVarChar(30),
-@trainerEmail NVarChar(100),
-@newTrainerID INT OUTPUT
-AS
-BEGIN
-	INSERT INTO Trainer 
-	(
-		TrainerFirstName,
-		TrainerLastName,
-        TrainerPhoneNumber,
-        TrainerEmail
-	)
-	VALUES	
-	(
-		@trainerFirstName,
-		@trainerLastName,
-        @trainerPhoneNumber,
-        @trainerEmail
-	);
-	SET @newTrainerID = SCOPE_IDENTITY();
-END;
-
 --insert into practice
 GO
 CREATE PROC sp_InsertIntoPractice
 @practiceName NVarChar(100),
 @startTIme DateTime2,
-@endTime DateTime2,
-@newPracticeID INT OUTPUT
+@endTime DateTime2
 AS
 BEGIN
     INSERT INTO Practice
@@ -216,7 +83,6 @@ BEGIN
         @startTime,
         @endTime
     );
-    SET @newPracticeID = SCOPE_IDENTITY();
 END;
 
 --insert into event
@@ -226,8 +92,7 @@ CREATE PROC sp_InsertIntoEvent
 @description NVarChar(250),
 @price FLoat,
 @ageGroup NVarChar(20),
-@time DateTime2,
-@newEventID INT OUTPUT
+@time DateTime2
 AS
 BEGIN
     INSERT INTO Event
@@ -246,99 +111,6 @@ BEGIN
         @ageGroup,
         @time
     );
-    SET @newEventID = SCOPE_IDENTITY();
-END;
-
---insert into event with member and/or trainer
-GO
-CREATE PROC sp_InsertMemberAndOrTrainerToEvent
-@memberID Int = NULL,
-@trainerID Int = NULL,
-@eventID Int
-AS
-BEGIN
-    BEGIN TRY
-        BEGIN TRANSACTION;
-
-        IF @memberID IS NOT NULL
-        BEGIN 
-            INSERT INTO Member_Event
-            (
-                MemberID,
-                EventID
-            )
-            VALUES
-            (
-                @memberID,
-                @eventID
-            );
-        END
-
-        IF @trainerID IS NOT NULL
-        BEGIN
-            INSERT INTO Trainer_Event
-            (
-                TrainerID,
-                EventID
-            )
-            VALUES
-            (
-                @trainerID,
-                @eventID
-            );
-        END
-        COMMIT TRANSACTION;
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        THROW;
-    END CATCH
-END;
-
---insert into practice with member and/or trainer
-GO
-CREATE PROC sp_InsertMemberAndOrTrainerToPractice
-@memberID Int = NULL,
-@trainerID Int = NULL,
-@practiceID Int
-AS
-BEGIN
-    BEGIN TRY
-        BEGIN TRANSACTION;
-
-        IF @memberID IS NOT NULL
-        BEGIN 
-            INSERT INTO Member_Practice
-            (
-                MemberID,
-                PracticeID
-            )
-            VALUES
-            (
-                @memberID,
-                @practiceID
-            );
-        END
-
-        IF @trainerID IS NOT NULL
-        BEGIN
-            INSERT INTO Trainer_Practice
-            (
-                TrainerID,
-                PracticeID
-            )
-            VALUES
-            (
-                @trainerID,
-                @practiceID
-            );
-        END
-        COMMIT TRANSACTION;
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        THROW;
-    END CATCH
 END;
 
 
@@ -442,22 +214,6 @@ BEGIN
     FROM Member m
     LEFT JOIN ContactInfo c
         ON m.MemberID = c.MemberID;
-END;
-
-GO
---GetAll til trænere
-CREATE PROC sp_GetAllTrainers
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT
-        TrainerID,
-        TrainerFirstName,
-        TrainerLastName,
-        TrainerPhoneNumber,
-        TrainerEmail
-    FROM Trainer;
 END;
 
 GO
@@ -607,59 +363,6 @@ BEGIN
         StartTime = COALESCE(@startTime, StartTime),
         EndTime = COALESCE(@endTime, EndTime)
     WHERE PracticeID = @practiceID;
-END;
-
-GO
---Update Trainer
-CREATE PROC sp_UpdateTrainer
-@trainerID INT,
-@trainerFirstName NVARCHAR(50) = NULL,
-@trainerLastName NVARCHAR(50) = NULL,
-@trainerPhoneNumber NVarChar(30) = NULL,
-@trainerEmail NVARCHAR(100) = NULL
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    IF NOT EXISTS (
-        SELECT 1 FROM Trainer WHERE TrainerID = @trainerID
-    )
-    BEGIN
-        RAISERROR('Trainer does not exist.', 16, 1);
-        RETURN;
-    END;
-
-    IF @trainerFirstName IS NOT NULL AND LTRIM(RTRIM(@trainerFirstName)) = ''
-    BEGIN
-        RAISERROR('Trainer first name cannot be empty', 16, 1)
-        RETURN;
-    END;
-
-    IF @trainerLastName IS NOT NULL AND LTRIM(RTRIM(@trainerLastName)) = ''
-    BEGIN
-        RAISERROR('Trainer last name cannot be empty', 16, 1)
-        RETURN;
-    END;
-
-    IF @trainerPhoneNumber IS NOT NULL AND LTRIM(RTRIM(@trainerPhoneNumber)) = ''
-    BEGIN
-        RAISERROR('Trainer phonenumber cannot be empty', 16, 1)
-        RETURN;
-    END;
-
-    IF @trainerEmail IS NOT NULL AND LTRIM(RTRIM(@trainerEmail)) = ''
-    BEGIN
-        RAISERROR('Trainer email cannot be empty', 16, 1)
-        RETURN;
-    END;
-
-    UPDATE Trainer
-    SET
-        TrainerFirstName = COALESCE(@trainerFirstName, TrainerFirstName),
-        TrainerLastName = COALESCE(@trainerLastName, TrainerLastName),
-        TrainerPhoneNumber = COALESCE(@trainerPhoneNumber, TrainerPhoneNumber),
-        TrainerEmail = COALESCE(@trainerEmail, TrainerEmail)
-    WHERE TrainerID = @trainerID
 END;
 
 GO
