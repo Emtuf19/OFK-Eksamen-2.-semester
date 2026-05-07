@@ -129,7 +129,7 @@
 
                 <Grid RowDefinitions="*,*,*,*,*,*,*,*,*">
 
-                    <TextBlock Grid.Row="0" FontSize="18" FontWeight="Bold" Text="{Binding IsEditMode, Converter={StaticResource EditModeToTitleConverter}}" />
+                    <TextBlock Grid.Row="0" FontSize="18" FontWeight="Bold" Text="{Binding IsEditMode, Converter={StaticResource EditModeToTitleConverter}, ConverterParameter=Event}" />
 
                     <DockPanel Grid.Row="1">
                         <TextBlock FontWeight="Bold" Text="Titel:" VerticalAlignment="Center" Width="82"/>

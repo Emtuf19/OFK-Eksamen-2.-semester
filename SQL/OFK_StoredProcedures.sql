@@ -341,203 +341,6 @@ BEGIN
     END CATCH
 END;
 
-GO
---GetByID generisk. (Copilot er ikke glad for at lave én fælles GetByID)
-CREATE PROCEDURE sp_GetById_Generic
-    @TableName SYSNAME,
-    @Id INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    DECLARE @IdColumn SYSNAME;
-    DECLARE @Sql NVARCHAR(MAX);
-
-    --------------------------------------------------
-    -- 1. Whitelist + ID-kolonne mapping
-    --------------------------------------------------
-    IF @TableName = 'Member'
-        SET @IdColumn = 'MemberID';
-    ELSE IF @TableName = 'Practice'
-        SET @IdColumn = 'PracticeID';
-    ELSE IF @TableName = 'Event'
-        SET @IdColumn = 'EventID';
-    ELSE
-    BEGIN
-        RAISERROR ('Ugyldig tabel', 16, 1);
-        RETURN;
-    END
-
-    --------------------------------------------------
-    -- 2. Dynamisk SQL (sikkert)
-    --------------------------------------------------
-    SET @Sql = N'
-        SELECT *
-        FROM ' + QUOTENAME(@TableName) + '
-        WHERE ' + QUOTENAME(@IdColumn) + ' = @Id';
-
-    --------------------------------------------------
-    -- 3. Eksekver med parameter (anti-SQL-injection)
-    --------------------------------------------------
-    EXEC sp_executesql
-        @Sql,
-        N'@Id INT',
-        @Id = @Id;
-END;
-
-GO
---GetByID Member med tilhørende kontaktpersoner
-CREATE PROCEDURE sp_GetMemberByID
-    @MemberID INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    IF NOT EXISTS (
-        SELECT 1 FROM Member WHERE MemberID = @MemberID
-    )
-    BEGIN
-        RAISERROR('Member does not exist.', 16, 1);
-        RETURN;
-    END;
-
-    SELECT
-        m.MemberID,
-        m.MemberFirstName,
-        m.MemberLastName,
-        c.ContactPersonID,
-        c.ContactFirstName,
-        c.ContactLastName,
-        c.ContactPhoneNumber,
-        c.ContactEmail
-    FROM Member m
-    LEFT JOIN ContactInfo c
-        ON m.MemberID = c.MemberID
-    WHERE m.MemberID = @MemberID;
-END;
-
-GO
---GetById til trainer
-CREATE PROC sp_GetByTrainerID
-@trainerID INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    IF NOT EXISTS ( SELECT 1 FROM Trainer WHERE TrainerID = @trainerID)
-    BEGIN
-        RAISERROR('Trainer does not exist.', 16, 1);
-        RETURN;
-    END;
-
-    SELECT
-        TrainerID,
-        TrainerFirstName,
-        TrainerLastName,
-        TrainerPhoneNumber,
-        TrainerEmail
-    FROM Trainer
-    WHERE TrainerID = @trainerID;
-END;
-
-
-GO
---GetByID for event med liste af medlemmer og trænere
-CREATE PROCEDURE sp_GetEventByIDWithMembersAndTrainers
-    @EventID INT
-AS
-BEGIN
-
-    IF NOT EXISTS (
-        SELECT 1 FROM Event WHERE EventID = @EventID
-    )
-    BEGIN
-        RAISERROR('Event does not exist.', 16, 1);
-        RETURN;
-    END;
-
-    -- 1️ Event-info (én række)
-    SELECT
-        EventID,
-        EventName,
-        Description,
-        Price,
-        AgeGroup,
-        Time
-    FROM Event
-    WHERE EventID = @EventID;
-
-    -- 2️ Medlemmer til event
-    SELECT
-        m.MemberID,
-        m.MemberFirstName,
-        m.MemberLastName
-    FROM Member_Event me
-    INNER JOIN Member m
-        ON me.MemberID = m.MemberID
-    WHERE me.EventID = @EventID;
-
-    -- 3️ Trænere til event
-    SELECT
-        t.TrainerID,
-        t.TrainerFirstName,
-        t.TrainerLastName,
-        t.TrainerPhoneNumber,
-        t.TrainerEmail
-    FROM Trainer_Event te
-    INNER JOIN Trainer t
-        ON te.TrainerID = t.TrainerID
-    WHERE te.EventID = @EventID;
-END;
-
-
-GO
---GetByID for practice med liste af medlemmer og liste af trænere
-CREATE PROCEDURE sp_GetPracticeByIDWithMembersAndTrainers
-    @PracticeID INT
-AS
-BEGIN
-
-    IF NOT EXISTS (
-        SELECT 1 FROM Practice WHERE PracticeID = @PracticeID
-    )
-    BEGIN
-        RAISERROR('Practice does not exist.', 16, 1);
-        RETURN;
-    END;
-
-    -- 1️ Practice-info (én række)
-    SELECT
-        PracticeID,
-        PracticeName,
-        StartTime,
-        EndTime
-    FROM Practice
-    WHERE PracticeID = @PracticeID;
-
-    -- 2️ Medlemmer til practice
-    SELECT
-        m.MemberID,
-        m.MemberFirstName,
-        m.MemberLastName
-    FROM Member_Practice mp
-    INNER JOIN Member m
-        ON mp.MemberID = m.MemberID
-    WHERE mp.PracticeID = @PracticeID;
-
-    -- 3️ Trænere til practice
-    SELECT
-        t.TrainerID,
-        t.TrainerFirstName,
-        t.TrainerLastName,
-        t.TrainerPhoneNumber,
-        t.TrainerEmail
-    FROM Trainer_Practice tp
-    INNER JOIN Trainer t
-        ON tp.TrainerID = t.TrainerID
-    WHERE tp.PracticeID = @PracticeID;
-END;
-
 
 GO
 --Get all for practice med tilhørende medlemmer og trænere
@@ -941,4 +744,17 @@ BEGIN
         INSERT INTO Member_Event (EventID, MemberID)
         VALUES(@eventID, @memberID)
     END;
+END;
+
+GO
+--Fjern medlem fra practice
+CREATE PROC sp_CancelParticipation
+@practiceID int,
+@memberID int
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    DELETE FROM Member_Practice
+    WHERE PracticeID = @practiceID AND MemberID = @memberID;
 END;

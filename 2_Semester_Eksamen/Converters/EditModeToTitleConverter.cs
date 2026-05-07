@@ -11,10 +11,13 @@ namespace _2_Semester_Eksamen.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool isEditMode)
-                return isEditMode ? "Rediger Event" : "Opret Event";
 
-            return "Event";
+            string type = parameter as string ?? "Item";
+
+            if (value is bool isEditMode)
+                return isEditMode ? $"Rediger {type}" : $"Opret {type}";
+
+            return type;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
