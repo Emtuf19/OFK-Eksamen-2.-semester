@@ -95,6 +95,7 @@
                 <Button Content="Rediger træning" Command="{Binding EditPracticeCommand}" Background="#FF679ECE"/>
                 <Button Content="Aflys træning" Command="{Binding DeletePracticeCommand}" Background="#FFDE4444"/>
             </StackPanel>
+            <Button x:Name="SignUpForPractice" Content="Tilmeld træning" Command="{Binding SignUpForPracticeCommand}" Background="#FF2DC72D"/>
             <Button x:Name="CancelParticipation" Content="Afmeld træning" Command="{Binding CancelParticipationCommand}" Background="#FFDE4444"/>
             <DockPanel x:Name="MemberIDInputTextBox">
                 <Label Content="MemberID" FontWeight="Bold" Margin="0" FontSize="12" HorizontalAlignment="Left"/>

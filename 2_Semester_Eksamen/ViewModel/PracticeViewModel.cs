@@ -27,6 +27,7 @@ namespace _2_Semester_Eksamen.ViewModel
                 _memberIDInput = value;
                 OnPropertyChanged();
                 CancelParticipationCommand?.RaiseCanExecuteChanged();
+                SignUpForPracticeCommand?.RaiseCanExecuteChanged();
             }
         }
 
@@ -43,6 +44,8 @@ namespace _2_Semester_Eksamen.ViewModel
                 {
                     DeletePracticeCommand?.RaiseCanExecuteChanged();
                     EditPracticeCommand?.RaiseCanExecuteChanged();
+                    SignUpForPracticeCommand?.RaiseCanExecuteChanged();
+                    CancelParticipationCommand?.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -155,7 +158,8 @@ namespace _2_Semester_Eksamen.ViewModel
         public RelayCommand EditPracticeCommand { get; set; }
         public RelayCommand SavePracticeCommand { get; set; }
         public RelayCommand CancelEditPracticeCommand { get; }
-
+        
+        public RelayCommand SignUpForPracticeCommand { get; }
         public RelayCommand CancelParticipationCommand { get; }
 
         private void ExecuteCancelParticipation()
@@ -182,10 +186,46 @@ namespace _2_Semester_Eksamen.ViewModel
                 }
 
                 MemberIDInput = 0;
+                LoadPractices();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Kunne ikke afmelde medlem.\n" + ex.Message, "Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void SignUpForPractice()
+        {
+            try
+            {
+
+                bool memberExistsInDB = _practiceRepository.MemberExists(MemberIDInput);
+                if (!memberExistsInDB)
+                {
+                    MessageBox.Show($"Medlem {MemberIDInput} findes ikke i systemet.", "Tilmelding mislykket", MessageBoxButton.OK, MessageBoxImage.Warning); 
+                    return;
+                }
+
+                bool memberExists = SelectedPractice.Members?.Any(m => m.MemberID == MemberIDInput) ?? false;
+
+                if (memberExists)
+                {
+                    MessageBox.Show($"Medlem {MemberIDInput} er allerede tilmeldt træningen.", "Tilmelding mislykket", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                _practiceRepository.AddMemberToPractice(SelectedPractice.PracticeID, MemberIDInput);
+                MessageBox.Show($"Medlem {MemberIDInput} er tilmeldt træningen.", "Tilmelding fuldført", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                var member = new Member { MemberID = MemberIDInput };
+                SelectedPractice.Members.Add(member);
+
+                MemberIDInput = 0;
+                LoadPractices();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Kunne ikke tilmelde medlem.\n" + ex.Message, "Fejl", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -211,6 +251,7 @@ namespace _2_Semester_Eksamen.ViewModel
             SavePracticeCommand = new RelayCommand(SavePractice);
             CancelEditPracticeCommand = new RelayCommand(CancelEdit);
 
+            SignUpForPracticeCommand = new RelayCommand(SignUpForPractice, () => SelectedPractice != null && MemberIDInput > 0);
             CancelParticipationCommand = new RelayCommand(ExecuteCancelParticipation, ()=> SelectedPractice != null && MemberIDInput > 0);
         }
 
