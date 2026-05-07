@@ -46,9 +46,9 @@
         </Label>
         <StackPanel Margin="20,0" Grid.Column="1" Grid.Row="1">
 
-            <Grid Background="#80000000" Visibility="{Binding IsPracticePopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Grid Background="#80000000" Width="400" Visibility="{Binding IsPracticePopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
 
-                <Border Width="450" Height="330" Background="White" Padding="15" CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Border Width="400" Height="250" Background="White" Padding="15" CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center">
 
                     <Grid RowDefinitions="*,*,*,*,*,*,*">
 
