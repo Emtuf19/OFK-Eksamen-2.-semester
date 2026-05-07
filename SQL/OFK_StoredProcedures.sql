@@ -461,3 +461,22 @@ BEGIN
     DELETE FROM Member_Practice
     WHERE PracticeID = @practiceID AND MemberID = @memberID;
 END;
+
+GO
+CREATE OR ALTER PROC sp_SignUpPractice
+@practiceID INT,
+@memberID INT
+AS
+BEGIN
+    SET NOCOUNT ON
+
+    IF NOT EXISTS 
+    (
+        SELECT 1 FROM Member_Practice
+        WHERE PracticeID = @practiceID AND MemberID = @memberID
+    )
+    BEGIN
+        INSERT INTO Member_Practice(PracticeID, MemberID)
+        VALUES(@practiceID, @memberID)
+    END;
+END;
