@@ -10,43 +10,89 @@ namespace _2_Semester_Eksamen.Model
     {
         private List<Member> members = new List<Member>();
 
-        public override Member? GetById(int ID)
+        public override List<Member> GetAll()
         {
             using (SqlConnection con = CreateConnection())
             {
                 con.Open();
+                members = new List<Member>();
 
-                Member member = new Member();
-
-                using SqlCommand cmd = new SqlCommand("dbo.GetByID", con);
+                using SqlCommand cmd = new SqlCommand("sp_GetAllMembers", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@ID", SqlDbType.Int).Value = ID;
 
-                return member;
+
+                using SqlDataReader reader = cmd.ExecuteReader();
+                while(reader.Read())
+                {
+                    var member = new Member
+                    {
+                        MemberID = Convert.ToInt32(reader["MemberID"]),
+                        MemberFirstName = reader["MemberFirstName"] is DBNull ? string.Empty : (string)reader["MemberFirstName"],
+                        MemberLastName = reader["MemberLastName"]  is DBNull ? string.Empty : (string)reader["MemberLastName"]
+                    };
+                    members.Add(member);
+
+                    var contactIDObject = reader["ContactPersonID"];
+                    if (contactIDObject != DBNull.Value)
+                    {
+                        var contact = new ContactInfo
+                        {
+                            ContactPersonID = Convert.ToInt32(contactIDObject),
+                            ContactFirstName = reader["ContactFirstName"] is DBNull ? string.Empty : (string)reader["ContactFirstName"],
+                            ContactLastName = reader["ContactLastName"] is DBNull ? string.Empty : (string)reader["ContactLastName"],
+                            ContactPhoneNumber = reader["ContactPhoneNumber"] is DBNull ? string.Empty : (string)reader["ContactPhoneNumber"],
+                            ContactEmail = reader["ContactEmail"] is DBNull ? string.Empty : (string)reader["ContactEmail"]
+                        };
+                        member.ContactPersons.Add(contact);
+                    }
+                }
+                return members;
             }
         }
-
-        public override List<Member> GetAll()
-        {
-            return members;
-        }
-
         public override void Add(Member member)
         {
             using (SqlConnection con = CreateConnection())
             {
                 con.Open();
 
-                using SqlCommand cmd = new SqlCommand("dbo.sp_InsertIntoTrainer", con);
+                using SqlCommand cmd = new SqlCommand("dbo.sp_InsertIntoMember", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@TrainerFirstName", SqlDbType.NVarChar, 50).Value = member.FirstName;
-                cmd.Parameters.Add("@TrainerLastName", SqlDbType.NVarChar, 50).Value = member.LastName;
+                cmd.Parameters.Add("@MemberFirstName", SqlDbType.NVarChar, 50).Value = member.MemberFirstName;
+                cmd.Parameters.Add("@MemberLastName", SqlDbType.NVarChar, 50).Value = member.MemberLastName;
+
+                cmd.ExecuteNonQuery();
             }
         }
 
         public override void Update(Member member)
         {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
 
+                using SqlCommand cmd = new SqlCommand("dbo.sp_UpdateMember", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@MemberID", SqlDbType.Int).Value = member.MemberID;
+                cmd.Parameters.Add("@MemberFirstName", SqlDbType.NVarChar, 50).Value = member.MemberFirstName;
+                cmd.Parameters.Add("@MemberLastName", SqlDbType.NVarChar, 50).Value = member.MemberLastName;
+                cmd.ExecuteNonQuery();
+            }
+
+            var contactRepo = new ContactInfoRepository();
+            foreach (var contact in member.ContactPersons)
+            {
+                contact.MemberID = member.MemberID;
+
+                if (contact.ContactPersonID <= 0)
+                {
+                    contactRepo.Add(contact);
+                }
+                else
+                {
+                    contactRepo.Update(contact);
+                }
+            }
         }
 
         public override void Delete(int ID)

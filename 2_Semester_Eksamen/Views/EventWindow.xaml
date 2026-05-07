@@ -1,0 +1,176 @@
+﻿<Page x:Class="_2_Semester_Eksamen.Views.EventWindow"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:_2_Semester_Eksamen.Views" 
+      xmlns:conv="clr-namespace:_2_Semester_Eksamen.Converters"
+      xmlns:viewmodel="clr-namespace:_2_Semester_Eksamen.ViewModel" 
+      d:DataContext="{d:DesignInstance Type=viewmodel:EventViewModel}"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" 
+      d:DesignWidth="1280"
+      Background="White"
+      Title="EventWindow">
+
+
+    <Page.Resources>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <conv:EditModeToTitleConverter x:Key="EditModeToTitleConverter"/>
+    </Page.Resources>
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="4">
+            Begivenheder
+        </Label>
+        <StackPanel x:Name="EventButtonsTrainer" Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Margin="0,10,0,10" >
+            <Button Content="Opret begivenhed" Command="{Binding CreateEventCommand}" Background="#FF2DC72D" Padding="10"/>
+            <Button Content="Rediger begivenhed" Command="{Binding EditEventCommand}" Background="#FF679ECE" Margin="10,0,0,0"/>
+            <Button Content="Slet begivenhed" Command="{Binding DeleteEventCommand}" Background="#FFDE4444" Margin="10,0,0,0"/>
+        </StackPanel>
+        <StackPanel x:Name="EventButtonsMember" Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Margin="0,10,0,10">
+            <Label Content="Medlems ID:" Margin="0,0,0,0" FontSize="16"/>
+            <TextBox Text="{Binding MemberIDInput}" Width="80" Margin="0,0,10,0" VerticalContentAlignment="Center"/>
+            <Button Content="Tilmeld begivenhed" Command="{Binding SignUpEventCommand}" Background="#FF2DC72D" Padding="10"/>
+            <Button Content="Afmeld begivenhed" Command="{Binding CancelSignUpEventCommand}" Background="#FFDE4444" Margin="10,0,0,0"/>
+        </StackPanel>
+
+        <StackPanel  Grid.Row="2" Margin="0,50,0,0">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+
+                    <ListBox ItemsSource="{Binding Events}" Background="White" Margin="0" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Hidden" SelectedItem="{Binding SelectedEvent}">
+                        <ListBox.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="Black"/>
+                            </Style>
+                        </ListBox.Resources>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <!--Expander er klik for drop down-->
+                                    <Expander>
+                                        <Expander.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock FontWeight="SemiBold" FontSize="22">
+                    Begivenheds navn:
+                                                </TextBlock>
+                                                <TextBlock Text="{Binding EventName}" Margin="10,0,0,0" FontSize="22"/>
+
+                                                <TextBlock Margin="20,0,0,0" FontWeight="SemiBold" FontSize="22">
+                    Aldersgruppe:
+                                                </TextBlock>
+                                                <TextBlock Text="{Binding AgeGroup}" Margin="10,0,0,0" FontSize="22"/>
+
+                                                <TextBlock Margin="20,0,0,0" FontWeight="SemiBold" FontSize="22">
+                    Tidspunkt:
+                                                </TextBlock>
+                                                <TextBlock Text="{Binding Time, ConverterCulture=da-DK, StringFormat=dd/MM/yyyy HH:mm}" Margin="10,0,0,0" FontSize="22"/>
+                                            </StackPanel>
+                                        </Expander.Header>
+                                        <!--Detaljer for event: beskrivelse, pris og antal deltagere-->
+                                        <StackPanel Background="White" Margin="0,5,0,0">
+                                            <WrapPanel Margin="0,10,0,0">
+                                                <TextBlock Width="100" FontWeight="Bold" FontSize="18">Beksrivelse:</TextBlock>
+                                                <TextBlock Text="{Binding Description}" Width="210" Margin="10,0,0,0" FontSize="16"/>
+
+                                                <TextBlock Width="105" Margin="20,0,0,0" FontWeight="Bold" FontSize="18">Pris:</TextBlock>
+                                                <TextBlock Text="{Binding Price, FallbackValue=0}" Width="175" Margin="10,0,0,0" FontSize="16"/>
+
+                                                <StackPanel Margin="20,0,0,0">
+                                                    <TextBlock FontWeight="Bold" FontSize="18">Medlemmer:</TextBlock>
+                                                    <ItemsControl ItemsSource="{Binding Members}" Margin="0,4,0,0" FontSize="16">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <TextBlock Text="{Binding MemberFirstName}" />
+                                                                    <TextBlock Text=" " />
+                                                                    <TextBlock Text="{Binding MemberLastName}" />
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </StackPanel>
+
+                                                <StackPanel Margin="20,0,0,0">
+                                                    <TextBlock FontWeight="Bold" FontSize="18">Trænere:</TextBlock>
+                                                    <ItemsControl ItemsSource="{Binding Trainers}" Margin="0,4,0,0" FontSize="16">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <TextBlock Text="{Binding TrainerFirstName}" />
+                                                                    <TextBlock Text=" " />
+                                                                    <TextBlock Text="{Binding TrainerLastName}" />
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </StackPanel>
+                                            </WrapPanel>
+                                        </StackPanel>
+                                    </Expander>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </ScrollViewer>
+        </StackPanel>
+
+        <Grid Background="#80000000" Visibility="{Binding IsEventPopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
+
+            <Border Width="450" Height="330" Background="White" Padding="15" CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                <Grid RowDefinitions="*,*,*,*,*,*,*,*,*">
+
+                    <TextBlock Grid.Row="0" FontSize="18" FontWeight="Bold" Text="{Binding IsEditMode, Converter={StaticResource EditModeToTitleConverter}, ConverterParameter=Event}" />
+
+                    <DockPanel Grid.Row="1">
+                        <TextBlock FontWeight="Bold" Text="Titel:" VerticalAlignment="Center" Width="82"/>
+                        <TextBox Text="{Binding EditingEvent.EventName}" VerticalContentAlignment="Center"/>
+                    </DockPanel>
+
+                    <DockPanel Grid.Row="2">
+                        <TextBlock FontWeight="Bold" Text="Beskrivelse:" VerticalAlignment="Center" Width="82"/>
+                        <TextBox Text="{Binding EditingEvent.Description}" Margin="0,5,0,0" VerticalContentAlignment="Center"/>
+                    </DockPanel>
+
+                    <DockPanel Grid.Row="3">
+                        <TextBlock FontWeight="Bold" Text="Aldersgruppe:" VerticalAlignment="Center" Width="82"/>
+                        <TextBox Text="{Binding EditingEvent.AgeGroup}" Margin="0,5,0,0" VerticalContentAlignment="Center"/>
+                    </DockPanel>
+
+                    <DockPanel Grid.Row="4">
+                        <TextBlock FontWeight="Bold" Text="Pris:" VerticalAlignment="Center" Width="82"/>
+                        <TextBox Text="{Binding EditingEvent.Price}" Margin="0,5,0,0" VerticalContentAlignment="Center"/>
+                    </DockPanel>
+
+                    <DockPanel Grid.Row="5">
+                        <TextBlock FontWeight="Bold" Text="Dato:" VerticalAlignment="Center" Width="82"/>
+                        <DatePicker SelectedDate="{Binding DatePart}" Margin="0,5,0,0" VerticalContentAlignment="Center"/>
+                    </DockPanel>
+
+
+                    <DockPanel Grid.Row="6">
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock FontWeight="Bold" Text="Tid:" VerticalAlignment="Center" Width="82"/>
+                            <ComboBox Width="70" ItemsSource="{Binding Hours}" SelectedItem="{Binding SelectedHour}" VerticalContentAlignment="Center"/>
+                            <TextBlock Text=":" Margin="5,0" />
+                            <ComboBox Width="70" ItemsSource="{Binding Minutes}" SelectedItem="{Binding SelectedMinute}" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                    </DockPanel>
+
+                    <Button Grid.Row="7" Content="Gem" Margin="82,5,0,0" Command="{Binding SaveEventCommand}" />
+                    <Button Grid.Row="8" Content="Annuller" Margin="82,5,0,0" Command="{Binding CancelEditEventCommand}" />
+
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Page>

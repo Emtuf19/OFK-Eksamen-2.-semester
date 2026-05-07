@@ -1,0 +1,148 @@
+﻿<Page
+    x:Class="_2_Semester_Eksamen.Views.PracticeWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:_2_Semester_Eksamen.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:viewmodel="clr-namespace:_2_Semester_Eksamen.ViewModel" 
+    xmlns:conv="clr-namespace:_2_Semester_Eksamen.Converters"
+    d:DataContext="{d:DesignInstance Type=viewmodel:PracticeViewModel}"
+    Title="PracticeWindow"
+    d:DesignHeight="720"
+    d:DesignWidth="1280"
+    Background="White"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <conv:EditModeToTitleConverter x:Key="EditModeToTitleConverter"/>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="8"/>
+                </Style>
+            </Style.Resources>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Grid.ColumnSpan="4" HorizontalAlignment="Center">
+            Træning
+        </Label>
+        <StackPanel Margin="20,0" Grid.Column="1" Grid.Row="1">
+
+            <Grid Background="#80000000" Width="400" Visibility="{Binding IsPracticePopupOpen, Converter={StaticResource BoolToVisibilityConverter}}">
+
+                <Border Width="400" Height="250" Background="White" Padding="15" CornerRadius="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                    <Grid RowDefinitions="*,*,*,*,*,*,*">
+
+                        <TextBlock Grid.Row="0" FontSize="18" FontWeight="Bold" Text="{Binding IsEditMode, Converter={StaticResource EditModeToTitleConverter}, ConverterParameter=Træning}" />
+
+                        <DockPanel Grid.Row="1">
+                            <TextBlock FontWeight="Bold" Text="Titel:" VerticalAlignment="Center" Width="82"/>
+                            <TextBox Text="{Binding EditingPractice.PracticeName}" VerticalContentAlignment="Center"/>
+                        </DockPanel>
+
+                        <DockPanel Grid.Row="2">
+                            <TextBlock FontWeight="Bold" Text="Dato:" VerticalAlignment="Center" Width="82"/>
+                            <DatePicker SelectedDate="{Binding DatePart}" Margin="0,5,0,0" VerticalContentAlignment="Center"/>
+                        </DockPanel>
+
+
+                        <DockPanel Grid.Row="3">
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock FontWeight="Bold" Text="Start tid:" VerticalAlignment="Center" Width="82"/>
+                                <ComboBox Width="70" ItemsSource="{Binding Hours}" SelectedItem="{Binding StartHour}" VerticalContentAlignment="Center"/>
+                                <TextBlock Text=":" Margin="5,0" />
+                                <ComboBox Width="70" ItemsSource="{Binding Minutes}" SelectedItem="{Binding StartMinute}" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <DockPanel Grid.Row="4">
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock FontWeight="Bold" Text="Slut tid:" VerticalAlignment="Center" Width="82"/>
+                                <ComboBox Width="70" ItemsSource="{Binding Hours}" SelectedItem="{Binding EndHour}" VerticalContentAlignment="Center"/>
+                                <TextBlock Text=":" Margin="5,0" />
+                                <ComboBox Width="70" ItemsSource="{Binding Minutes}" SelectedItem="{Binding EndMinute}" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <Button Grid.Row="5" Content="Gem" Background="DarkGray" Margin="82,5,0,0" Command="{Binding SavePracticeCommand}" />
+                        <Button Grid.Row="6" Content="Annuller" Background="DarkGray" Margin="82,5,0,0" Command="{Binding CancelEditPracticeCommand}" />
+
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <StackPanel x:Name="TrainerTrainingCommands">
+                <Button Content="Opret træning" Command="{Binding OpenCreatePracticeCommand}" Background="#FF2DC72D"/>
+                <Button Content="Rediger træning" Command="{Binding EditPracticeCommand}" Background="#FF679ECE"/>
+                <Button Content="Aflys træning" Command="{Binding DeletePracticeCommand}" Background="#FFDE4444"/>
+            </StackPanel>
+            <Button x:Name="SignUpForPractice" Content="Tilmeld træning" Command="{Binding SignUpForPracticeCommand}" Background="#FF2DC72D"/>
+            <Button x:Name="CancelParticipation" Content="Afmeld træning" Command="{Binding CancelParticipationCommand}" Background="#FFDE4444"/>
+            <DockPanel x:Name="MemberIDInputTextBox">
+                <Label Content="MemberID" FontWeight="Bold" Margin="0" FontSize="12" HorizontalAlignment="Left"/>
+                <TextBox Text="{Binding MemberIDInput}" Height="25" Margin="0,0,7,0"/>
+            </DockPanel>
+            <!--  Practices list  -->
+            <DockPanel MinHeight="220" Margin="0,10,0,0">
+                <ListBox ItemsSource="{Binding Practices}"  BorderThickness="1" BorderBrush="Black"                         
+                        SelectedItem="{Binding SelectedPractice}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding PracticeName}" FontWeight="Bold">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="Black"/>
+
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding PracticeName}" Value="Træning Aflyst">
+                                                    <Setter Property="Foreground" Value="Red"/>
+                                                    <Setter Property="FontSize" Value="16"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <DockPanel>
+                                    <TextBlock Text="Start: " FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding StartTime, ConverterCulture=da-DK}"/>
+                                    <TextBlock Text="  Slut: " FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding EndTime, ConverterCulture=da-DK}"/>
+                                </DockPanel>
+                                <DockPanel>
+                                    <TextBlock Text="Antal Tilmeldte: " FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding MemberCount}"/>
+                                </DockPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </StackPanel>
+        <!--  Calendar  -->
+        <StackPanel Margin="7,0" Grid.Row="1" Grid.Column="2">
+            <Viewbox>
+                <Calendar SelectedDate="{Binding SelectedDate}"/>
+            </Viewbox>
+        </StackPanel>
+    </Grid>
+</Page>

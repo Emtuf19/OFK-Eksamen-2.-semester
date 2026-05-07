@@ -1,9 +1,11 @@
 ﻿using _2_Semester_Eksamen.Model;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace _2_Semester_Eksamen.Model
@@ -12,26 +14,93 @@ namespace _2_Semester_Eksamen.Model
     {
         private List<Practice> practices = new List<Practice>();
 
-        public override Practice? GetById(int ID)
+        public override List<Practice> GetAll()
         {
+            List<Practice> practices = new List<Practice>();
+
             using (SqlConnection con = CreateConnection())
             {
                 con.Open();
 
-                Practice practice = new Practice();
+                using SqlCommand cmd = new SqlCommand("sp_GetAllPracticesWithMembersAndTrainers", con);
 
-                using SqlCommand cmd = new SqlCommand("dbo.GetByID", con);
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@ID", SqlDbType.Int).Value = ID;
 
-                return practice;
+                using SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var practice = new Practice
+                    {
+                        PracticeID = Convert.ToInt32(reader["PracticeID"]),
+                        PracticeName = reader["PracticeName"] is DBNull ? string.Empty : (string)reader["PracticeName"],
+                        StartTime = Convert.ToDateTime(reader["StartTime"]),
+                        EndTime = Convert.ToDateTime(reader["EndTime"]),
+                        Members = new List<Member>(),
+                        Trainers = new List<Trainer>()
+                    };
+                    practices.Add(practice);
+                }
+
+                if (reader.NextResult())
+                {
+                    while (reader.Read())
+                    {
+                        var PracticeIDObj = reader["PracticeID"];
+                        if (PracticeIDObj == DBNull.Value) continue;
+                        int practiceID = Convert.ToInt32(PracticeIDObj);
+
+                        var practice = practices.Find(p => p.PracticeID == practiceID);
+                        if (practice == null) continue;
+
+                        var MemberIDObject = reader["MemberID"];
+                        if (MemberIDObject != DBNull.Value)
+                        {
+                            var member = new Member
+                            {
+                                MemberID = Convert.ToInt32(MemberIDObject),
+                                MemberFirstName = reader["MemberFirstName"] is DBNull ? string.Empty : (string)reader["MemberFirstName"],
+                                MemberLastName = reader["MemberLastName"] is DBNull ? string.Empty : (string)reader["MemberLastName"],
+                            };
+                            practice.Members.Add(member);
+                        }
+                    }
+                }
+
+                if (reader.NextResult())
+                {
+                    while (reader.Read())
+                    {
+                        var PracticeIDObj = reader["PracticeID"];
+                        if (PracticeIDObj == DBNull.Value) continue;
+                        int practiceID = Convert.ToInt32(PracticeIDObj);
+
+                        var practice = practices.Find(p => p.PracticeID == practiceID);
+                        if (practice == null) continue;
+
+                        var trainerIDObject = reader["TrainerID"];
+                        if (trainerIDObject != DBNull.Value)
+                        {
+                            var trainer = new Trainer
+                            {
+                                TrainerID = Convert.ToInt32(trainerIDObject),
+                                TrainerFirstName = reader["TrainerFirstName"] is DBNull ? string.Empty : (string)reader["TrainerFirstName"],
+                                TrainerLastName = reader["TrainerLastName"] is DBNull ? string.Empty : (string)reader["TrainerLastName"],
+                                TrainerPhoneNumber = reader["TrainerPhoneNumber"] is DBNull ? string.Empty : (string)reader["TrainerPhoneNumber"],
+                                TrainerEmail = reader["TrainerEmail"] is DBNull ? string.Empty : (string)reader["TrainerEmail"]
+                            };
+                            practice.Trainers.Add(trainer);
+                        }
+                    }
+                }
             }
+            //Tilføjet filter for at kun vise fremtidige practices, og sortering på starttidspunkt
+            practices = practices.Where(p => p.StartTime >= DateTime.Now).ToList();
+            return practices.OrderBy(p => p.StartTime).ToList();
         }
 
-        public override List<Practice> GetAll()
-        {
-            return practices;
-        }
+
+
 
         public override void Add(Practice practice)
         {
@@ -44,12 +113,25 @@ namespace _2_Semester_Eksamen.Model
                 cmd.Parameters.Add("@PracticeName", SqlDbType.NVarChar, 50).Value = practice.PracticeName;
                 cmd.Parameters.Add("@StartTime", SqlDbType.DateTime2).Value = practice.StartTime;
                 cmd.Parameters.Add("@EndTime", SqlDbType.DateTime2).Value = practice.EndTime;
+
+                cmd.ExecuteNonQuery();
             }
         }
 
         public override void Update(Practice practice)
         {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
 
+                using SqlCommand cmd = new SqlCommand("dbo.sp_UpdatePractice", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@PracticeID", SqlDbType.Int).Value = practice.PracticeID;
+                cmd.Parameters.Add("@PracticeName", SqlDbType.NVarChar, 50).Value = practice.PracticeName;
+                cmd.Parameters.Add("@StartTime", SqlDbType.DateTime2).Value = practice.StartTime;
+                cmd.Parameters.Add("@EndTime", SqlDbType.DateTime2).Value = practice.EndTime;
+                cmd.ExecuteNonQuery();
+            }
         }
 
         public override void Delete(int ID)
@@ -66,6 +148,81 @@ namespace _2_Semester_Eksamen.Model
             }
         }
 
-    }
+        //Test af ny CreatePractice, som gøre brug af SCOPE IDENTITY() for at få det nye PracticeID, og dermed kunne tilføje medlemmer og trænere til den nye practice
+        public int Create(Practice practice)
+        {
+            using (SqlConnection conn = CreateConnection())
+            using (SqlCommand cmd = new SqlCommand("sp_InsertIntoPractice", conn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
 
+                cmd.Parameters.AddWithValue("@practiceName", practice.PracticeName);
+                cmd.Parameters.AddWithValue("@startTime", practice.StartTime);
+                cmd.Parameters.AddWithValue("@endTime", practice.EndTime);
+
+                SqlParameter outputId = new SqlParameter("@newPracticeID", SqlDbType.Int)
+                {
+                    Direction = ParameterDirection.Output
+                };
+
+                cmd.Parameters.Add(outputId);
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+
+                int newId = (int)outputId.Value;
+                practice.PracticeID = newId;
+
+                return newId;
+            }
+        }
+
+        //metode til at fjerne medlemmer fra practice
+        public void RemoveMemberFromPractice(int practiceID, int memberID)
+        {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
+                using SqlCommand cmd = new SqlCommand("sp_CancelParticipation", con);
+                
+                cmd.CommandType= CommandType.StoredProcedure;
+                cmd.Parameters.Add("@PracticeID", SqlDbType.Int).Value = practiceID;
+                cmd.Parameters.Add("@MemberID", SqlDbType.Int).Value = memberID;
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void AddMemberToPractice(int practiceID, int memberID)
+        {
+            using (SqlConnection con = CreateConnection())
+            {
+                con.Open();
+                using SqlCommand cmd = new SqlCommand("sp_SignUpPractice", con);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@PracticeID", SqlDbType.Int).Value = practiceID;
+                cmd.Parameters.Add("@MemberID", SqlDbType.Int).Value = memberID;
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        //bruges til at tjekke om et medlem eksistere, før man tilføjer det til en practice, for at undgå fejl
+        public bool MemberExists(int memberId)
+        {
+            using (SqlConnection con = CreateConnection())
+            {
+                string query = "SELECT COUNT(1) FROM Member WHERE MemberID = @MemberID";
+
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@MemberID", memberId);
+                    con.Open();
+
+                    return (int)cmd.ExecuteScalar() > 0;
+                }
+            }
+        }
+    }
 }
