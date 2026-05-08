@@ -115,6 +115,15 @@ namespace _2_Semester_Eksamen.ViewModel
                 SelectedMember = Members.FirstOrDefault(m => m.MemberID == id);
         }
 
+        private void ExecuteDelete()
+        {
+            if (SelectedMember == null) return;
+            _repo.Delete(SelectedMember.MemberID);
+            Members.Remove(SelectedMember);
+            SelectedMember = null;
+            Load();
+        }
+
         public bool IsValidEmail(string email)
         {
             try
@@ -128,14 +137,6 @@ namespace _2_Semester_Eksamen.ViewModel
             }
         }
 
-        private void ExecuteDelete()
-        {
-            if (SelectedMember == null) return;
-            _repo.Delete(SelectedMember.MemberID);
-            Members.Remove(SelectedMember);
-            SelectedMember = null;
-            Load();
-        }
     }
 
 }
