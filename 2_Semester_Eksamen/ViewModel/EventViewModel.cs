@@ -261,14 +261,8 @@ namespace _2_Semester_Eksamen.ViewModel
                 Events.Add(EditingEvent);
             }
 
-            ClosePopup();
+            CancelEdit();
             LoadEvents();
-        }
-
-        private void ClosePopup()
-        {
-            IsEventPopupOpen = false;
-            EditingEvent = null;
         }
 
         private void CancelEdit()
