@@ -162,6 +162,20 @@ namespace _2_Semester_Eksamen.ViewModel
         public RelayCommand SignUpForPracticeCommand { get; }
         public RelayCommand CancelParticipationCommand { get; }
 
+        public PracticeViewModel()
+        {
+            LoadPractices();
+
+            DeletePracticeCommand = new RelayCommand(ExecuteDeletePractice, ()=> SelectedPractice != null);
+            OpenCreatePracticeCommand = new RelayCommand(OpenCreatePractice);
+            EditPracticeCommand = new RelayCommand(EditPractice, ()=> SelectedPractice != null);
+            SavePracticeCommand = new RelayCommand(SavePractice);
+            CancelEditPracticeCommand = new RelayCommand(CancelEdit);
+
+            SignUpForPracticeCommand = new RelayCommand(SignUpForPractice, () => SelectedPractice != null && MemberIDInput > 0);
+            CancelParticipationCommand = new RelayCommand(ExecuteCancelParticipation, ()=> SelectedPractice != null && MemberIDInput > 0);
+        }
+
         private void ExecuteCancelParticipation()
         {
             try
@@ -241,26 +255,19 @@ namespace _2_Semester_Eksamen.ViewModel
 
         }
 
-        public PracticeViewModel()
-        {
-            LoadPractices();
-
-            DeletePracticeCommand = new RelayCommand(ExecuteDeletePractice, ()=> SelectedPractice != null);
-            OpenCreatePracticeCommand = new RelayCommand(OpenCreatePractice);
-            EditPracticeCommand = new RelayCommand(EditPractice, ()=> SelectedPractice != null);
-            SavePracticeCommand = new RelayCommand(SavePractice);
-            CancelEditPracticeCommand = new RelayCommand(CancelEdit);
-
-            SignUpForPracticeCommand = new RelayCommand(SignUpForPractice, () => SelectedPractice != null && MemberIDInput > 0);
-            CancelParticipationCommand = new RelayCommand(ExecuteCancelParticipation, ()=> SelectedPractice != null && MemberIDInput > 0);
-        }
 
         private void OpenCreatePractice()
         {
+
+            DatePart = DateTime.Now.Date;
+            StartHour = DateTime.Now.Hour;
+            StartMinute = 0; // <-- sørg for 0 som startværdi
+
+
             EditingPractice = new Practice
             {
-                StartTime = DateTime.Now,
-                EndTime = DateTime.Now.AddHours(1)
+                StartTime = DateTime.Now.Date.AddHours(StartHour).AddMinutes(StartMinute),
+                EndTime = DateTime.Now.Date.AddHours(StartHour + 1)
             };
 
             DatePart = EditingPractice.StartTime.Date;

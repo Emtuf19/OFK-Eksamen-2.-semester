@@ -15,12 +15,12 @@ namespace UnitTestAndetSemesterEksamen
             Practice practice = new Practice
             {
                 PracticeName = "Unit Test Practice",
-                StartTime = new DateTime(2026, 5, 7, 18, 0, 0),
-                EndTime = new DateTime(2026, 5, 7, 20, 0, 0)
+                StartTime = new DateTime(2026, 12, 8, 18, 0, 0),
+                EndTime = new DateTime(2026, 12, 8, 20, 0, 0)
             };
 
             // Act
-            repo.Create(practice);
+            repo.Add(practice);
 
             // Assert
             List<Practice> practices = repo.GetAll();
@@ -39,12 +39,22 @@ namespace UnitTestAndetSemesterEksamen
             // Arange
             PracticeRepository repo = new PracticeRepository();
 
+            Practice practice = new Practice
+            {
+                PracticeName = "OriginalPractice",
+                StartTime = new DateTime(2026, 10, 7, 18, 0, 0),
+                EndTime = new DateTime(2026, 10, 8, 20, 0, 0)
+            }; 
+            repo.Add(practice);
+
+            var insertedPractice = repo.GetAll().LastOrDefault(p => p.PracticeName == "OriginalPractice");
+
             // Act
             Practice Practice = new Practice
             {
-                PracticeID = 5,
+                PracticeID = insertedPractice.PracticeID,
                 PracticeName = "UpdatedPractice",
-                StartTime = new DateTime(2026, 6, 7, 18, 0, 0),
+                StartTime = new DateTime(2026, 10, 7, 18, 0, 0),
                 EndTime = new DateTime(2026, 10, 8, 20, 0, 0)
             };
 
@@ -75,7 +85,7 @@ namespace UnitTestAndetSemesterEksamen
                 EndTime = new DateTime(2026, 10, 8, 20, 0, 0)
             };
 
-            repo.Create(Practice);
+            repo.Add(Practice);
 
             Practice insertedPractice = repo.GetAll().LastOrDefault(p => p.PracticeName == "DeletePractice");
 

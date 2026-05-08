@@ -70,7 +70,7 @@
                                 <TextBlock FontWeight="Bold" Text="Start tid:" VerticalAlignment="Center" Width="82"/>
                                 <ComboBox Width="70" ItemsSource="{Binding Hours}" SelectedItem="{Binding StartHour}" VerticalContentAlignment="Center"/>
                                 <TextBlock Text=":" Margin="5,0" />
-                                <ComboBox Width="70" ItemsSource="{Binding Minutes}" SelectedItem="{Binding StartMinute}" VerticalContentAlignment="Center"/>
+                                <ComboBox Width="70" ItemsSource="{Binding Minutes}" SelectedItem="{Binding StartMinute, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
                             </StackPanel>
                         </DockPanel>
 
@@ -79,7 +79,7 @@
                                 <TextBlock FontWeight="Bold" Text="Slut tid:" VerticalAlignment="Center" Width="82"/>
                                 <ComboBox Width="70" ItemsSource="{Binding Hours}" SelectedItem="{Binding EndHour}" VerticalContentAlignment="Center"/>
                                 <TextBlock Text=":" Margin="5,0" />
-                                <ComboBox Width="70" ItemsSource="{Binding Minutes}" SelectedItem="{Binding EndMinute}" VerticalContentAlignment="Center"/>
+                                <ComboBox Width="70" ItemsSource="{Binding Minutes}" SelectedItem="{Binding EndMinute, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
                             </StackPanel>
                         </DockPanel>
 

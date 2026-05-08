@@ -10,6 +10,7 @@ namespace _2_Semester_Eksamen.Model
         public string MemberFirstName { get; set; } = string.Empty;
         public string MemberLastName { get; set; } = string.Empty;
 
+        //Bliver brugt i MemberListBox i OverviewMemberWindow, for at vise både fornavn og efternavn (selvom den ikke viser referencen)
         public string FullName => $"{MemberFirstName} {MemberLastName}".Trim();
 
         public List<ContactInfo> ContactPersons { get; set; } = new List<ContactInfo>();
